@@ -1,0 +1,186 @@
+[
+  {
+    "kind": "brand",
+    "productSlug": null,
+    "path": "/brand/dap-margarinas-azul.png",
+    "width": 1536,
+    "height": 1024,
+    "sizeBytes": 241719
+  },
+  {
+    "kind": "brand",
+    "productSlug": null,
+    "path": "/brand/dap-margarinas-negro.png",
+    "width": 1536,
+    "height": 1024,
+    "sizeBytes": 156358
+  },
+  {
+    "kind": "brand",
+    "productSlug": null,
+    "path": "/brand/logo-cmc-png-copia-1.png",
+    "width": 1038,
+    "height": 688,
+    "sizeBytes": 95848
+  },
+  {
+    "kind": "brand",
+    "productSlug": null,
+    "path": "/brand/logo-cmc-png.png",
+    "width": 1920,
+    "height": 1080,
+    "sizeBytes": 96696
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-aceite-solido",
+    "path": "/images/products/dap-aceite-solido/dap-aceite-solido-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 67368
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-aceite-solido",
+    "path": "/images/products/dap-aceite-solido/dap-aceite-solido.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 53592
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-alinado",
+    "path": "/images/products/dap-alinado/dap-alinados-1.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 65602
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-alinado",
+    "path": "/images/products/dap-alinado/dap-alinados.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 57858
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-alta-reposteria-ponque",
+    "path": "/images/products/dap-alta-reposteria-ponque/caja-dap-alta-reposteria-ponque.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 81612
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-alta-reposteria-ponque",
+    "path": "/images/products/dap-alta-reposteria-ponque/fotos-dap-alta-reposteria.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 57742
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/caja-dap-hojaldre.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 67876
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-con-productos.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 52354
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-industrial",
+    "path": "/images/products/dap-industrial/dap-industrial-1.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 39466
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-industrial",
+    "path": "/images/products/dap-industrial/dap-industrial.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 53004
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-multiproposito",
+    "path": "/images/products/dap-multiproposito/2.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 47130
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-multiproposito",
+    "path": "/images/products/dap-multiproposito/dap-multiproposito-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 79926
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-preparado-graso",
+    "path": "/images/products/dap-preparado-graso/preparado-graso-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 63360
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-preparado-graso",
+    "path": "/images/products/dap-preparado-graso/preparado-graso-con-productos-2.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 81470
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-preparado-graso",
+    "path": "/images/products/dap-preparado-graso/preparado-graso-con-productos.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 37636
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-reposteria",
+    "path": "/images/products/dap-reposteria/dap-reposteria-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 74728
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-reposteria",
+    "path": "/images/products/dap-reposteria/dap-reposteria.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 35746
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-semi-hojaldrado",
+    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 76780
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-semi-hojaldrado",
+    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-con-productos.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 48832
+  }
+]

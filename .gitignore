@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# uploads locales del CMS (adaptador de desarrollo)
+/public/uploads
+
+# artefactos de OpenNext / wrangler
+/.open-next
+/bundled
+.wrangler
