@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sitio corporativo — Compañía Mundial de Comercio S.A.S.
 
-## Getting Started
+Sitio web corporativo con CMS propio para **Compañía Mundial de Comercio S.A.S.**,
+empresa colombiana dedicada a la producción y distribución de margarinas,
+mantequillas y aceites.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Función | Tecnología |
+|---|---|
+| Aplicación full-stack | Next.js 15 (App Router) + TypeScript estricto + Tailwind CSS v4 |
+| Base de datos y auth | Supabase (PostgreSQL + Auth) con Row Level Security |
+| Runtime en producción | Cloudflare Workers vía `@opennextjs/cloudflare` |
+| Imágenes del CMS | Cloudflare R2 (binding `MEDIA_BUCKET`); adaptador local en desarrollo |
+| Caché | SSG + revalidación bajo demanda (R2 incremental cache + D1 tag cache) |
+
+Documentación completa en [docs/](docs/):
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — arquitectura y decisiones técnicas.
+- [CMS_GUIDE.md](docs/CMS_GUIDE.md) — guía del panel para personas no técnicas.
+- [CONTENT_PENDING.md](docs/CONTENT_PENDING.md) — contenido pendiente y en revisión editorial.
+- [INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md) — servicios, planes gratuitos, costos y backups.
+- [DEPLOYMENT.md](docs/DEPLOYMENT.md) — procedimiento de despliegue futuro (sin tocar DNS/correo).
+- [VERIFICATION_LOG.md](docs/VERIFICATION_LOG.md) — registro de verificaciones técnicas.
+
+## Desarrollo local
+
+Requisitos: Node.js 20+, npm y un proyecto de Supabase (gratuito).
+
+```powershell
+npm install
+Copy-Item .env.example .env.local   # completar las variables de Supabase
+npm run dev                          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Configurar la base de datos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+En el SQL Editor del proyecto de Supabase (o con `supabase db push`), ejecutar en orden:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. `supabase/migrations/0001_schema.sql`
+2. `supabase/migrations/0002_rls.sql`
+3. `supabase/seed.sql`
+4. (Verificación) `supabase/tests/rls_checks.sql` — debe terminar con
+   «TODAS LAS PRUEBAS RLS PASARON».
 
-## Learn More
+Después, **deshabilitar el registro público**: Authentication → Sign In / Up →
+desactivar “Allow new users to sign up”.
 
-To learn more about Next.js, take a look at the following resources:
+### Crear el primer administrador
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Sin contraseñas fijas en el código. Ver el procedimiento paso a paso en
+[docs/CMS_GUIDE.md](docs/CMS_GUIDE.md#crear-el-primer-administrador).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Importar los activos oficiales del cliente
 
-## Deploy on Vercel
+Los logos e imágenes de producto entregados por el cliente se importan con:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```powershell
+npm run import-assets -- --source="RUTA\Página web CMC"
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El script valida la carpeta, lista lo que importará, no sobrescribe sin
+`--force`, pre-dimensiona a WebP (máx. 1200 px) y genera
+`scripts/assets-manifest.json`. Los archivos quedan en `public/brand/` y
+`public/images/products/` (proveedor `STATIC` en `media_assets`).
+
+## Scripts
+
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Desarrollo local |
+| `npm run build` | Build de producción de Next.js |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript sin emitir |
+| `npm run preview` | Build de OpenNext + preview en el runtime real de Workers |
+| `npm run deploy` | Despliegue a Cloudflare (NO usar hasta aprobar la publicación) |
+| `npm run cf-typegen` | Regenera los tipos de los bindings de Cloudflare |
+| `npm run import-assets` | Importa los activos oficiales del cliente |
+
+## Variables de entorno
+
+Ver [.env.example](.env.example). Nunca subir `.env.local` ni claves al
+repositorio. En producción, las variables sensibles se configuran como
+secretos de wrangler (`npx wrangler secret put NOMBRE`).
+
+## Advisories conocidas
+
+`npm audit` reporta vulnerabilidades en `postcss` y `sharp` **empaquetados
+dentro de next@15** (solo se corrigen en Next 16, fuera del alcance acordado).
+Ambos son dependencias de build: `sharp` no se ejecuta en Workers (imágenes
+`unoptimized`) y `postcss` solo corre al compilar. Revisar al planear la
+actualización mayor de Next.
