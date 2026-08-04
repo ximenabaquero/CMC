@@ -1,0 +1,82 @@
+/**
+ * Configuración de Cloudflare Workers para cmc-website.
+ *
+ * IMPORTANTE: esta fase NO incluye despliegue productivo. Los nombres de
+ * buckets/base D1 y el database_id son marcadores: se crearán en la cuenta
+ * de Cloudflare DE LA EMPRESA CLIENTE al momento del despliegue
+ * (ver docs/DEPLOYMENT.md). No hay credenciales en este archivo.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cmc-website",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-01",
+  // nodejs_compat es requerido por OpenNext (APIs de Node en el Worker).
+  "compatibility_flags": ["nodejs_compat"],
+  // Archivos estáticos generados por el build de OpenNext (JS/CSS/publicos).
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "r2_buckets": [
+    {
+      // Caché incremental de OpenNext: páginas pre-generadas (SSG/ISR).
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "cmc-website-cache-dev"
+    },
+    {
+      // Imágenes cargadas desde el CMS (adaptador de almacenamiento R2).
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "cmc-website-media-dev"
+    }
+  ],
+  "d1_databases": [
+    {
+      // Tag cache de OpenNext: soporta revalidateTag/revalidatePath.
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "cmc-website-tags-dev",
+      "database_id": "00000000-0000-0000-0000-000000000000" // marcador; se reemplaza al crear la base
+    }
+  ],
+  "vars": {
+    // Variables públicas no sensibles. Las sensibles (claves de Supabase)
+    // van en secretos de wrangler o .dev.vars, nunca aquí.
+    "NEXT_PUBLIC_SITE_URL": "http://localhost:8787",
+    "STORAGE_DRIVER": "r2"
+  },
+  "env": {
+    // Entorno productivo: mismos bindings con recursos de producción.
+    // Se completa al desplegar en la cuenta del cliente (docs/DEPLOYMENT.md).
+    "production": {
+      "name": "cmc-website-production",
+      "assets": {
+        "directory": ".open-next/assets",
+        "binding": "ASSETS"
+      },
+      "r2_buckets": [
+        {
+          "binding": "NEXT_INC_CACHE_R2_BUCKET",
+          "bucket_name": "cmc-website-cache"
+        },
+        {
+          "binding": "MEDIA_BUCKET",
+          "bucket_name": "cmc-website-media"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "NEXT_TAG_CACHE_D1",
+          "database_name": "cmc-website-tags",
+          "database_id": "00000000-0000-0000-0000-000000000000" // marcador
+        }
+      ],
+      "vars": {
+        "NEXT_PUBLIC_SITE_URL": "https://REEMPLAZAR-POR-DOMINIO-DEL-CLIENTE",
+        "STORAGE_DRIVER": "r2"
+      }
+    }
+  }
+}

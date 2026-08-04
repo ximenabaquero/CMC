@@ -47,3 +47,7 @@ next-env.d.ts
 /.open-next
 /bundled
 .wrangler
+
+# logs locales
+*.log
+cloudflare-env.d.ts
