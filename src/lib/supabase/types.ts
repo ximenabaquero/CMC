@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tipos de la base de datos (escritos a mano a partir de
  * supabase/migrations/0001_schema.sql). Si el esquema cambia,
  * actualizar este archivo o regenerar con
@@ -8,17 +8,17 @@
 export type PublishStatus = "DRAFT" | "PUBLISHED";
 export type StorageProvider = "STATIC" | "R2";
 
-export interface ProductFeature {
+export type ProductFeature = {
   label: string;
   value: string;
 }
 
-export interface PillarItem {
+export type PillarItem = {
   title: string;
   description: string;
 }
 
-interface ProfileRow {
+type ProfileRow = {
   id: string;
   email: string;
   full_name: string | null;
@@ -27,7 +27,7 @@ interface ProfileRow {
   updated_at: string;
 }
 
-interface MediaAssetRow {
+type MediaAssetRow = {
   id: string;
   storage_provider: StorageProvider;
   storage_path: string;
@@ -43,7 +43,7 @@ interface MediaAssetRow {
   updated_by: string | null;
 }
 
-interface SiteSettingsRow {
+type SiteSettingsRow = {
   id: number;
   company_name: string;
   slogan: string | null;
@@ -64,7 +64,7 @@ interface SiteSettingsRow {
   updated_by: string | null;
 }
 
-interface CompanyContentRow {
+type CompanyContentRow = {
   id: string;
   section_key: string;
   title: string | null;
@@ -77,7 +77,7 @@ interface CompanyContentRow {
   updated_by: string | null;
 }
 
-interface ProductCategoryRow {
+type ProductCategoryRow = {
   id: string;
   name: string;
   slug: string;
@@ -87,7 +87,7 @@ interface ProductCategoryRow {
   updated_by: string | null;
 }
 
-interface ProductRow {
+type ProductRow = {
   id: string;
   name: string;
   slug: string;
@@ -107,7 +107,7 @@ interface ProductRow {
   updated_by: string | null;
 }
 
-interface ProductMediaRow {
+type ProductMediaRow = {
   id: string;
   product_id: string;
   media_asset_id: string;
@@ -115,7 +115,7 @@ interface ProductMediaRow {
   created_at: string;
 }
 
-interface BlogPostRow {
+type BlogPostRow = {
   id: string;
   title: string;
   slug: string;
@@ -132,7 +132,7 @@ interface BlogPostRow {
   updated_by: string | null;
 }
 
-interface FaqRow {
+type FaqRow = {
   id: string;
   question: string;
   answer: string;
@@ -148,14 +148,14 @@ interface FaqRow {
 type Generated<Row, GeneratedKeys extends keyof Row> = Omit<Row, GeneratedKeys> &
   Partial<Pick<Row, GeneratedKeys>>;
 
-interface TableDef<Row, Insert, Update> {
+type TableDef<Row, Insert, Update> = {
   Row: Row;
   Insert: Insert;
   Update: Update;
   Relationships: [];
 }
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: TableDef<
@@ -264,3 +264,4 @@ export type Product = ProductRow;
 export type ProductMedia = ProductMediaRow;
 export type BlogPost = BlogPostRow;
 export type Faq = FaqRow;
+
