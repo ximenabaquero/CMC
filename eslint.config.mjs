@@ -18,6 +18,11 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      // Artefactos generados por OpenNext/wrangler
+      ".open-next/**",
+      "bundled/**",
+      ".wrangler/**",
+      "cloudflare-env.d.ts",
     ],
   },
 ];
