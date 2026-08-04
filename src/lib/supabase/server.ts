@@ -20,8 +20,10 @@ function getSupabaseEnv() {
  * usan SU sesión: la autorización real la aplican las políticas RLS.
  */
 export async function createSupabaseServerClient() {
-  const { url, anonKey } = getSupabaseEnv();
+  // cookies() primero: durante el build marca la ruta como dinámica
+  // antes de validar variables de entorno.
   const cookieStore = await cookies();
+  const { url, anonKey } = getSupabaseEnv();
 
   return createServerClient<Database>(url, anonKey, {
     cookies: {
