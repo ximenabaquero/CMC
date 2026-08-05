@@ -24,7 +24,7 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 
 - Las rutas públicas son **estáticas** (SSG/`generateStaticParams`). Los
   fetchers (`src/lib/content.ts`) usan `unstable_cache` con tags
-  (`settings`, `content`, `products`, `posts`, `faqs`) y **sin revalidación
+  (`settings`, `content`, `products`, `posts`, `faqs`, `brands`) y **sin revalidación
   periódica**: la base solo se consulta al generar o regenerar una página.
 - Tras cada cambio en el CMS, las Server Actions llaman
   `revalidateTag(...)` + `revalidatePath("/", "layout")`
@@ -100,7 +100,7 @@ src/
 ├─ app/admin/login       # login
 ├─ app/admin/(protected) # panel (dinámico, requiere ADMIN)
 ├─ app/api/media/[...key]# sirve archivos del adaptador (local/R2)
-├─ actions/              # Server Actions (auth, products, posts, faqs, settings, content)
+├─ actions/              # Server Actions (auth, products, brands, posts, faqs, settings, content)
 ├─ components/ (admin/, public/)
 └─ lib/ (supabase/, storage/, content.ts, validation/, markdown.tsx, …)
 supabase/ (migrations/, seed.sql, tests/rls_checks.sql)

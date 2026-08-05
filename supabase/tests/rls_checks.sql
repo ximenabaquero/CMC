@@ -29,6 +29,12 @@ insert into public.profiles (id, email, full_name, role)
 values ('99999999-9999-4999-8999-999999999901', 'admin-prueba@example.com', 'Admin de prueba', 'ADMIN');
 -- El usuario "común" NO tiene perfil: no debe ser admin.
 
+-- Marcas de prueba (0003): una publicada y una en borrador.
+insert into public.brands (id, name, status)
+values
+  ('99999999-9999-4999-8999-999999999911', 'Marca publicada de prueba', 'PUBLISHED'),
+  ('99999999-9999-4999-8999-999999999912', 'Marca borrador de prueba', 'DRAFT');
+
 -- ============================================================
 -- 1) VISITANTE ANÓNIMO: solo lee contenido publicado
 -- ============================================================
@@ -60,6 +66,12 @@ begin
   select count(*) into n from public.company_content where section_key = 'iso_certification';
   if n <> 0 then
     raise exception 'FALLO: anon puede ver la sección iso_certification en DRAFT';
+  end if;
+
+  -- Marcas: solo la publicada es visible.
+  select count(*) into n from public.brands;
+  if n <> 1 then
+    raise exception 'FALLO: anon ve % marcas (esperado 1 publicada)', n;
   end if;
 
   -- is_admin() debe ser false sin sesión.
@@ -94,6 +106,13 @@ begin
     end if;
   exception
     when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.brands (name, status) values ('hack', 'PUBLISHED');
+    raise exception 'FALLO: anon pudo insertar en brands';
+  exception
+    when insufficient_privilege or check_violation then null;
   end;
 end $$;
 
@@ -149,6 +168,12 @@ begin
     raise exception 'FALLO: admin ve % FAQs (esperado 5)', n;
   end if;
 
+  -- Ve las 2 marcas de prueba (incluida la DRAFT).
+  select count(*) into n from public.brands;
+  if n <> 2 then
+    raise exception 'FALLO: admin ve % marcas (esperado 2)', n;
+  end if;
+
   -- Puede escribir.
   update public.products
      set short_description = coalesce(short_description, '')
@@ -159,6 +184,13 @@ begin
 
   insert into public.faqs (question, answer, status) values ('prueba admin', 'ok', 'DRAFT');
   delete from public.faqs where question = 'prueba admin';
+
+  update public.brands
+     set sort_order = 5
+   where id = '99999999-9999-4999-8999-999999999912';
+  if not found then
+    raise exception 'FALLO: admin no pudo actualizar una marca';
+  end if;
 end $$;
 
 reset role;

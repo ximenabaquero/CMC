@@ -61,6 +61,25 @@ si dejas un campo vacío, ese canal se oculta sin dañar el diseño.
 - Mientras no haya productos publicados, el sitio muestra
   «Catálogo en preparación».
 
+### Marcas
+
+Logos de las marcas que la compañía maneja, mostrados como carrusel en la
+página de Inicio.
+
+- **Crear**: botón «+ Nueva marca» → nombre → se crea en borrador.
+- **Logo**: súbelo en la sección «Logo» (JPEG, PNG, WebP o AVIF, con texto
+  alternativo). Es **obligatorio para poder publicar** la marca; si quitas
+  el logo de una marca publicada, vuelve a borrador automáticamente.
+- **Sitio web** (opcional): si lo indicas, el logo enlaza a esa dirección.
+- **Orden**: menor número aparece primero en el carrusel.
+- **Vista previa**: en la lista de marcas se muestra el carrusel tal como
+  se verá, incluyendo borradores.
+- Mientras no haya marcas publicadas, la sección **no aparece** en el
+  sitio público.
+- Importante: antes de publicar el logo de un cliente, asegúrate de contar
+  con su **autorización escrita**. Puedes anotar el estado del permiso en
+  la «Nota interna» de cada marca.
+
 ### Blog
 
 Igual que productos: crear en borrador, escribir, subir portada, vista

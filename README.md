@@ -39,8 +39,9 @@ En el SQL Editor del proyecto de Supabase (o con `supabase db push`), ejecutar e
 
 1. `supabase/migrations/0001_schema.sql`
 2. `supabase/migrations/0002_rls.sql`
-3. `supabase/seed.sql`
-4. (Verificación) `supabase/tests/rls_checks.sql` — debe terminar con
+3. `supabase/migrations/0003_brands.sql`
+4. `supabase/seed.sql`
+5. (Verificación) `supabase/tests/rls_checks.sql` — debe terminar con
    «TODAS LAS PRUEBAS RLS PASARON».
 
 Después, **deshabilitar el registro público**: Authentication → Sign In / Up →

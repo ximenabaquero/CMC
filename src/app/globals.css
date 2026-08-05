@@ -130,3 +130,41 @@ h6 {
   padding-left: 1rem;
   color: var(--muted-foreground);
 }
+
+/* ------------------------------------------------------------
+   Marquee de marcas (página de inicio). El track tiene dos copias
+   de la lista: -50% recorre exactamente una y el bucle es continuo.
+   ------------------------------------------------------------ */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.brands-marquee {
+  overflow: hidden;
+}
+
+.brands-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.brands-marquee:hover .brands-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands-marquee {
+    overflow-x: auto;
+  }
+
+  .brands-marquee-track {
+    animation: none;
+    width: auto;
+  }
+}

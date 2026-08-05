@@ -98,6 +98,14 @@ export const siteSettingsSchema = z.object({
   seo_description: optionalTrimmed(170),
 });
 
+export const brandSchema = z.object({
+  name: z.string().trim().min(1, "El nombre es obligatorio.").max(150),
+  website_url: optionalUrl,
+  sort_order: z.coerce.number().int().min(0).max(9999).default(0),
+  status: statusSchema,
+  internal_note: optionalTrimmed(1000),
+});
+
 export const companyContentSchema = z.object({
   title: optionalTrimmed(200),
   body: optionalTrimmed(20000),

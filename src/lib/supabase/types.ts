@@ -1,6 +1,6 @@
 ﻿/**
  * Tipos de la base de datos (escritos a mano a partir de
- * supabase/migrations/0001_schema.sql). Si el esquema cambia,
+ * supabase/migrations/0001_schema.sql y 0003_brands.sql). Si el esquema cambia,
  * actualizar este archivo o regenerar con
  * `supabase gen types typescript`.
  */
@@ -145,6 +145,19 @@ type FaqRow = {
   updated_by: string | null;
 }
 
+type BrandRow = {
+  id: string;
+  name: string;
+  logo_media_id: string | null;
+  website_url: string | null;
+  sort_order: number;
+  status: PublishStatus;
+  internal_note: string | null;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
 type Generated<Row, GeneratedKeys extends keyof Row> = Omit<Row, GeneratedKeys> &
   Partial<Pick<Row, GeneratedKeys>>;
 
@@ -242,6 +255,22 @@ export type Database = {
         >,
         Partial<FaqRow>
       >;
+      brands: TableDef<
+        BrandRow,
+        Generated<
+          BrandRow,
+          | "id"
+          | "logo_media_id"
+          | "website_url"
+          | "sort_order"
+          | "status"
+          | "internal_note"
+          | "created_at"
+          | "updated_at"
+          | "updated_by"
+        >,
+        Partial<BrandRow>
+      >;
     };
     Views: Record<string, never>;
     Functions: {
@@ -264,4 +293,5 @@ export type Product = ProductRow;
 export type ProductMedia = ProductMediaRow;
 export type BlogPost = BlogPostRow;
 export type Faq = FaqRow;
+export type Brand = BrandRow;
 

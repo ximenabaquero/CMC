@@ -586,3 +586,10 @@ Almacenar adecuadamente la materia prima en una panadería o pastelería garanti
   'Borrador extraído del PDF oficial con corrección ortográfica. Pendiente aprobación del cliente para publicar.'
 )
 on conflict (slug) do nothing;
+
+-- ------------------------------------------------------------
+-- brands (migración 0003): SIN datos de seed a propósito.
+-- Los logos de las marcas cliente aún no se han recibido y falta
+-- la autorización escrita para exhibirlos (docs/CONTENT_PENDING.md).
+-- Las marcas se cargan desde el panel: /admin/marcas.
+-- ------------------------------------------------------------

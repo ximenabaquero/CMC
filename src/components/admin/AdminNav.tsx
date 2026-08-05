@@ -8,6 +8,7 @@ const items = [
   { href: "/admin/empresa", label: "Contenido de la empresa" },
   { href: "/admin/contacto", label: "Información de contacto" },
   { href: "/admin/productos", label: "Productos" },
+  { href: "/admin/marcas", label: "Marcas" },
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/preguntas-frecuentes", label: "Preguntas frecuentes" },
 ];

@@ -48,7 +48,10 @@ reunión 1, punto 2). Última actualización: 2026-08-04.
 - [ ] **Redes sociales oficiales** (URLs).
 - [ ] **Logos de las marcas cliente**: la carpeta «Logos de marcas que son
       sus clientes» del Drive está vacía. Además, falta autorización escrita
-      de esas marcas para exhibir sus logos.
+      de esas marcas para exhibir sus logos. El carrusel de marcas de la
+      página de inicio ya está implementado (gestión en `/admin/marcas`,
+      migración `0003_brands.sql`) y permanece oculto hasta que se publique
+      al menos una marca con logo.
 - [ ] **Certificado ISO 22000** (ver sección 1).
 - [ ] **Información legal**: textos de política de privacidad / tratamiento
       de datos personales (Ley 1581 de 2012) si el cliente los requiere.

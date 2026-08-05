@@ -3,6 +3,7 @@ import { createSupabasePublicClient } from "@/lib/supabase/server";
 import { CACHE_TAGS } from "@/lib/revalidate";
 import type {
   BlogPost,
+  Brand,
   CompanyContent,
   Faq,
   MediaAsset,
@@ -197,6 +198,39 @@ export const getPostBySlug = unstable_cache(
   },
   ["post-by-slug"],
   { tags: [CACHE_TAGS.posts] }
+);
+
+export interface BrandWithLogo extends Brand {
+  logo: MediaAsset;
+}
+
+/**
+ * Marcas del carrusel de la página de inicio. Solo se devuelven
+ * marcas cuyo logo pudo resolverse: una marca sin logo no aporta
+ * nada visual (la acción de publicar ya lo exige, esto es defensa
+ * adicional).
+ */
+export const getPublishedBrands = unstable_cache(
+  async (): Promise<BrandWithLogo[]> => {
+    const supabase = createSupabasePublicClient();
+    const { data: brands, error } = await supabase.from("brands").select("*").order("sort_order");
+    if (error) throw new ContentUnavailableError("las marcas aliadas");
+
+    const logoIds = (brands ?? [])
+      .map((b) => b.logo_media_id)
+      .filter((id): id is string => Boolean(id));
+    const { data: logos } = logoIds.length
+      ? await supabase.from("media_assets").select("*").in("id", logoIds)
+      : { data: [] as MediaAsset[] };
+    const logoById = new Map((logos ?? []).map((l) => [l.id, l]));
+
+    return (brands ?? []).flatMap((brand) => {
+      const logo = brand.logo_media_id ? logoById.get(brand.logo_media_id) : undefined;
+      return logo ? [{ ...brand, logo }] : [];
+    });
+  },
+  ["brands-list"],
+  { tags: [CACHE_TAGS.brands] }
 );
 
 export const getPublishedFaqs = unstable_cache(

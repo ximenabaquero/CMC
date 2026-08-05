@@ -2,11 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   extractPillars,
+  getPublishedBrands,
   getPublishedFaqs,
   getPublishedPosts,
   getPublishedProducts,
   getPublishedSections,
 } from "@/lib/content";
+import { BrandsMarquee } from "@/components/public/BrandsMarquee";
 import {
   CatalogInPreparation,
   DataUnavailable,
@@ -17,17 +19,21 @@ import {
 } from "@/components/public/shared";
 
 export default async function HomePage() {
-  const [sectionsResult, productsResult, postsResult, faqsResult] = await Promise.allSettled([
-    getPublishedSections(),
-    getPublishedProducts(),
-    getPublishedPosts(),
-    getPublishedFaqs(),
-  ]);
+  const [sectionsResult, productsResult, postsResult, faqsResult, brandsResult] =
+    await Promise.allSettled([
+      getPublishedSections(),
+      getPublishedProducts(),
+      getPublishedPosts(),
+      getPublishedFaqs(),
+      getPublishedBrands(),
+    ]);
 
   const sections = sectionsResult.status === "fulfilled" ? sectionsResult.value : null;
   const products = productsResult.status === "fulfilled" ? productsResult.value : null;
   const posts = postsResult.status === "fulfilled" ? postsResult.value : null;
   const faqs = faqsResult.status === "fulfilled" ? faqsResult.value : null;
+  // La sección de marcas es opcional: si falla o está vacía, se oculta.
+  const brands = brandsResult.status === "fulfilled" ? brandsResult.value : [];
 
   const hero = sections?.home_hero;
   const intro = sections?.home_intro;
@@ -90,6 +96,16 @@ export default async function HomePage() {
             >
               Conoce más sobre nosotros →
             </Link>
+          </div>
+        </section>
+      ) : null}
+
+      {/* Marcas que manejamos (solo si hay marcas publicadas con logo) */}
+      {brands.length > 0 ? (
+        <section className="border-t border-border bg-surface" aria-labelledby="marcas">
+          <div className="mx-auto max-w-6xl px-4 py-14">
+            <SectionHeading eyebrow="Confianza" title="Marcas que manejamos" />
+            <BrandsMarquee brands={brands} />
           </div>
         </section>
       ) : null}
