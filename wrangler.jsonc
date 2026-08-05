@@ -70,11 +70,11 @@
         {
           "binding": "NEXT_TAG_CACHE_D1",
           "database_name": "cmc-website-tags",
-          "database_id": "00000000-0000-0000-0000-000000000000" // marcador
+          "database_id": "72c8bf9e-2784-4726-8d4c-b56fbf7dfa7e"
         }
       ],
       "vars": {
-        "NEXT_PUBLIC_SITE_URL": "https://REEMPLAZAR-POR-DOMINIO-DEL-CLIENTE",
+        "NEXT_PUBLIC_SITE_URL": "https://cmc-website-production.saraximenagilbaquero.workers.dev",
         "STORAGE_DRIVER": "r2"
       }
     }

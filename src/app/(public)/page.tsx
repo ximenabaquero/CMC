@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   extractPillars,
   getPublishedBrands,
@@ -9,6 +8,7 @@ import {
   getPublishedSections,
 } from "@/lib/content";
 import { BrandsMarquee } from "@/components/public/BrandsMarquee";
+import { HomeHero } from "@/components/public/HomeHero";
 import {
   CatalogInPreparation,
   DataUnavailable,
@@ -45,42 +45,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero corporativo */}
-      <section className="border-b border-border bg-surface">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:py-20 lg:grid-cols-[3fr_2fr]">
-          <div>
-            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
-              {hero?.title ?? "Margarinas, mantequillas y aceites con el respaldo de la experiencia"}
-            </h1>
-            {hero?.body ? (
-              <p className="mt-4 max-w-xl text-lg text-muted-foreground">{hero.body}</p>
-            ) : null}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/productos"
-                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover"
-              >
-                Conoce nuestros productos
-              </Link>
-              <Link
-                href="/nosotros"
-                className="rounded-md border border-border px-5 py-2.5 text-sm font-medium transition hover:bg-surface-muted"
-              >
-                Sobre nosotros
-              </Link>
-            </div>
-          </div>
-          <div className="hidden justify-center lg:flex">
-            <Image
-              src="/brand/logo-cmc-png.png"
-              alt=""
-              width={420}
-              height={236}
-              priority
-              className="w-full max-w-sm"
-            />
-          </div>
-        </div>
-      </section>
+      <HomeHero hero={hero} />
 
       {/* Presentación breve */}
       {intro ? (

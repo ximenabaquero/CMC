@@ -25,6 +25,12 @@
   --secondary-hover: #1d4fa0;
   --accent: #c93a2e; /* rojo del logotipo, uso puntual */
 
+  /* Hero de inicio (crema cálido y mantequilla) */
+  --hero-cream: #f8f2e4; /* crema cálido del hero, más amarillo que --surface-muted */
+  --butter: #f0cf72; /* amarillo mantequilla: puntos e indicadores, nunca texto */
+  --butter-light: #f7e7bb; /* mancha decorativa suave */
+  --green-deep: #15522d; /* verde oscuro: eyebrow y acentos tipográficos */
+
   /* Forma y espaciado */
   --radius-sm: 0.375rem;
   --radius-md: 0.625rem;
@@ -49,6 +55,10 @@
   --color-secondary: var(--secondary);
   --color-secondary-hover: var(--secondary-hover);
   --color-accent: var(--accent);
+  --color-hero-cream: var(--hero-cream);
+  --color-butter: var(--butter);
+  --color-butter-light: var(--butter-light);
+  --color-green-deep: var(--green-deep);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
