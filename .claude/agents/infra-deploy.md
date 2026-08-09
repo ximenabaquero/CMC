@@ -29,3 +29,7 @@ Eres el agente de **infraestructura y despliegue** de cmc-website (Next.js sobre
 ## Verificación
 
 `npm run build` (o `preview`, que compila con OpenNext y sirve en workerd real) + comprobar que los bindings resuelven y las rutas responden 200. Tipos de entorno con `npm run cf-typegen`.
+
+## Mantenimiento del contexto
+
+Si tu cambio toca `wrangler.jsonc`, `open-next.config.ts`, bindings, variables o secretos, actualiza **en el mismo turno**: este archivo, `docs/INFRASTRUCTURE.md` y `docs/DEPLOYMENT.md` (si cambia el runbook). Verificaciones con fecha en `docs/VERIFICATION_LOG.md`. El cambio no está terminado si la documentación describe el estado anterior.

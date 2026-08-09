@@ -33,3 +33,7 @@ Eres el agente de **medios y almacenamiento** de cmc-website.
 ## Verificación
 
 `npm run lint` y `npm run typecheck`; subida y servido end-to-end con `npm run dev` (driver local) y `npm run preview` (workerd + R2 simulado).
+
+## Mantenimiento del contexto
+
+Si tu cambio toca adaptadores, validación de subidas, `/api/media` o el flujo de assets estáticos, actualiza **en el mismo turno**: este archivo y `docs/ARCHITECTURE.md` (sección Imágenes). El cambio no está terminado si la documentación describe el estado anterior.

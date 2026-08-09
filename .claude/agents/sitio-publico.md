@@ -8,9 +8,11 @@ Eres el agente del **sitio público** de cmc-website (Next.js 15 App Router, SSG
 ## Archivos clave
 
 - Rutas públicas: `src/app/(public)/` (home, `nosotros`, `productos` + `[slug]`, `blog` + `[slug]`, `preguntas-frecuentes`, `contacto`; chrome compartido en `(public)/layout.tsx`)
-- Componentes: `src/components/public/{shared,ProductDetail,PostArticle,MobileNav}.tsx`
+- Componentes compartidos: `src/components/public/{shared,ProductDetail,PostArticle,MobileNav,BrandsMarquee}.tsx` — `shared.tsx` (`ProductCard`, `PostCard`, `FaqList`, `SectionHeading` con props opcionales `id`/`size`/`tone`) lo usan también `/productos`, `/blog` y las vistas previas del admin: cambios solo aditivos.
+- Componentes exclusivos de la home: `src/components/public/{HomeHero,HomeStats,HomePillars,HomeProductCard,HomePostsSection,HomeCta}.tsx`. `HomeHero` recibe `hero` (company_content), `settings` (slogan como eyebrow) y hasta 3 productos publicados con imagen; sin productos degrada a composición geométrica. `HomeStats` calcula indicadores del catálogo y se oculta sin datos. `HomePostsSection` genera portadas editoriales CSS para posts sin cover y omite fechas nulas/ inválidas. `HomeCta` solo muestra canales configurados en `site_settings`.
 - Fetchers de contenido: `src/lib/content.ts`
-- Revalidación: `src/lib/revalidate.ts` (`CACHE_TAGS`, `revalidatePublicContent()`)
+- Revalidación: `src/lib/revalidate.ts` (`CACHE_TAGS`: `settings`, `content`, `products`, `posts`, `faqs`, `brands`; `revalidatePublicContent()`)
+- Navegación y etiquetas: `src/lib/nav.ts`, `src/lib/section-labels.ts`
 - SEO: `src/app/sitemap.ts`, `src/app/robots.ts`, `src/app/not-found.tsx`
 - Markdown: `src/lib/markdown.tsx`
 
@@ -23,6 +25,12 @@ Eres el agente del **sitio público** de cmc-website (Next.js 15 App Router, SSG
 - `next/image` corre con `unoptimized: true`; no reintroducir el optimizador de Next.
 - Respetar las restricciones al final de `docs/ARCHITECTURE.md`.
 
+## Tema visual público
+
+- Tokens en `src/app/globals.css` (Tailwind v4, `@theme inline`, sin tailwind.config). Paleta cálida del rediseño: `petrol`/`petrol-deep` (titulares e institucional), `cream`/`cream-deep` (fondos), `amber` (decorativo/botón sobre petróleo; **nunca** texto sobre fondos claros), `orange` (eyebrows/numeración, AA sobre crema y blanco). No cambiar los tokens originales: los usa también el admin.
+- Fraunces (display) solo aplica dentro de `.public-site` (clase del layout público) sobre `h1–h3` y vía la utilidad `font-display`; el admin conserva Geist. No añadir reglas tipográficas globales.
+- `mix-blend-multiply` del hero requiere packshots con fondo blanco y `isolate` en la sección.
+
 ## Convenciones
 
 - Código, comentarios, copy y commits en español; identificadores en inglés (convención existente).
@@ -31,3 +39,8 @@ Eres el agente del **sitio público** de cmc-website (Next.js 15 App Router, SSG
 ## Verificación
 
 No hay framework de tests JS. Verifica con `npm run lint` y `npm run typecheck`; para comprobar en el runtime real de Workers, `npm run preview`.
+
+## Mantenimiento del contexto
+
+Si tu cambio agrega/renombra rutas públicas, componentes de `src/components/public/`, tags de caché o fetchers, actualiza **en el mismo turno**: este archivo, `docs/ARCHITECTURE.md` y `src/app/sitemap.ts` (si hay ruta nueva). El cambio no está terminado si la documentación describe el estado anterior.
+3

@@ -5,22 +5,45 @@ import { Markdown } from "@/lib/markdown";
 import type { ProductWithImage, PostWithCover } from "@/lib/content";
 import type { Faq } from "@/lib/supabase/types";
 
-/** Encabezado de sección con jerarquía consistente. */
+/**
+ * Encabezado de sección con jerarquía consistente.
+ * `id`, `size` y `tone` son opcionales y con sus valores por defecto el
+ * componente se comporta exactamente igual que antes (lo usan otras páginas
+ * públicas que no forman parte del rediseño de la home).
+ * - `id`: se aplica al <h2> para que funcione el `aria-labelledby` de la sección.
+ * - `size="lg"`: título más grande para las secciones principales de la home.
+ * - `tone="warm"`: eyebrow naranja y título petróleo (paleta cálida de la home).
+ */
 export function SectionHeading({
   eyebrow,
   title,
   description,
+  id,
+  size = "md",
+  tone = "default",
 }: {
   eyebrow?: string;
   title: string;
   description?: string | null;
+  id?: string;
+  size?: "md" | "lg";
+  tone?: "default" | "warm";
 }) {
+  const eyebrowColor = tone === "warm" ? "text-orange" : "text-primary";
+  const titleClasses =
+    size === "lg"
+      ? `text-3xl font-semibold sm:text-4xl ${tone === "warm" ? "text-petrol" : ""}`
+      : `text-2xl font-semibold sm:text-3xl ${tone === "warm" ? "text-petrol" : ""}`;
   return (
     <div className="mb-8 max-w-2xl">
       {eyebrow ? (
-        <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-primary">{eyebrow}</p>
+        <p className={`mb-1 text-sm font-semibold uppercase tracking-wide ${eyebrowColor}`}>
+          {eyebrow}
+        </p>
       ) : null}
-      <h2 className="text-2xl font-semibold sm:text-3xl">{title}</h2>
+      <h2 id={id} className={titleClasses.trim()}>
+        {title}
+      </h2>
       {description ? <p className="mt-2 text-muted-foreground">{description}</p> : null}
     </div>
   );

@@ -36,7 +36,9 @@ export default async function PublicLayout({ children }: { children: React.React
   ].filter((s): s is { label: string; href: string } => Boolean(s));
 
   return (
-    <div className="flex min-h-screen flex-col">
+    // `public-site` activa la tipografía display (Fraunces) solo en el
+    // sitio público; el panel admin conserva Geist (ver globals.css).
+    <div className="public-site flex min-h-screen flex-col">
       <a
         href="#contenido"
         className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm"
@@ -44,7 +46,7 @@ export default async function PublicLayout({ children }: { children: React.React
         Saltar al contenido
       </a>
 
-      <header className="relative sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
+      <header className="relative sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>
             <Image
@@ -55,7 +57,7 @@ export default async function PublicLayout({ children }: { children: React.React
               priority
               className="h-11 w-auto"
             />
-            <span className="hidden text-sm font-semibold leading-tight sm:block">
+            <span className="hidden text-sm font-semibold leading-tight text-petrol sm:block">
               Compañía Mundial
               <br />
               de Comercio S.A.S.
@@ -80,33 +82,33 @@ export default async function PublicLayout({ children }: { children: React.React
         {children}
       </main>
 
-      <footer className="border-t border-border bg-surface-muted">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3">
+      <footer className="border-t border-border bg-cream-deep">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
           <div>
             <Image
               src="/brand/logo-cmc-png-copia-1.png"
               alt=""
               width={96}
               height={64}
-              className="mb-3 h-14 w-auto"
+              className="mb-3 h-10 w-auto"
             />
-            <p className="text-sm font-semibold">{companyName}</p>
+            <p className="text-sm font-semibold text-petrol">{companyName}</p>
             {settings?.slogan ? (
               <p className="text-sm text-muted-foreground">«{settings.slogan}»</p>
             ) : null}
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               Producción y distribución de margarinas, mantequillas y aceites.
             </p>
           </div>
 
           <nav aria-label="Mapa del sitio">
-            <h2 className="mb-3 text-sm font-semibold">Navegación</h2>
-            <ul className="space-y-2">
+            <h2 className="mb-3 text-sm font-semibold text-petrol">Navegación</h2>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-1.5 sm:grid-cols-1 sm:gap-y-2 lg:grid-cols-2">
               {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                    className="text-sm text-muted-foreground underline-offset-2 hover:text-petrol hover:underline"
                   >
                     {item.label}
                   </Link>
@@ -116,7 +118,7 @@ export default async function PublicLayout({ children }: { children: React.React
           </nav>
 
           <div>
-            <h2 className="mb-3 text-sm font-semibold">Contacto</h2>
+            <h2 className="mb-3 text-sm font-semibold text-petrol">Contacto</h2>
             {contactChannels.length > 0 ? (
               <ul className="space-y-2">
                 {contactChannels.map((channel) => (

@@ -92,6 +92,30 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - Estados `DRAFT`/`PUBLISHED` en todo el contenido; `internal_note`
   documenta el contenido en revisión editorial dentro del propio CMS.
 
+### Capa visual del sitio público
+
+- **Tema** centralizado en `src/app/globals.css` (Tailwind v4, `@theme inline`).
+  Además de los tokens provisionales originales, el rediseño de la home añadió
+  la paleta cálida pública: `--petrol`/`--petrol-deep` (titulares, franjas
+  institucionales), `--cream`/`--cream-deep` (fondos alternos), `--amber`
+  (decorativo y botón sobre petróleo; **nunca** texto sobre fondos claros) y
+  `--orange` (eyebrows/numeración; AA sobre crema y blanco).
+- **Tipografía**: Geist (cuerpo) + Fraunces (display). Fraunces solo aplica a
+  `h1–h3` dentro de `.public-site` (clase del layout público) y vía la
+  utilidad `font-display`; el panel admin conserva Geist íntegro.
+- **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
+  `hero`, `settings` y hasta 3 productos publicados con imagen para la
+  composición derecha; sin productos degrada a formas geométricas),
+  `HomeStats` (indicadores calculados del catálogo; se oculta si no hay
+  datos), `HomePillars` (numeración editorial), `HomeProductCard` y
+  `HomePostsSection` (destacado + secundarios; posts sin portada usan portada
+  editorial CSS) y `HomeCta` (canales de `site_settings` solo si existen).
+  Son independientes de los compartidos de `shared.tsx` (`ProductCard`,
+  `PostCard`…), que siguen usándose en `/productos`, `/blog` y las vistas
+  previas del admin.
+- `mix-blend-multiply` en el hero solo funciona con packshots sobre fondo
+  blanco; la sección usa `isolate` para contener la mezcla.
+
 ### Estructura del código
 
 ```

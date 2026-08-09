@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/nav";
@@ -17,7 +17,9 @@ export function DesktopNav() {
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={`rounded-md px-3 py-2 text-sm font-medium transition ${
-                active ? "text-primary" : "text-foreground hover:text-primary"
+                active
+                  ? "text-petrol underline decoration-orange decoration-2 underline-offset-8"
+                  : "text-foreground hover:text-petrol"
               }`}
             >
               {item.label}
@@ -32,15 +34,35 @@ export function DesktopNav() {
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Cerrar con Escape devolviendo el foco al botón (accesibilidad teclado).
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  // Cerrar al navegar a otra ruta (respaldo del onClick de cada enlace).
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <div className="lg:hidden">
       <button
+        ref={buttonRef}
         type="button"
         aria-expanded={open}
         aria-controls="menu-movil"
         onClick={() => setOpen((v) => !v)}
-        className="rounded-md border border-border p-2"
+        className="flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border"
       >
         <span className="sr-only">{open ? "Cerrar menú" : "Abrir menú"}</span>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -55,7 +77,7 @@ export function MobileNav() {
         <nav
           id="menu-movil"
           aria-label="Menú principal"
-          className="absolute inset-x-0 top-full z-50 border-b border-border bg-surface shadow-md"
+          className="absolute inset-x-0 top-full z-50 border-b border-border bg-cream shadow-md"
         >
           <ul className="p-2">
             {NAV_ITEMS.map((item) => {
@@ -66,8 +88,8 @@ export function MobileNav() {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
-                    className={`block rounded-md px-3 py-2.5 text-sm font-medium ${
-                      active ? "bg-primary/10 text-primary" : "hover:bg-surface-muted"
+                    className={`block rounded-md px-4 py-3 text-sm font-medium ${
+                      active ? "bg-petrol/10 text-petrol" : "hover:bg-cream-deep"
                     }`}
                   >
                     {item.label}

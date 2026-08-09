@@ -6,27 +6,38 @@ import {
   getPublishedPosts,
   getPublishedProducts,
   getPublishedSections,
+  getSiteSettings,
 } from "@/lib/content";
 import { BrandsMarquee } from "@/components/public/BrandsMarquee";
 import { HomeHero } from "@/components/public/HomeHero";
+import { HomeStats } from "@/components/public/HomeStats";
+import { HomePillars } from "@/components/public/HomePillars";
+import { HomeProductCard } from "@/components/public/HomeProductCard";
+import { HomePostsSection } from "@/components/public/HomePostsSection";
+import { HomeCta } from "@/components/public/HomeCta";
 import {
   CatalogInPreparation,
   DataUnavailable,
   FaqList,
-  PostCard,
-  ProductCard,
   SectionHeading,
 } from "@/components/public/shared";
 
 export default async function HomePage() {
-  const [sectionsResult, productsResult, postsResult, faqsResult, brandsResult] =
-    await Promise.allSettled([
-      getPublishedSections(),
-      getPublishedProducts(),
-      getPublishedPosts(),
-      getPublishedFaqs(),
-      getPublishedBrands(),
-    ]);
+  const [
+    sectionsResult,
+    productsResult,
+    postsResult,
+    faqsResult,
+    brandsResult,
+    settingsResult,
+  ] = await Promise.allSettled([
+    getPublishedSections(),
+    getPublishedProducts(),
+    getPublishedPosts(),
+    getPublishedFaqs(),
+    getPublishedBrands(),
+    getSiteSettings(),
+  ]);
 
   const sections = sectionsResult.status === "fulfilled" ? sectionsResult.value : null;
   const products = productsResult.status === "fulfilled" ? productsResult.value : null;
@@ -34,6 +45,8 @@ export default async function HomePage() {
   const faqs = faqsResult.status === "fulfilled" ? faqsResult.value : null;
   // La sección de marcas es opcional: si falla o está vacía, se oculta.
   const brands = brandsResult.status === "fulfilled" ? brandsResult.value : [];
+  // Settings alimenta eyebrow del hero y canales del CTA; sin él se degradan.
+  const settings = settingsResult.status === "fulfilled" ? settingsResult.value : null;
 
   const hero = sections?.home_hero;
   const intro = sections?.home_intro;
@@ -41,26 +54,55 @@ export default async function HomePage() {
   const valueProposition = sections?.value_proposition;
   const pillars = extractPillars(pillarsSection);
   const featuredFaqs = (faqs ?? []).filter((f) => f.featured).slice(0, 3);
+  // Composición del hero: primeros productos publicados que tengan imagen.
+  const heroProducts = (products ?? []).filter((p) => p.image).slice(0, 3);
+  const introParagraphs = intro?.body ? intro.body.split(/\n\n+/) : [];
 
   return (
     <>
-      {/* Hero corporativo */}
-      <HomeHero hero={hero} />
+      {/* Hero corporativo con productos reales */}
+      <HomeHero hero={hero} settings={settings} products={heroProducts} />
 
-      {/* Presentación breve */}
+      {/* Indicadores calculados del catálogo */}
+      <HomeStats products={products} />
+
+      {/* Presentación editorial: ¿quiénes somos? */}
       {intro ? (
-        <section className="mx-auto max-w-6xl px-4 py-14" aria-labelledby="quienes-somos">
-          <div className="max-w-3xl">
-            <h2 id="quienes-somos" className="text-2xl font-semibold sm:text-3xl">
-              {intro.title ?? "¿Quiénes somos?"}
-            </h2>
-            {intro.body ? <p className="mt-3 text-muted-foreground">{intro.body}</p> : null}
-            <Link
-              href="/nosotros"
-              className="mt-4 inline-block text-sm font-medium text-secondary underline-offset-2 hover:underline"
-            >
-              Conoce más sobre nosotros →
-            </Link>
+        <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="quienes-somos">
+          <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:gap-14">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
+                Nuestra empresa
+              </p>
+              <h2
+                id="quienes-somos"
+                className="text-balance text-3xl font-semibold text-petrol sm:text-4xl"
+              >
+                {intro.title ?? "¿Quiénes somos?"}
+              </h2>
+            </div>
+            <div>
+              {introParagraphs.map((paragraph, index) =>
+                index === 0 ? (
+                  <p
+                    key={index}
+                    className="text-xl font-medium leading-snug text-petrol sm:text-2xl"
+                  >
+                    {paragraph}
+                  </p>
+                ) : (
+                  <p key={index} className="mt-4 text-muted-foreground">
+                    {paragraph}
+                  </p>
+                )
+              )}
+              <Link
+                href="/nosotros"
+                className="mt-6 inline-block font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                Conoce más sobre nosotros →
+              </Link>
+            </div>
           </div>
         </section>
       ) : null}
@@ -69,36 +111,21 @@ export default async function HomePage() {
       {brands.length > 0 ? (
         <section className="border-t border-border bg-surface" aria-labelledby="marcas">
           <div className="mx-auto max-w-6xl px-4 py-14">
-            <SectionHeading eyebrow="Confianza" title="Marcas que manejamos" />
+            <SectionHeading id="marcas" tone="warm" eyebrow="Confianza" title="Marcas que manejamos" />
             <BrandsMarquee brands={brands} />
           </div>
         </section>
       ) : null}
 
-      {/* Pilares */}
-      {pillars.length > 0 ? (
-        <section className="border-y border-border bg-surface-muted" aria-labelledby="pilares">
-          <div className="mx-auto max-w-6xl px-4 py-14">
-            <SectionHeading
-              eyebrow="Nuestros pilares"
-              title={pillarsSection?.title ?? "Nuestros pilares"}
-              description={pillarsSection?.body}
-            />
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {pillars.map((pillar) => (
-                <li key={pillar.title} className="rounded-lg border border-border bg-surface p-5">
-                  <h3 className="font-semibold">{pillar.title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{pillar.description}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      ) : null}
+      {/* Pilares en presentación editorial */}
+      <HomePillars section={pillarsSection} pillars={pillars} />
 
       {/* Vista previa del catálogo */}
-      <section className="mx-auto max-w-6xl px-4 py-14" aria-labelledby="catalogo">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
         <SectionHeading
+          id="catalogo"
+          size="lg"
+          tone="warm"
           eyebrow="Catálogo"
           title="Nuestros productos"
           description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
@@ -109,19 +136,19 @@ export default async function HomePage() {
           <CatalogInPreparation />
         ) : (
           <>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {products.slice(0, 4).map((product) => (
+            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {products.slice(0, 4).map((product, index) => (
                 <li key={product.id}>
-                  <ProductCard product={product} />
+                  <HomeProductCard product={product} index={index} />
                 </li>
               ))}
             </ul>
-            <div className="mt-6">
+            <div className="mt-8">
               <Link
                 href="/productos"
-                className="text-sm font-medium text-secondary underline-offset-2 hover:underline"
+                className="inline-block rounded-md border-2 border-petrol px-6 py-3 text-sm font-semibold text-petrol transition hover:bg-petrol hover:text-white"
               >
-                Ver todo el catálogo →
+                Ver todo el catálogo
               </Link>
             </div>
           </>
@@ -130,17 +157,31 @@ export default async function HomePage() {
 
       {/* Propuesta de valor */}
       {valueProposition ? (
-        <section className="border-y border-border bg-primary/5" aria-labelledby="propuesta">
-          <div className="mx-auto max-w-6xl px-4 py-14">
+        <section className="border-y border-border bg-cream-deep" aria-labelledby="propuesta">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
             <div className="max-w-3xl">
-              <h2 id="propuesta" className="text-2xl font-semibold sm:text-3xl">
+              <h2
+                id="propuesta"
+                className="text-balance text-3xl font-semibold text-petrol sm:text-4xl"
+              >
                 {valueProposition.title ?? "Nuestra promesa"}
               </h2>
               {valueProposition.body ? (
-                <div className="mt-3 space-y-3 text-muted-foreground">
-                  {valueProposition.body.split(/\n\n+/).map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
+                <div className="mt-6 space-y-4">
+                  {valueProposition.body.split(/\n\n+/).map((paragraph, index) =>
+                    index === 0 ? (
+                      <p
+                        key={index}
+                        className="border-l-4 border-orange pl-6 text-lg font-medium leading-relaxed text-petrol"
+                      >
+                        {paragraph}
+                      </p>
+                    ) : (
+                      <p key={index} className="text-muted-foreground">
+                        {paragraph}
+                      </p>
+                    )
+                  )}
                 </div>
               ) : null}
             </div>
@@ -149,8 +190,11 @@ export default async function HomePage() {
       ) : null}
 
       {/* Vista previa del blog */}
-      <section className="mx-auto max-w-6xl px-4 py-14" aria-labelledby="blog">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="blog">
         <SectionHeading
+          id="blog"
+          size="lg"
+          tone="warm"
           eyebrow="Blog"
           title="Últimos artículos"
           description="Consejos y contenido sobre panadería, repostería y nuestros productos."
@@ -163,17 +207,11 @@ export default async function HomePage() {
           </p>
         ) : (
           <>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.slice(0, 3).map((post) => (
-                <li key={post.id}>
-                  <PostCard post={post} />
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6">
+            <HomePostsSection posts={posts.slice(0, 3)} />
+            <div className="mt-8">
               <Link
                 href="/blog"
-                className="text-sm font-medium text-secondary underline-offset-2 hover:underline"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
               >
                 Ver todos los artículos →
               </Link>
@@ -184,9 +222,11 @@ export default async function HomePage() {
 
       {/* Preguntas frecuentes destacadas */}
       {featuredFaqs.length > 0 ? (
-        <section className="border-t border-border bg-surface-muted" aria-labelledby="faqs">
-          <div className="mx-auto max-w-3xl px-4 py-14">
+        <section className="border-t border-border bg-cream" aria-labelledby="faqs">
+          <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
             <SectionHeading
+              id="faqs"
+              tone="warm"
               eyebrow="Preguntas frecuentes"
               title="Resolvemos tus dudas"
             />
@@ -194,7 +234,7 @@ export default async function HomePage() {
             <div className="mt-6">
               <Link
                 href="/preguntas-frecuentes"
-                className="text-sm font-medium text-secondary underline-offset-2 hover:underline"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
               >
                 Ver todas las preguntas →
               </Link>
@@ -204,23 +244,7 @@ export default async function HomePage() {
       ) : null}
 
       {/* Llamado a contacto */}
-      <section className="border-t border-border bg-surface" aria-labelledby="cta-contacto">
-        <div className="mx-auto max-w-6xl px-4 py-14 text-center">
-          <h2 id="cta-contacto" className="text-2xl font-semibold sm:text-3xl">
-            ¿Hablamos de tu negocio?
-          </h2>
-          <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
-            Cuéntanos qué necesitas y te acompañamos con productos y procesos consistentes, ágiles
-            y confiables.
-          </p>
-          <Link
-            href="/contacto"
-            className="mt-6 inline-block rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover"
-          >
-            Ir a contacto
-          </Link>
-        </div>
-      </section>
+      <HomeCta settings={settings} />
     </>
   );
 }

@@ -7,10 +7,10 @@ Eres el agente del **panel de administración** (CMS) de cmc-website.
 
 ## Archivos clave
 
-- Rutas protegidas: `src/app/admin/(protected)/` (dashboard, `productos`, `blog`, `preguntas-frecuentes`, `empresa/[key]`, `contacto`; cada CRUD con list/`nueva`/`[id]`/`vista-previa`)
+- Rutas protegidas: `src/app/admin/(protected)/` (dashboard, `productos`, `blog`, `marcas`, `preguntas-frecuentes`, `empresa/[key]`, `contacto`; cada CRUD con list/`nueva`/`[id]`/`vista-previa`)
 - Login: `src/app/admin/login`
-- Server Actions: `src/actions/{products,posts,faqs,settings,content,auth}.ts`
-- Validación: `src/lib/validation/index.ts` (`productSchema`, `blogPostSchema`, `faqSchema`, `siteSettingsSchema`, `companyContentSchema`, `slugSchema`, `statusSchema`, `altTextSchema`)
+- Server Actions: `src/actions/{products,posts,brands,faqs,settings,content,auth}.ts`
+- Validación: `src/lib/validation/index.ts` (`productSchema`, `blogPostSchema`, `brandSchema`, `faqSchema`, `siteSettingsSchema`, `companyContentSchema`, `slugSchema`, `statusSchema`, `altTextSchema`)
 - UI admin compartida: `src/components/admin/{AdminNav,fields,buttons,FaqForm,UploadImageForm}.tsx`
 - Plumbing de formularios: `src/lib/action-state.ts`
 - Manejo de errores admin: `src/app/admin/(protected)/error.tsx`
@@ -32,3 +32,7 @@ Eres el agente del **panel de administración** (CMS) de cmc-website.
 ## Verificación
 
 No hay framework de tests JS. Verifica con `npm run lint` y `npm run typecheck`; flujo completo con `npm run preview` o `npm run dev`.
+
+## Mantenimiento del contexto
+
+Si tu cambio agrega/renombra rutas admin, Server Actions o schemas Zod, actualiza **en el mismo turno**: este archivo y `docs/CMS_GUIDE.md` (si cambia el flujo que ve el editor). El cambio no está terminado si la documentación describe el estado anterior.

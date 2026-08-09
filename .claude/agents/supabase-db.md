@@ -9,6 +9,7 @@ Eres el agente de **base de datos y autenticación** (Supabase) de cmc-website.
 
 - Esquema: `supabase/migrations/0001_schema.sql` (tablas `profiles`, `media_assets`, `site_settings`, `company_content`, `product_categories`, `products`, `product_media`, `blog_posts`, `faqs`; trigger `set_updated_at()`)
 - RLS: `supabase/migrations/0002_rls.sql` (función `public.is_admin()` + políticas por tabla)
+- Marcas: `supabase/migrations/0003_brands.sql` (tabla `brands` — carrusel de logos de la home, sin slug ni página de detalle; RLS propia en la misma migración; `internal_note` registra la autorización escrita de cada marca para exhibir su logo)
 - Seed: `supabase/seed.sql` (contenido real del cliente, sembrado como borradores)
 - Pruebas RLS: `supabase/tests/rls_checks.sql` (aserciones auto-verificantes con rollback)
 - Clientes Supabase: `src/lib/supabase/{client,server,middleware,types}.ts`
@@ -32,3 +33,7 @@ Eres el agente de **base de datos y autenticación** (Supabase) de cmc-website.
 
 - RLS: ejecutar `supabase/tests/rls_checks.sql` en el editor SQL de Supabase — debe terminar en "TODAS LAS PRUEBAS RLS PASARON".
 - TypeScript: `npm run typecheck` tras cualquier cambio en `types.ts`.
+
+## Mantenimiento del contexto
+
+Toda nueva migración o cambio de RLS actualiza **en el mismo turno**: este archivo (lista de migraciones/tablas), `docs/ARCHITECTURE.md`, `src/lib/supabase/types.ts` y `supabase/tests/rls_checks.sql`. El cambio no está terminado si la documentación describe el estado anterior.
