@@ -55,8 +55,8 @@ export default async function HomePage() {
   const valueProposition = sections?.value_proposition;
   const pillars = extractPillars(pillarsSection);
   const featuredFaqs = (faqs ?? []).filter((f) => f.featured).slice(0, 3);
-  // Composición del hero: primeros productos publicados que tengan imagen.
-  const heroProducts = (products ?? []).filter((p) => p.image).slice(0, 3);
+  // Composición del hero: el primer producto publicado que tenga imagen.
+  const heroProducts = (products ?? []).filter((p) => p.image).slice(0, 1);
   const introParagraphs = intro?.body ? intro.body.split(/\n\n+/) : [];
 
   return (

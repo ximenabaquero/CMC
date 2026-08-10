@@ -12,9 +12,9 @@ const FALLBACK_BODY =
 /**
  * Hero de la home. El texto (título y párrafo) viene de `company_content`
  * (`home_hero`) y el eyebrow del slogan de `site_settings`, ambos editables
- * desde el admin. La composición derecha usa los primeros productos
- * PUBLICADOS con imagen (máx. 3, ya filtrados por la página): si no hay
- * ninguno, se degrada a la composición geométrica sola.
+ * desde el admin. La composición derecha usa el primer producto PUBLICADO
+ * con imagen (ya filtrado por la página): si no hay ninguno, se degrada a
+ * la composición geométrica sola.
  *
  * Nota: `mix-blend-multiply` integra el fondo blanco de estudio de los
  * packshots al crema; requiere `isolate` en la sección para no mezclarse
@@ -33,7 +33,7 @@ export function HomeHero({
   const title = hero?.title?.trim() || FALLBACK_TITLE;
   const body = hero?.body?.trim() || FALLBACK_BODY;
 
-  const [mainProduct, secondProduct, thirdProduct] = products;
+  const [mainProduct] = products;
 
   return (
     <section className="relative isolate overflow-hidden border-b border-border bg-hero-cream">
@@ -77,26 +77,6 @@ export function HomeHero({
             aria-hidden="true"
             className="absolute -bottom-8 -left-6 h-36 w-36 rounded-full border-2 border-orange/40 lg:h-48 lg:w-48"
           />
-          {/* Margarina mezclándose en la esquina inferior derecha, junto al
-              punto naranja (decorativa, solo escritorio y con motion permitido) */}
-          <div
-            aria-hidden="true"
-            className="absolute -bottom-2 right-10 z-30 hidden lg:motion-safe:block"
-          >
-            <Image
-              src="/gifsanimados/cmc-margarina-mezcla-preview.gif"
-              alt=""
-              width={512}
-              height={512}
-              className="w-28"
-            />
-          </div>
-          {/* Punto naranja de acento */}
-          <span
-            aria-hidden="true"
-            className="absolute bottom-10 right-2 h-3 w-3 rounded-full bg-orange"
-          />
-
           {mainProduct?.image ? (
             <Image
               src={mediaUrl(mainProduct.image)}
@@ -106,30 +86,6 @@ export function HomeHero({
               priority
               className="relative z-10 w-full -rotate-2 mix-blend-multiply"
             />
-          ) : null}
-
-          {secondProduct?.image ? (
-            <div className="absolute bottom-0 z-20 hidden w-44 rotate-3 rounded-lg border border-border bg-white p-2 shadow-lg sm:-left-2 sm:block lg:-left-8 lg:bottom-8 lg:w-52">
-              <Image
-                src={mediaUrl(secondProduct.image)}
-                alt={secondProduct.image.alt_text}
-                width={secondProduct.image.width ?? 208}
-                height={secondProduct.image.height ?? 208}
-                className="w-full"
-              />
-            </div>
-          ) : null}
-
-          {thirdProduct?.image ? (
-            <div className="absolute -top-2 right-0 z-20 hidden w-40 -rotate-2 rounded-lg border border-border bg-white p-2 shadow-md lg:block">
-              <Image
-                src={mediaUrl(thirdProduct.image)}
-                alt={thirdProduct.image.alt_text}
-                width={thirdProduct.image.width ?? 160}
-                height={thirdProduct.image.height ?? 160}
-                className="w-full"
-              />
-            </div>
           ) : null}
         </div>
       </div>

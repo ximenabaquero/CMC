@@ -49,10 +49,11 @@ export default async function PublicLayout({ children }: { children: React.React
       <header className="relative sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>
-            {/* Logo animado en bucle continuo; con prefers-reduced-motion
-                se muestra la versión estática. */}
+            {/* Logo animado: entra una sola vez y queda fijo (el loop continuo
+                dejaba el logo "en blanco" en cada reinicio); estático con
+                prefers-reduced-motion. */}
             <Image
-              src="/gifsanimados/cmc-logo-entrada-preview.gif"
+              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
               alt={`Logotipo de ${companyName}`}
               width={512}
               height={340}

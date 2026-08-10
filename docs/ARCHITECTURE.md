@@ -110,7 +110,7 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `h1–h3` dentro de `.public-site` (clase del layout público) y vía la
   utilidad `font-display`; el panel admin conserva Geist íntegro.
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
-  `hero`, `settings` y hasta 3 productos publicados con imagen para la
+  `hero`, `settings` y el primer producto publicado con imagen para la
   composición derecha; sin productos degrada a formas geométricas),
   `HomeStats` (indicadores calculados del catálogo; se oculta si no hay
   datos), `HomePillars` (numeración editorial), `HomeProductCard` y
