@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -46,6 +47,17 @@ export function HomeCta({ settings }: { settings: SiteSettings | null }) {
         aria-hidden="true"
         className="absolute -right-24 -top-24 -z-10 h-72 w-72 rounded-full bg-amber/15"
       />
+      {/* Mantequilla mezclándose sobre el círculo ámbar (decorativa; oculta
+          en móvil y con prefers-reduced-motion) */}
+      <div aria-hidden="true" className="absolute right-6 top-6 hidden motion-safe:sm:block">
+        <Image
+          src="/gifsanimados/mantequilla-mezclando.gif"
+          alt=""
+          width={512}
+          height={512}
+          className="w-20 sm:w-24"
+        />
+      </div>
       <div
         className={`mx-auto max-w-6xl px-4 py-16 sm:py-20 ${
           hasChannels ? "grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center" : ""

@@ -49,13 +49,22 @@ export default async function PublicLayout({ children }: { children: React.React
       <header className="relative sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>
+            {/* Logo animado en bucle continuo; con prefers-reduced-motion
+                se muestra la versión estática. */}
+            <Image
+              src="/gifsanimados/cmc-logo-entrada-preview.gif"
+              alt={`Logotipo de ${companyName}`}
+              width={512}
+              height={340}
+              priority
+              className="h-11 w-auto motion-reduce:hidden"
+            />
             <Image
               src="/brand/logo-cmc-png-copia-1.png"
               alt={`Logotipo de ${companyName}`}
               width={72}
               height={48}
-              priority
-              className="h-11 w-auto"
+              className="hidden h-11 w-auto motion-reduce:block"
             />
             <span className="hidden text-sm font-semibold leading-tight text-petrol sm:block">
               Compañía Mundial
@@ -85,12 +94,21 @@ export default async function PublicLayout({ children }: { children: React.React
       <footer className="border-t border-border bg-cream-deep">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
           <div>
+            {/* Versión del logo que se anima una sola vez y queda fija (en el
+                footer no conviene un bucle infinito); estático si hay reduced motion. */}
+            <Image
+              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
+              alt=""
+              width={512}
+              height={340}
+              className="mb-3 h-10 w-auto motion-reduce:hidden"
+            />
             <Image
               src="/brand/logo-cmc-png-copia-1.png"
               alt=""
               width={96}
               height={64}
-              className="mb-3 h-10 w-auto"
+              className="mb-3 hidden h-10 w-auto motion-reduce:block"
             />
             <p className="text-sm font-semibold text-petrol">{companyName}</p>
             {settings?.slogan ? (

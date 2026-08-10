@@ -77,6 +77,20 @@ export function HomeHero({
             aria-hidden="true"
             className="absolute -bottom-8 -left-6 h-36 w-36 rounded-full border-2 border-orange/40 lg:h-48 lg:w-48"
           />
+          {/* Margarina mezclándose en la esquina inferior derecha, junto al
+              punto naranja (decorativa, solo escritorio y con motion permitido) */}
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-2 right-10 z-30 hidden lg:motion-safe:block"
+          >
+            <Image
+              src="/gifsanimados/cmc-margarina-mezcla-preview.gif"
+              alt=""
+              width={512}
+              height={512}
+              className="w-28"
+            />
+          </div>
           {/* Punto naranja de acento */}
           <span
             aria-hidden="true"

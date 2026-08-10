@@ -67,6 +67,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - **Dos proveedores explícitos** en `media_assets.storage_provider`:
   - `STATIC`: activos oficiales versionados en `public/` (importados con
     `scripts/import-assets.mjs`). Su URL es su ruta bajo `/`.
+  - Excepción: `public/gifsanimados/` contiene GIFs animados de marca
+    (logo de entrada, margarina mezclándose) versionados a mano, fuera del
+    flujo `import-assets`/`media_assets`. Se usan como decoración en header,
+    footer, hero y CTA de la home; `scripts/patch-gif-loop.mjs` genera la
+    variante sin loop (`cmc-logo-entrada-una-vez.gif`) que reproduce la
+    animación una sola vez.
   - `R2`: archivos subidos desde el CMS a través del adaptador
     (`src/lib/storage/`): R2 en producción, sistema de archivos local en
     desarrollo. URL estable `/api/media/<clave>` en ambos entornos.
