@@ -136,10 +136,10 @@ export default async function HomePage() {
           <CatalogInPreparation />
         ) : (
           <>
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {products.slice(0, 4).map((product, index) => (
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {products.slice(0, 4).map((product) => (
                 <li key={product.id}>
-                  <HomeProductCard product={product} index={index} />
+                  <HomeProductCard product={product} />
                 </li>
               ))}
             </ul>

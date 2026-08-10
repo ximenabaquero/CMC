@@ -20,3 +20,23 @@ Base del proyecto (Next.js 15.5.22 + OpenNext 1.20.2, sin Supabase ni markdown a
 Conclusión: margen amplio frente al límite de 3 MB gzip del plan gratuito.
 Se repetirá la medición tras agregar `@supabase/supabase-js`, `@supabase/ssr`,
 `zod` y el render de markdown (ver verificación final).
+
+## 2026-08-10 — Rediseño visual de productos destacados en la home
+
+Cambios: `HomeProductCard` (lienzo blanco uniforme, sin fondos por índice,
+`object-contain` sin recortes, área de imagen de 288/320/360 px) y grid de la
+home a 2 columnas máximo (2×2 con los 4 productos actuales). Header con logo
+animado `cmc-logo-entrada-preview.gif` (bucle; estático con reduced motion).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK |
+| `npm run build` (29 páginas estáticas) | OK |
+| Home 1440 px (Chrome headless, screenshot) | Grid 2×2, lienzo blanco, packshots grandes, alturas consistentes |
+| Home 500 px (layout móvil < `sm`) | 1 columna, sin desbordamiento horizontal, textos completos |
+| Logo animado del header | Renderiza en dev; fallback estático vía `motion-reduce` |
+
+Nota: los productos actuales solo cubren imágenes apaisadas con fondo propio;
+los casos PNG transparente / vertical / fondo de color quedan cubiertos por
+construcción (`object-contain` + alto fijo + lienzo blanco) y deben revisarse
+visualmente cuando se suban archivos así desde el admin.

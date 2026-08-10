@@ -3,43 +3,35 @@ import Link from "next/link";
 import { mediaUrl } from "@/lib/media";
 import type { ProductWithImage } from "@/lib/content";
 
-/* Fondos contextuales alternados por posición para que las tarjetas no sean
-   idénticas entre sí (siempre tonos crema/mantequilla del tema). */
-const IMAGE_BACKGROUNDS = ["bg-hero-cream", "bg-cream-deep", "bg-butter-light", "bg-cream"];
-
 /**
  * Tarjeta de producto destacado de la home. Es independiente de la
  * `ProductCard` compartida (que usan /productos y la vista previa del admin)
  * para poder rediseñarla sin tocar las demás páginas.
+ *
+ * El área de imagen es un lienzo blanco uniforme: la imagen se renderiza tal
+ * cual fue subida desde el admin (`object-contain`, sin recortes ni filtros),
+ * de modo que admite archivos con cualquier fondo, proporción u orientación.
  */
-export function HomeProductCard({
-  product,
-  index,
-}: {
-  product: ProductWithImage;
-  index: number;
-}) {
-  const imageBackground = IMAGE_BACKGROUNDS[index % IMAGE_BACKGROUNDS.length];
-
+export function HomeProductCard({ product }: { product: ProductWithImage }) {
   return (
     <Link
       href={`/productos/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-petrol/30 hover:shadow-md"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-petrol/30 hover:shadow-md motion-reduce:transition-none"
     >
       {product.image ? (
-        <div className={`${imageBackground} overflow-hidden`}>
+        <div className="h-72 bg-white p-2.5 sm:h-80 lg:h-[360px]">
           <Image
             src={mediaUrl(product.image)}
             alt={product.image.alt_text}
             width={product.image.width ?? 600}
             height={product.image.height ?? 600}
-            className="aspect-[4/3] w-full object-contain p-6 transition-transform group-hover:scale-[1.03] motion-reduce:transform-none motion-reduce:transition-none"
+            className="h-full w-full object-contain object-center"
           />
         </div>
       ) : (
         <div
           aria-hidden="true"
-          className={`flex aspect-[4/3] w-full items-center justify-center p-6 ${imageBackground}`}
+          className="flex h-72 w-full items-center justify-center bg-surface-muted p-6 sm:h-80 lg:h-[360px]"
         >
           <span className="font-display text-center text-xl font-semibold text-petrol/50">
             {product.name}
