@@ -77,6 +77,21 @@ export function HomeHero({
             aria-hidden="true"
             className="absolute -bottom-8 -left-6 h-36 w-36 rounded-full border-2 border-orange/40 lg:h-48 lg:w-48"
           />
+          {/* Logo animado sobre el círculo ámbar, en insignia crema para que
+              el texto rojo del logo sea legible: entra una sola vez y queda
+              fijo (decorativo; el logo accesible vive en el header) */}
+          <div
+            aria-hidden="true"
+            className="absolute right-2 top-2 z-20 hidden h-48 w-48 items-center justify-center rounded-full bg-cream/95 shadow-sm lg:motion-safe:flex"
+          >
+            <Image
+              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
+              alt=""
+              width={512}
+              height={340}
+              className="w-40"
+            />
+          </div>
           {mainProduct?.image ? (
             <Image
               src={mediaUrl(mainProduct.image)}
