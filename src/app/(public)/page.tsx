@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   extractPillars,
   getPublishedBrands,
@@ -122,14 +123,27 @@ export default async function HomePage() {
 
       {/* Vista previa del catálogo */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
-        <SectionHeading
-          id="catalogo"
-          size="lg"
-          tone="warm"
-          eyebrow="Catálogo"
-          title="Nuestros productos"
-          description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
-        />
+        <div className="flex items-center justify-between gap-8">
+          <SectionHeading
+            id="catalogo"
+            size="lg"
+            tone="warm"
+            eyebrow="Catálogo"
+            title="Nuestros productos"
+            description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
+          />
+          {/* Wordmark DAP animado: entra una sola vez al llegar a la sección
+              (carga diferida) y queda fijo; oculto en móvil y con reduced motion. */}
+          <div aria-hidden="true" className="hidden shrink-0 md:motion-safe:block">
+            <Image
+              src="/gifsanimados/dap-margarinas-entrada-una-vez.gif"
+              alt=""
+              width={512}
+              height={512}
+              className="w-40 lg:w-52"
+            />
+          </div>
+        </div>
         {products === null ? (
           <DataUnavailable resource="el catálogo" />
         ) : products.length === 0 ? (
