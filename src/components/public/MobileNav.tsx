@@ -77,7 +77,7 @@ export function MobileNav() {
         <nav
           id="menu-movil"
           aria-label="Menú principal"
-          className="absolute inset-x-0 top-full z-50 border-b border-border bg-cream shadow-md"
+          className="nav-drawer absolute inset-x-0 top-full z-50 border-b border-border bg-cream shadow-md"
         >
           <ul className="p-2">
             {NAV_ITEMS.map((item) => {

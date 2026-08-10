@@ -7,12 +7,12 @@ import type { Faq } from "@/lib/supabase/types";
 
 /**
  * Encabezado de sección con jerarquía consistente.
- * `id`, `size` y `tone` son opcionales y con sus valores por defecto el
- * componente se comporta exactamente igual que antes (lo usan otras páginas
- * públicas que no forman parte del rediseño de la home).
  * - `id`: se aplica al <h2> para que funcione el `aria-labelledby` de la sección.
  * - `size="lg"`: título más grande para las secciones principales de la home.
- * - `tone="warm"`: eyebrow naranja y título petróleo (paleta cálida de la home).
+ * - `tone`: "warm" (por defecto) = eyebrow naranja y título petróleo, el
+ *   patrón de encabezado de todo el sitio público ("The Eyebrow Rule" de
+ *   DESIGN.md). "default" conserva el eyebrow verde para contextos fuera de
+ *   la paleta cálida.
  */
 export function SectionHeading({
   eyebrow,
@@ -20,7 +20,7 @@ export function SectionHeading({
   description,
   id,
   size = "md",
-  tone = "default",
+  tone = "warm",
 }: {
   eyebrow?: string;
   title: string;
@@ -45,6 +45,39 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? <p className="mt-2 text-muted-foreground">{description}</p> : null}
+    </div>
+  );
+}
+
+/* Sistema de portadas editoriales para artículos sin imagen: fondo de color
+   rotado por posición + numeral tipográfico. Sin imágenes falsas. Lo usan la
+   home (HomePostsSection) y el índice del blog (PostCard). */
+const EDITORIAL_COVERS = [
+  { background: "bg-petrol", numeral: "text-white/25" },
+  { background: "bg-orange", numeral: "text-white/25" },
+  { background: "bg-amber", numeral: "text-petrol/25" },
+];
+
+export function EditorialCover({
+  index,
+  className,
+  numeralClassName,
+}: {
+  index: number;
+  className: string;
+  numeralClassName: string;
+}) {
+  const cover = EDITORIAL_COVERS[index % EDITORIAL_COVERS.length];
+  return (
+    <div
+      aria-hidden="true"
+      className={`relative flex items-end justify-end overflow-hidden rounded-lg ${cover.background} ${className}`}
+    >
+      <span
+        className={`font-display font-semibold leading-none ${cover.numeral} ${numeralClassName}`}
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
     </div>
   );
 }
@@ -78,47 +111,56 @@ export function ProductCard({ product }: { product: ProductWithImage }) {
   return (
     <Link
       href={`/productos/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-primary hover:shadow-sm"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-petrol/30 hover:shadow-md motion-reduce:transition-none"
     >
+      {/* Lienzo blanco uniforme: el empaque nunca se recorta (object-contain). */}
       {product.image ? (
-        <Image
-          src={mediaUrl(product.image)}
-          alt={product.image.alt_text}
-          width={product.image.width ?? 600}
-          height={product.image.height ?? 600}
-          className="aspect-square w-full bg-surface-muted object-cover"
-        />
+        <div className="aspect-square w-full bg-white p-5">
+          <Image
+            src={mediaUrl(product.image)}
+            alt={product.image.alt_text}
+            width={product.image.width ?? 600}
+            height={product.image.height ?? 600}
+            className="h-full w-full object-contain object-center"
+          />
+        </div>
       ) : (
         <div
           aria-hidden="true"
-          className="flex aspect-square w-full items-center justify-center bg-surface-muted text-sm text-muted-foreground"
+          className="flex aspect-square w-full items-center justify-center bg-surface-muted p-6"
         >
-          Imagen en preparación
+          <span className="font-display text-center text-lg font-semibold text-petrol/50">
+            {product.name}
+          </span>
         </div>
       )}
       <div className="flex flex-1 flex-col p-4">
         {product.category ? (
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-primary">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-orange">
             {product.category.name}
           </p>
         ) : null}
-        <h3 className="font-semibold group-hover:text-primary">{product.name}</h3>
+        <h3 className="font-semibold text-petrol underline-offset-4 group-hover:underline">
+          {product.name}
+        </h3>
         {product.short_description ? (
           <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">
             {product.short_description}
           </p>
         ) : null}
-        <span className="mt-auto pt-3 text-sm font-medium text-secondary">Ver producto →</span>
+        <span className="mt-auto pt-3 text-sm font-semibold text-primary">
+          Ver producto <span aria-hidden="true">→</span>
+        </span>
       </div>
     </Link>
   );
 }
 
-export function PostCard({ post }: { post: PostWithCover }) {
+export function PostCard({ post, index = 0 }: { post: PostWithCover; index?: number }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-primary hover:shadow-sm"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-petrol/30 hover:shadow-md motion-reduce:transition-none"
     >
       {post.cover ? (
         <Image
@@ -129,20 +171,22 @@ export function PostCard({ post }: { post: PostWithCover }) {
           className="aspect-[16/9] w-full bg-surface-muted object-cover"
         />
       ) : (
-        <div
-          aria-hidden="true"
-          className="flex aspect-[16/9] w-full items-center justify-center bg-surface-muted text-sm text-muted-foreground"
-        >
-          {/* Placeholder identificado: aún no hay imagen de portada */}
-          Artículo
-        </div>
+        <EditorialCover
+          index={index}
+          className="aspect-[16/9] w-full rounded-none p-4"
+          numeralClassName="text-6xl"
+        />
       )}
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-semibold group-hover:text-primary">{post.title}</h3>
+        <h3 className="font-semibold text-petrol underline-offset-4 group-hover:underline">
+          {post.title}
+        </h3>
         {post.excerpt ? (
           <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
         ) : null}
-        <span className="mt-auto pt-3 text-sm font-medium text-secondary">Leer artículo →</span>
+        <span className="mt-auto pt-3 text-sm font-semibold text-primary">
+          Leer artículo <span aria-hidden="true">→</span>
+        </span>
       </div>
     </Link>
   );
@@ -157,10 +201,10 @@ export function FaqList({ faqs }: { faqs: Faq[] }) {
           <details className="group rounded-lg border border-border bg-surface">
             <summary className="cursor-pointer list-none px-5 py-4 font-medium marker:hidden [&::-webkit-details-marker]:hidden">
               <span className="flex items-center justify-between gap-3">
-                {faq.question}
+                <span className="pr-2">{faq.question}</span>
                 <span
                   aria-hidden="true"
-                  className="text-primary transition-transform group-open:rotate-45"
+                  className="text-lg leading-none text-primary transition-transform duration-[250ms] [transition-timing-function:var(--ease-out)] group-open:rotate-45 motion-reduce:transition-none"
                 >
                   +
                 </span>

@@ -23,6 +23,9 @@ const eslintConfig = [
       "bundled/**",
       ".wrangler/**",
       "cloudflare-env.d.ts",
+      // Skills de agentes instaladas con `npx skills add` (herramientas, no código de la app)
+      ".agents/**",
+      ".claude/**",
     ],
   },
 ];

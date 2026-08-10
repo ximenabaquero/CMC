@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getPublishedProducts } from "@/lib/content";
+import { getProductBySlug, getPublishedProducts, getSiteSettings } from "@/lib/content";
 import { ProductDetail } from "@/components/public/ProductDetail";
 import { mediaUrl } from "@/lib/media";
 
@@ -43,5 +43,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  return <ProductDetail product={product} />;
+  // El CTA de WhatsApp usa los canales de site_settings; si no cargan,
+  // el detalle se degrada al enlace de /contacto.
+  let settings: Awaited<ReturnType<typeof getSiteSettings>> | null = null;
+  try {
+    settings = await getSiteSettings();
+  } catch {
+    settings = null;
+  }
+
+  return <ProductDetail product={product} settings={settings} />;
 }

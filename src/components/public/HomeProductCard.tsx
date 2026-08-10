@@ -19,7 +19,7 @@ export function HomeProductCard({ product }: { product: ProductWithImage }) {
       className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface transition hover:border-petrol/30 hover:shadow-md motion-reduce:transition-none"
     >
       {product.image ? (
-        <div className="h-72 bg-white p-2.5 sm:h-80 lg:h-[360px]">
+        <div className="h-72 bg-white p-5 sm:h-80 lg:h-[360px] lg:p-6">
           <Image
             src={mediaUrl(product.image)}
             alt={product.image.alt_text}

@@ -21,7 +21,7 @@ export function PostArticle({ post }: { post: PostWithCover }) {
       </nav>
 
       <header className="mb-8">
-        <h1 className="text-3xl font-semibold sm:text-4xl">{post.title}</h1>
+        <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">{post.title}</h1>
         {post.published_at ? (
           <p className="mt-2 text-sm text-muted-foreground">
             Publicado el{" "}
@@ -44,6 +44,24 @@ export function PostArticle({ post }: { post: PostWithCover }) {
       ) : null}
 
       <Markdown>{post.body}</Markdown>
+
+      {/* Salida al final del artículo: el momento de mayor credibilidad no
+          debe terminar en un callejón sin salida. */}
+      <footer className="mt-12 border-t border-border pt-6">
+        <Link
+          href="/blog"
+          className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+        >
+          <span aria-hidden="true">←</span> Todos los artículos
+        </Link>
+        <p className="mt-3 text-sm text-muted-foreground">
+          ¿Tienes preguntas sobre nuestros productos?{" "}
+          <Link href="/contacto" className="font-medium text-petrol underline underline-offset-2">
+            Contáctanos
+          </Link>
+          .
+        </p>
+      </footer>
     </article>
   );
 }

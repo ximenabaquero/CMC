@@ -51,6 +51,20 @@
   /* Tipografía (provisional hasta recibir manual de identidad) */
   --font-heading: var(--font-geist-sans);
   --font-body: var(--font-geist-sans);
+
+  /* Vocabulario de motion (una sola voz de easing/duración en todo el sitio) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 150ms; /* feedback de pulsación y hovers */
+  --dur-base: 250ms; /* cambios de estado: acordeón, drawer */
+  --dur-enter: 400ms; /* entradas de marketing (solo hero de la home; discreta
+                         porque en un sitio MPA se repite en cada visita) */
+}
+
+/* Permite animar block-size hasta `auto` (acordeón FAQ, Chromium 131+).
+   Acotado al sitio público para no cambiar el comportamiento del admin. */
+.public-site {
+  interpolate-size: allow-keywords;
 }
 
 @theme inline {
@@ -197,6 +211,12 @@ h6 {
   animation-play-state: paused;
 }
 
+/* Pausa también al navegar con teclado: los logos enlazados son enfocables
+   y nadie debe perseguir un blanco en movimiento. */
+.brands-marquee:focus-within .brands-marquee-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .brands-marquee {
     overflow-x: auto;
@@ -205,5 +225,141 @@ h6 {
   .brands-marquee-track {
     animation: none;
     width: auto;
+  }
+
+  /* Sin animación la segunda copia (decorativa) solo duplicaría los logos. */
+  .brands-marquee-track > [aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Motion del sitio público. CSS puro (SSG): sin JavaScript ni
+   observers. Todo respeta prefers-reduced-motion.
+   ------------------------------------------------------------ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Variante sin opacidad para candidatos LCP (h1 e imagen del hero): con
+   opacity: 0 inicial, Chrome no cuenta el elemento como pintado y el delay
+   penalizaría la métrica en cada carga de la home. */
+@keyframes rise-in-solid {
+  from {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Entrada escalonada del hero (solo la home).
+   `backwards` mantiene el estado inicial durante el delay. */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: rise-in var(--dur-enter) var(--ease-out) backwards;
+  }
+  .enter-lcp {
+    animation-name: rise-in-solid;
+  }
+  .enter-2 {
+    animation-delay: 70ms;
+  }
+  .enter-3 {
+    animation-delay: 140ms;
+  }
+  .enter-4 {
+    animation-delay: 210ms;
+  }
+  /* Composición visual del hero: entra un pelo después del texto,
+     sin opacidad (candidato LCP). */
+  .enter-visual {
+    animation: rise-in-solid var(--dur-enter) var(--ease-out) 150ms backwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Más suave, no cero: solo opacidad, sin desplazamiento. */
+  .enter {
+    animation: fade-in var(--dur-base) ease-out backwards;
+  }
+  /* Los candidatos LCP quedan estáticos y visibles desde el primer frame. */
+  .enter-lcp,
+  .enter-visual {
+    animation: none;
+  }
+}
+
+/* Reveal ligado al scroll para tarjetas y bloques bajo el fold (solo home).
+   El stagger emerge de la posición de cada elemento; sin delays artificiales.
+   Fallback: sin soporte de view(), el contenido queda visible tal cual. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 40%;
+    }
+  }
+}
+
+/* Acordeón FAQ: apertura/cierre animados sobre details/summary nativo
+   (Chromium 131+; en el resto conserva el snap actual, sin JS). */
+@media (prefers-reduced-motion: no-preference) {
+  .public-site details::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    opacity: 0;
+    transition:
+      content-visibility var(--dur-base) allow-discrete,
+      block-size var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out);
+  }
+
+  .public-site details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  /* Drawer del menú móvil: nace del header al montarse en el DOM. */
+  .nav-drawer {
+    transition:
+      opacity 200ms var(--ease-drawer),
+      translate 200ms var(--ease-drawer);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -8px;
+    }
+  }
+}
+
+/* Crossfade entre páginas (view transitions cross-document; Chromium.
+   El resto de navegadores navega como siempre). */
+@view-transition {
+  navigation: auto;
+}
+
+/* El header sticky es idéntico en todas las páginas: con nombre propio, sus
+   snapshots crossfadean de forma imperceptible y el chrome se percibe estable. */
+.public-site > header {
+  view-transition-name: site-header;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
   }
 }

@@ -63,7 +63,7 @@ export function HomeCta({ settings }: { settings: SiteSettings | null }) {
           hasChannels ? "grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center" : ""
         }`}
       >
-        <div className={hasChannels ? "" : "mx-auto max-w-2xl text-center"}>
+        <div className={`reveal ${hasChannels ? "" : "mx-auto max-w-2xl text-center"}`}>
           <h2
             id="cta-contacto"
             className="text-balance text-3xl font-semibold text-white sm:text-4xl lg:text-5xl"
@@ -74,16 +74,38 @@ export function HomeCta({ settings }: { settings: SiteSettings | null }) {
             Cuéntanos qué necesitas y te acompañamos con productos y procesos consistentes,
             ágiles y confiables.
           </p>
-          <Link
-            href="/contacto"
-            className="mt-8 inline-block rounded-md bg-amber px-8 py-4 text-base font-semibold text-petrol-deep transition hover:bg-amber-hover"
-          >
-            Ir a contacto
-          </Link>
+          {/* El objetivo del sitio es el contacto directo: si hay WhatsApp
+              configurado, el botón principal va directo al chat y /contacto
+              queda como camino secundario. */}
+          {settings?.whatsapp ? (
+            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+              <a
+                href={`https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-md bg-amber px-8 py-4 text-base font-semibold text-petrol-deep transition hover:bg-amber-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+              >
+                Escríbenos por WhatsApp
+              </a>
+              <Link
+                href="/contacto"
+                className="text-sm font-medium text-white underline-offset-4 hover:underline"
+              >
+                Ver todos los canales <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          ) : (
+            <Link
+              href="/contacto"
+              className="mt-8 inline-block rounded-md bg-amber px-8 py-4 text-base font-semibold text-petrol-deep transition hover:bg-amber-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+            >
+              Contáctanos
+            </Link>
+          )}
         </div>
 
         {hasChannels ? (
-          <ul>
+          <ul className="reveal">
             {channels.map((channel) => (
               <li key={channel.label} className="border-t border-white/15 py-3.5 last:border-b">
                 <a

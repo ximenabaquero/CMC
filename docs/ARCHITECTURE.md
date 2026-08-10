@@ -69,10 +69,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
     `scripts/import-assets.mjs`). Su URL es su ruta bajo `/`.
   - Excepción: `public/gifsanimados/` contiene GIFs animados de marca
     (logo de entrada, margarina mezclándose) versionados a mano, fuera del
-    flujo `import-assets`/`media_assets`. Se usan como decoración en header,
-    footer, hero y CTA de la home; `scripts/patch-gif-loop.mjs` genera la
-    variante sin loop (`cmc-logo-entrada-una-vez.gif`) que reproduce la
-    animación una sola vez.
+    flujo `import-assets`/`media_assets`. Tras la auditoría de diseño
+    (2026-08-10) se usan solo en **dos** momentos: el logo del header y la
+    mantequilla del CTA final de la home ("dieta de GIFs": un mismo activo
+    animado repetido devaluaba el gesto y competía con el producto).
+    `scripts/patch-gif-loop.mjs` genera la variante sin loop
+    (`cmc-logo-entrada-una-vez.gif`) que reproduce la animación una sola vez.
   - `R2`: archivos subidos desde el CMS a través del adaptador
     (`src/lib/storage/`): R2 en producción, sistema de archivos local en
     desarrollo. URL estable `/api/media/<clave>` en ambos entornos.
@@ -109,16 +111,35 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - **Tipografía**: Geist (cuerpo) + Fraunces (display). Fraunces solo aplica a
   `h1–h3` dentro de `.public-site` (clase del layout público) y vía la
   utilidad `font-display`; el panel admin conserva Geist íntegro.
+- **Fundación de diseño** (2026-08-10): `PRODUCT.md` (verdad de producto) y
+  `DESIGN.md` + `.impeccable/design.json` (sistema visual, North Star
+  "El Obrador Editorial", reglas nombradas) en la raíz del repo. Son la
+  autoridad de criterio visual para cualquier cambio del sitio público;
+  generados con las skills de diseño instaladas en `.agents/skills/`
+  (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
   `hero`, `settings` y el primer producto publicado con imagen para la
-  composición derecha; sin productos degrada a formas geométricas),
-  `HomeStats` (indicadores calculados del catálogo; se oculta si no hay
-  datos), `HomePillars` (numeración editorial), `HomeProductCard` y
-  `HomePostsSection` (destacado + secundarios; posts sin portada usan portada
-  editorial CSS) y `HomeCta` (canales de `site_settings` solo si existen).
-  Son independientes de los compartidos de `shared.tsx` (`ProductCard`,
-  `PostCard`…), que siguen usándose en `/productos`, `/blog` y las vistas
-  previas del admin.
+  composición derecha — protagonista único; sin productos degrada a formas
+  geométricas), `HomeStats` (indicadores calculados del catálogo; oculta
+  cifras < 3 y desaparece sin datos), `HomePillars` (numeración editorial;
+  también lo reutiliza `/nosotros`), `HomeProductCard` y `HomePostsSection`
+  (destacado + secundarios; también encabeza el índice de `/blog`) y
+  `HomeCta` (canales de `site_settings`; con WhatsApp configurado el botón
+  principal abre el chat directo). Los compartidos de `shared.tsx`
+  (`ProductCard`, `PostCard`, `SectionHeading` con `tone="warm"` por defecto,
+  `EditorialCover` para posts sin portada…) siguen usándose en `/productos`,
+  `/blog` y las vistas previas del admin. Las imágenes de producto van
+  siempre sobre lienzo blanco con `object-contain`: el empaque nunca se
+  recorta (también en `ProductDetail`, que acepta `settings` para el CTA de
+  WhatsApp con producto prellenado).
+- **Motion**: vocabulario CSS-first al final de `globals.css` (tokens
+  `--ease-out`/`--dur-*`, entrada del hero `.enter*`, reveal scroll-driven
+  `.reveal` con `animation-timeline: view()` bajo `@supports`, acordeón FAQ
+  con `::details-content` + `interpolate-size`, drawer móvil con
+  `@starting-style`, view transitions cross-document con header estable).
+  Sin JavaScript ni librerías: compatible con SSG/server components, con
+  fallback íntegro sin soporte y `prefers-reduced-motion` respetado en cada
+  pieza.
 - `mix-blend-multiply` en el hero solo funciona con packshots sobre fondo
   blanco; la sección usa `isolate` para contener la mezcla.
 

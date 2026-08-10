@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-10T00:00:00Z",
+  "title": "Design System: CMC — Compañía Mundial de Comercio",
+  "extensions": {
+    "colorMeta": {
+      "petrol": { "role": "primary", "displayName": "Azul Petróleo", "canonical": "#123f4d", "tonalRamp": ["#06181e", "#0b2d38", "#123f4d", "#1d5c70", "#2f7d96", "#5ba3ba", "#93c6d6", "#d3e8ef"] },
+      "cream": { "role": "neutral", "displayName": "Crema", "canonical": "#faf6ec", "tonalRamp": ["#3d3626", "#6e6144", "#a08e64", "#c4b48c", "#ddd1af", "#eee4cb", "#f5eedd", "#faf6ec"] },
+      "amber": { "role": "secondary", "displayName": "Ámbar Mantequilla", "canonical": "#f2b63d", "tonalRamp": ["#402b05", "#6d4a0a", "#9a6a11", "#c48a1c", "#e6a92f", "#f2b63d", "#f7cd77", "#fbe6bb"] },
+      "orange": { "role": "secondary", "displayName": "Naranja Editorial", "canonical": "#b3491a", "tonalRamp": ["#2e1105", "#5a230a", "#863512", "#b3491a", "#d0662f", "#e18b5c", "#eeb392", "#f8dcc9"] },
+      "primary-green": { "role": "secondary", "displayName": "Verde Campos", "canonical": "#1e7a3c", "tonalRamp": ["#07230f", "#0f4520", "#166030", "#1e7a3c", "#2f9b53", "#5cbc7c", "#97d8ac", "#d3efdc"] },
+      "foreground": { "role": "neutral", "displayName": "Tinta", "canonical": "#1f2933", "tonalRamp": ["#12181e", "#1f2933", "#38434e", "#52606d", "#71808d", "#96a3ae", "#bcc5cd", "#e1e6ea"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display Fraunces", "purpose": "Solo el h1 del hero; max-w-16ch, text-balance, petróleo." },
+      "headline": { "displayName": "Headline Fraunces", "purpose": "h2 de sección tras el eyebrow naranja." },
+      "label": { "displayName": "Eyebrow", "purpose": "Uppercase tracking-wide; naranja sobre claro, ámbar sobre petróleo." }
+    },
+    "shadows": [
+      { "name": "hover-lift", "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)", "purpose": "Única sombra del sistema; solo en hover de tarjetas (Flat-At-Rest)." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Curva por defecto del sitio: entradas, reveal, acordeón." },
+      { "name": "ease-drawer", "value": "cubic-bezier(0.32, 0.72, 0, 1)", "purpose": "Drawer del menú móvil." },
+      { "name": "dur-fast", "value": "150ms", "purpose": "Feedback de pulsación (active:scale-[0.98]) y hovers." },
+      { "name": "dur-base", "value": "250ms", "purpose": "Cambios de estado: acordeón FAQ, drawer." },
+      { "name": "dur-enter", "value": "400ms", "purpose": "Entrada escalonada del hero (stagger 70ms; candidatos LCP solo transform)." },
+      { "name": "reveal", "value": "animation-timeline: view(); animation-range: entry 10% entry 40%", "purpose": "Reveal scroll-driven de tarjetas/ítems de la home; fallback visible sin soporte." },
+      { "name": "view-transition", "value": "200ms crossfade", "purpose": "Navegación entre páginas (Chromium); header con nombre propio para estabilidad." },
+      { "name": "marquee", "value": "35s linear infinite", "purpose": "Carrusel de marcas; pausa en hover y focus-within; scroll manual con reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario (verde)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción principal: Ver catálogo, Contáctanos.",
+      "html": "<button class=\"ds-btn-primary\">Ver catálogo</button>",
+      "css": ".ds-btn-primary { background: var(--primary, #1e7a3c); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 0.625rem; font-weight: 600; font-size: 0.875rem; transition: background 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: var(--primary-hover, #166030); } .ds-btn-primary:focus-visible { outline: 2px solid #2563c4; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botón outline petróleo",
+      "kind": "button",
+      "refersTo": "button-outline-petrol",
+      "description": "Acción secundaria; invierte a petróleo sólido en hover.",
+      "html": "<button class=\"ds-btn-outline\">Conócenos</button>",
+      "css": ".ds-btn-outline { background: transparent; color: var(--petrol, #123f4d); padding: 0.75rem 1.5rem; border: 2px solid var(--petrol, #123f4d); border-radius: 0.625rem; font-weight: 600; font-size: 0.875rem; transition: background 150ms, color 150ms; } .ds-btn-outline:hover { background: var(--petrol, #123f4d); color: #fff; } .ds-btn-outline:focus-visible { outline: 2px solid #2563c4; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botón ámbar (sobre petróleo)",
+      "kind": "button",
+      "refersTo": "button-amber",
+      "description": "CTA de la banda petróleo final; nunca sobre fondo claro.",
+      "html": "<div style=\"background:#0b2d38;padding:24px;border-radius:8px\"><button class=\"ds-btn-amber\">Escríbenos por WhatsApp</button></div>",
+      "css": ".ds-btn-amber { background: var(--amber, #f2b63d); color: var(--petrol-deep, #0b2d38); padding: 0.75rem 1.5rem; border: none; border-radius: 0.625rem; font-weight: 600; font-size: 0.875rem; transition: background 150ms; } .ds-btn-amber:hover { background: var(--amber-hover, #e6a92f); }"
+    },
+    {
+      "name": "Tarjeta de producto",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "Lienzo blanco uniforme; sombra solo en hover.",
+      "html": "<article class=\"ds-card-product\"><div class=\"ds-card-canvas\">📦</div><h3 class=\"ds-card-title\">DAP Hojaldre</h3><p class=\"ds-card-desc\">Margarina industrial para masas hojaldradas.</p></article>",
+      "css": ".ds-card-product { background: #fff; border: 1px solid var(--border, #e4e0d8); border-radius: 1rem; padding: 1.25rem; max-width: 320px; transition: border-color 150ms, box-shadow 150ms; } .ds-card-product:hover { border-color: rgba(18,63,77,0.3); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); } .ds-card-canvas { display: flex; align-items: center; justify-content: center; height: 160px; font-size: 48px; background: #fff; border-radius: 0.625rem; } .ds-card-title { font-family: Georgia, serif; font-weight: 600; font-size: 1.25rem; color: var(--petrol, #123f4d); margin: 0.75rem 0 0.25rem; } .ds-card-desc { color: var(--muted-foreground, #52606d); font-size: 0.875rem; margin: 0; }"
+    },
+    {
+      "name": "Eyebrow + titular de sección",
+      "kind": "custom",
+      "description": "The Eyebrow Rule: patrón de apertura de toda sección.",
+      "html": "<header class=\"ds-section-heading\"><p class=\"ds-eyebrow\">Catálogo</p><h2 class=\"ds-heading\">Nuestros productos</h2><p class=\"ds-desc\">Margarinas, mantequillas y aceites para panadería e industria.</p></header>",
+      "css": ".ds-section-heading { max-width: 480px; } .ds-eyebrow { color: var(--orange, #b3491a); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; font-size: 0.875rem; margin: 0 0 0.5rem; } .ds-heading { font-family: Georgia, serif; font-weight: 600; font-size: 2rem; line-height: 1.15; letter-spacing: -0.01em; color: var(--petrol, #123f4d); margin: 0; } .ds-desc { color: var(--muted-foreground, #52606d); margin: 0.75rem 0 0; }"
+    },
+    {
+      "name": "Nav link",
+      "kind": "nav",
+      "description": "Link del header; el activo lleva subrayado naranja.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">Inicio</a><a class=\"ds-nav-link ds-active\" href=\"#\">Productos</a><a class=\"ds-nav-link\" href=\"#\">Blog</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 1.5rem; background: rgba(250,246,236,0.95); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border, #e4e0d8); } .ds-nav-link { color: var(--foreground, #1f2933); font-size: 0.875rem; font-weight: 500; text-decoration: none; padding-bottom: 2px; border-bottom: 2px solid transparent; transition: border-color 150ms; } .ds-nav-link:hover { border-bottom-color: rgba(179,73,26,0.4); } .ds-nav-link.ds-active { border-bottom-color: var(--orange, #b3491a); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Obrador Editorial",
+    "overview": "La calidez de un obrador de panadería —crema, ámbar, mantequilla derritiéndose— presentada con el rigor de una revista bien compuesta. El sitio habla a compradores B2B: cálido porque vende materia prima de panadería, serio porque es un proveedor industrial. La tensión se resuelve con composición editorial: numeración 01/02 en naranja, eyebrows en mayúsculas, titulares Fraunces con aire, y el producto real (la caja DAP) como único héroe fotográfico.",
+    "keyCharacteristics": [
+      "Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo)",
+      "Composición editorial: eyebrow naranja → titular Fraunces → prosa Geist",
+      "Producto real como héroe; cero fotografía de stock",
+      "Plano y preciso: bordes finos, sombra solo como respuesta al hover"
+    ],
+    "rules": [
+      { "name": "The Amber Guardrail Rule", "body": "El ámbar NUNCA es texto sobre fondo claro; solo funciona sobre petróleo (8:1) o como forma decorativa.", "section": "colors" },
+      { "name": "The One Hero Rule", "body": "Cada viewport tiene un solo protagonista de color o imagen; los acentos no compiten en la misma vista.", "section": "colors" },
+      { "name": "The Eyebrow Rule", "body": "Toda sección se anuncia igual: eyebrow uppercase naranja → titular Fraunces petróleo → descripción gris piedra.", "section": "typography" },
+      { "name": "The Flat-At-Rest Rule", "body": "Ninguna superficie tiene sombra en reposo; la sombra es exclusivamente una respuesta al hover.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do anunciar toda sección con el patrón eyebrow → Fraunces → descripción.",
+      "Do usar el producto real (caja DAP) como único héroe visual; lienzo blanco + object-contain.",
+      "Do alternar fondos (blanco/crema/crema profunda/petróleo) para estructurar la página.",
+      "Do envolver todo motion en motion-safe: y dar fallback en motion-reduce:.",
+      "Do mantener el camino a WhatsApp/teléfono a un paso en cada página."
+    ],
+    "donts": [
+      "Don't usar ámbar como texto sobre fondos claros.",
+      "Don't añadir sombras en reposo.",
+      "Don't usar fotografía de stock, testimonios o cifras no verificadas.",
+      "Don't introducir librerías de animación JS ni client components innecesarios: motion CSS-first (SSG).",
+      "Don't poner más de un protagonista de color/imagen por viewport."
+    ]
+  }
+}

@@ -23,6 +23,11 @@ como base de datos y **R2** para medios. Todo el contenido, copy, comentarios y 
 - **Infra**: caché incremental en R2 + tag cache en D1, sin cola (`open-next.config.ts`,
   `wrangler.jsonc`). El despliegue a producción está **bloqueado** hasta aprobación del cliente.
 - Detalle completo en `docs/ARCHITECTURE.md` (incluye las restricciones no negociables al final).
+- **Diseño**: `PRODUCT.md` (verdad de producto) y `DESIGN.md` (sistema visual, North Star
+  "El Obrador Editorial" y reglas nombradas) en la raíz son la autoridad de criterio para
+  cualquier cambio visual del sitio público. Skills de diseño instaladas en `.agents/skills/`
+  (impeccable, emil-design-eng + sub-skills de animación, design-taste-frontend). Motion
+  CSS-first únicamente (SSG): vocabulario al final de `src/app/globals.css`.
 
 ## Comandos
 

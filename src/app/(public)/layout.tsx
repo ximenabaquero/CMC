@@ -46,7 +46,7 @@ export default async function PublicLayout({ children }: { children: React.React
         Saltar al contenido
       </a>
 
-      <header className="relative sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>
             {/* Logo animado: entra una sola vez y queda fijo (el loop continuo
@@ -79,7 +79,7 @@ export default async function PublicLayout({ children }: { children: React.React
           <div className="flex items-center gap-2">
             <Link
               href="/contacto"
-              className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover sm:block"
+              className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100 sm:block"
             >
               Contáctanos
             </Link>
@@ -95,25 +95,18 @@ export default async function PublicLayout({ children }: { children: React.React
       <footer className="border-t border-border bg-cream-deep">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
           <div>
-            {/* Versión del logo que se anima una sola vez y queda fija (en el
-                footer no conviene un bucle infinito); estático si hay reduced motion. */}
-            <Image
-              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
-              alt=""
-              width={512}
-              height={340}
-              className="mb-3 h-10 w-auto motion-reduce:hidden"
-            />
+            {/* Logo estático: el momento animado de marca vive solo en el
+                header; repetir el mismo GIF aquí devaluaba el gesto. */}
             <Image
               src="/brand/logo-cmc-png-copia-1.png"
               alt=""
               width={96}
               height={64}
-              className="mb-3 hidden h-10 w-auto motion-reduce:block"
+              className="mb-3 h-10 w-auto"
             />
             <p className="text-sm font-semibold text-petrol">{companyName}</p>
             {settings?.slogan ? (
-              <p className="text-sm text-muted-foreground">«{settings.slogan}»</p>
+              <p className="text-sm italic text-muted-foreground">{settings.slogan}</p>
             ) : null}
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               Producción y distribución de margarinas, mantequillas y aceites.

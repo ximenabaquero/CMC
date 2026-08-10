@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { extractPillars, getPublishedSections } from "@/lib/content";
-import { DataUnavailable, SectionHeading } from "@/components/public/shared";
+import { DataUnavailable } from "@/components/public/shared";
+import { HomePillars } from "@/components/public/HomePillars";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -21,7 +22,7 @@ export default async function AboutPage() {
   if (!sections) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-14">
-        <h1 className="mb-6 text-3xl font-semibold">Nosotros</h1>
+        <h1 className="mb-6 text-3xl font-semibold text-petrol">Nosotros</h1>
         <DataUnavailable resource="la información de la empresa" />
       </div>
     );
@@ -30,54 +31,59 @@ export default async function AboutPage() {
   const intro = sections.home_intro;
   const pillars = extractPillars(sections.pillars);
   const blocks = ABOUT_SECTION_KEYS.map((key) => sections[key]).filter(Boolean);
+  const introParagraphs = intro?.body ? intro.body.split(/\n\n+/) : [];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14">
-      <header className="max-w-3xl">
-        <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-primary">Nosotros</p>
-        <h1 className="text-3xl font-semibold sm:text-4xl">
-          {intro?.title ?? "¿Quiénes somos?"}
-        </h1>
-        {intro?.body ? <p className="mt-4 text-lg text-muted-foreground">{intro.body}</p> : null}
-      </header>
+    <>
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <header className="max-w-3xl">
+          <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-orange">Nosotros</p>
+          <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">
+            {intro?.title ?? "¿Quiénes somos?"}
+          </h1>
+          {introParagraphs.map((paragraph, index) => (
+            <p
+              key={index}
+              className={
+                index === 0
+                  ? "mt-4 text-lg font-medium leading-snug text-petrol"
+                  : "mt-4 text-muted-foreground"
+              }
+            >
+              {paragraph}
+            </p>
+          ))}
+        </header>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-2">
-        {blocks.map((block) => (
-          <section
-            key={block.section_key}
-            aria-labelledby={`sec-${block.section_key}`}
-            className="rounded-lg border border-border bg-surface p-6"
-          >
-            <h2 id={`sec-${block.section_key}`} className="text-xl font-semibold">
-              {block.title}
-            </h2>
-            {block.body ? (
-              <div className="mt-3 space-y-3 text-muted-foreground">
-                {block.body.split(/\n\n+/).map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-              </div>
-            ) : null}
-          </section>
-        ))}
+        {/* Bloques institucionales en lenguaje editorial: divisores y
+            jerarquía tipográfica, sin tarjetas idénticas. */}
+        {blocks.length > 0 ? (
+          <div className="mt-14 grid gap-x-14 gap-y-8 lg:grid-cols-2">
+            {blocks.map((block) => (
+              <section
+                key={block.section_key}
+                aria-labelledby={`sec-${block.section_key}`}
+                className="border-t border-border pt-6"
+              >
+                <h2 id={`sec-${block.section_key}`} className="text-xl font-semibold text-petrol">
+                  {block.title}
+                </h2>
+                {block.body ? (
+                  <div className="mt-3 space-y-3 text-muted-foreground">
+                    {block.body.split(/\n\n+/).map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
+            ))}
+          </div>
+        ) : null}
       </div>
 
-      {pillars.length > 0 ? (
-        <section className="mt-14" aria-labelledby="pilares-nosotros">
-          <SectionHeading
-            eyebrow="Propuesta de valor"
-            title="Seis pilares innegociables"
-          />
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((pillar) => (
-              <li key={pillar.title} className="rounded-lg border border-border bg-surface-muted p-5">
-                <h3 className="font-semibold">{pillar.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{pillar.description}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </div>
+      {/* Mismo lenguaje editorial de pilares que la home: un solo patrón
+          para el mismo contenido en todo el sitio. */}
+      <HomePillars section={sections.pillars} pillars={pillars} />
+    </>
   );
 }

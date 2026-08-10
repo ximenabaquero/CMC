@@ -20,10 +20,10 @@ export default async function FaqsPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-14">
       <header className="mb-10">
-        <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-primary">
+        <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-orange">
           Preguntas frecuentes
         </p>
-        <h1 className="text-3xl font-semibold sm:text-4xl">Resolvemos tus dudas</h1>
+        <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">Resolvemos tus dudas</h1>
         <p className="mt-3 text-muted-foreground">
           Si no encuentras la respuesta que buscas,{" "}
           <Link href="/contacto" className="text-secondary underline underline-offset-2">

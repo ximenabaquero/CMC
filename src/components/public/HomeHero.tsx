@@ -37,33 +37,37 @@ export function HomeHero({
 
   return (
     <section className="relative isolate overflow-hidden border-b border-border bg-hero-cream">
-      <div className="mx-auto grid max-w-[80rem] items-center gap-10 px-4 py-12 sm:py-16 lg:min-h-[min(88vh,44rem)] lg:grid-cols-[52fr_48fr] lg:gap-14 lg:py-12">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 lg:min-h-[min(88vh,44rem)] lg:grid-cols-[52fr_48fr] lg:gap-14 lg:py-12">
         {/* Columna izquierda: mensaje y acciones */}
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wider text-orange">{eyebrow}</p>
-          <h1 className="mt-4 max-w-[16ch] text-balance text-[2.75rem] font-semibold leading-[1.06] text-petrol sm:text-6xl sm:leading-[1.04] lg:text-[4rem]">
+          <p className="enter text-sm font-semibold uppercase tracking-wider text-orange">
+            {eyebrow}
+          </p>
+          <h1 className="enter enter-lcp enter-2 mt-4 max-w-[16ch] text-balance text-[2.75rem] font-semibold leading-[1.06] text-petrol sm:text-6xl sm:leading-[1.04] lg:text-[4rem]">
             {title}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">{body}</p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <p className="enter enter-3 mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            {body}
+          </p>
+          <div className="enter enter-4 mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/productos"
-              className="rounded-md bg-primary px-7 py-3.5 text-center text-base font-semibold text-primary-foreground transition hover:bg-primary-hover"
+              className="rounded-md bg-primary px-7 py-3.5 text-center text-base font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
             >
-              Conocer nuestros productos
+              Ver catálogo
             </Link>
             <Link
               href="/contacto"
-              className="rounded-md border-2 border-petrol px-7 py-3.5 text-center text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white"
+              className="rounded-md border-2 border-petrol px-7 py-3.5 text-center text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
             >
-              Hablar con nosotros
+              Contáctanos
             </Link>
           </div>
         </div>
 
         {/* Columna derecha: composición con productos reales publicados */}
         <div
-          className={`relative mx-auto w-full max-w-md lg:max-w-none ${
+          className={`enter-visual relative mx-auto w-full max-w-md lg:max-w-none ${
             mainProduct ? "" : "hidden lg:block lg:min-h-96"
           }`}
         >
@@ -77,21 +81,6 @@ export function HomeHero({
             aria-hidden="true"
             className="absolute -bottom-8 -left-6 h-36 w-36 rounded-full border-2 border-orange/40 lg:h-48 lg:w-48"
           />
-          {/* Logo animado sobre el círculo ámbar, en insignia crema para que
-              el texto rojo del logo sea legible: entra una sola vez y queda
-              fijo (decorativo; el logo accesible vive en el header) */}
-          <div
-            aria-hidden="true"
-            className="absolute right-2 top-2 z-20 hidden h-48 w-48 items-center justify-center rounded-full bg-cream/95 shadow-sm lg:motion-safe:flex"
-          >
-            <Image
-              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
-              alt=""
-              width={512}
-              height={340}
-              className="w-40"
-            />
-          </div>
           {mainProduct?.image ? (
             <Image
               src={mediaUrl(mainProduct.image)}

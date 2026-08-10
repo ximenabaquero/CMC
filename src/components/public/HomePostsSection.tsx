@@ -2,14 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { mediaUrl } from "@/lib/media";
 import type { PostWithCover } from "@/lib/content";
-
-/* Sistema de portadas editoriales para artículos sin imagen: fondo de color
-   rotado por posición + numeral tipográfico. Sin imágenes falsas. */
-const EDITORIAL_COVERS = [
-  { background: "bg-petrol", numeral: "text-white/25" },
-  { background: "bg-orange", numeral: "text-white/25" },
-  { background: "bg-amber", numeral: "text-petrol/25" },
-];
+import { EditorialCover } from "@/components/public/shared";
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("es-CO", { dateStyle: "long" });
 
@@ -19,30 +12,6 @@ function formatDate(value: string | null): string | null {
   const timestamp = Date.parse(value);
   if (Number.isNaN(timestamp)) return null;
   return DATE_FORMATTER.format(new Date(timestamp));
-}
-
-function EditorialCover({
-  index,
-  className,
-  numeralClassName,
-}: {
-  index: number;
-  className: string;
-  numeralClassName: string;
-}) {
-  const cover = EDITORIAL_COVERS[index % EDITORIAL_COVERS.length];
-  return (
-    <div
-      aria-hidden="true"
-      className={`relative flex items-end justify-end overflow-hidden rounded-lg ${cover.background} ${className}`}
-    >
-      <span
-        className={`font-display font-semibold leading-none ${cover.numeral} ${numeralClassName}`}
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-    </div>
-  );
 }
 
 /**
@@ -84,13 +53,16 @@ export function HomePostsSection({ posts }: { posts: PostWithCover[] }) {
           {featured.excerpt ? (
             <p className="mt-3 max-w-2xl text-muted-foreground">{featured.excerpt}</p>
           ) : null}
-          <p className="mt-3 text-sm text-muted-foreground">
-            {featuredDate ? (
-              <time dateTime={featured.published_at ?? undefined}>{featuredDate}</time>
-            ) : null}
-            <span className="ml-0 font-medium text-primary">
-              {featuredDate ? " · " : ""}Leer artículo →
-            </span>
+          {featuredDate ? (
+            <time
+              dateTime={featured.published_at ?? undefined}
+              className="mt-3 block text-sm text-muted-foreground"
+            >
+              {featuredDate}
+            </time>
+          ) : null}
+          <p className="mt-2 text-sm font-semibold text-primary">
+            Leer artículo <span aria-hidden="true">→</span>
           </p>
         </Link>
       </article>

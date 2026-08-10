@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   extractPillars,
   getPublishedBrands,
@@ -101,7 +100,7 @@ export default async function HomePage() {
                 href="/nosotros"
                 className="mt-6 inline-block font-semibold text-primary underline-offset-4 hover:underline"
               >
-                Conoce más sobre nosotros →
+                Conoce más sobre nosotros <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>
@@ -123,27 +122,14 @@ export default async function HomePage() {
 
       {/* Vista previa del catálogo */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
-        <div className="flex items-center justify-between gap-8">
-          <SectionHeading
-            id="catalogo"
-            size="lg"
-            tone="warm"
-            eyebrow="Catálogo"
-            title="Nuestros productos"
-            description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
-          />
-          {/* Wordmark DAP animado: entra una sola vez al llegar a la sección
-              (carga diferida) y queda fijo; oculto en móvil y con reduced motion. */}
-          <div aria-hidden="true" className="hidden shrink-0 md:motion-safe:block">
-            <Image
-              src="/gifsanimados/dap-margarinas-entrada-una-vez.gif"
-              alt=""
-              width={512}
-              height={512}
-              className="w-40 lg:w-52"
-            />
-          </div>
-        </div>
+        <SectionHeading
+          id="catalogo"
+          size="lg"
+          tone="warm"
+          eyebrow="Catálogo"
+          title="Nuestros productos"
+          description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
+        />
         {products === null ? (
           <DataUnavailable resource="el catálogo" />
         ) : products.length === 0 ? (
@@ -152,7 +138,7 @@ export default async function HomePage() {
           <>
             <ul className="grid gap-6 sm:grid-cols-2">
               {products.slice(0, 4).map((product) => (
-                <li key={product.id}>
+                <li key={product.id} className="reveal">
                   <HomeProductCard product={product} />
                 </li>
               ))}
@@ -160,9 +146,9 @@ export default async function HomePage() {
             <div className="mt-8">
               <Link
                 href="/productos"
-                className="inline-block rounded-md border-2 border-petrol px-6 py-3 text-sm font-semibold text-petrol transition hover:bg-petrol hover:text-white"
+                className="inline-block rounded-md border-2 border-petrol px-6 py-3 text-sm font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
-                Ver todo el catálogo
+                Ver catálogo
               </Link>
             </div>
           </>
@@ -174,6 +160,9 @@ export default async function HomePage() {
         <section className="border-y border-border bg-cream-deep" aria-labelledby="propuesta">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
             <div className="max-w-3xl">
+              <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
+                Propuesta de valor
+              </p>
               <h2
                 id="propuesta"
                 className="text-balance text-3xl font-semibold text-petrol sm:text-4xl"
@@ -186,7 +175,7 @@ export default async function HomePage() {
                     index === 0 ? (
                       <p
                         key={index}
-                        className="border-l-4 border-orange pl-6 text-lg font-medium leading-relaxed text-petrol"
+                        className="text-xl font-medium leading-snug text-petrol sm:text-2xl"
                       >
                         {paragraph}
                       </p>
@@ -227,7 +216,7 @@ export default async function HomePage() {
                 href="/blog"
                 className="font-semibold text-primary underline-offset-4 hover:underline"
               >
-                Ver todos los artículos →
+                Ver todos los artículos <span aria-hidden="true">→</span>
               </Link>
             </div>
           </>
@@ -250,7 +239,7 @@ export default async function HomePage() {
                 href="/preguntas-frecuentes"
                 className="font-semibold text-primary underline-offset-4 hover:underline"
               >
-                Ver todas las preguntas →
+                Ver todas las preguntas <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>

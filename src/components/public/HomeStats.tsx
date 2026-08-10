@@ -1,11 +1,11 @@
-import Link from "next/link";
 import type { ProductWithImage } from "@/lib/content";
 
 /**
  * Franja de indicadores bajo el hero. Los valores se calculan con los datos
  * ya cargados por la home (productos publicados): nunca se escriben cifras
- * fijas. Los indicadores en cero se ocultan y, si no queda ninguno (o el
- * catálogo no cargó), la franja entera desaparece sin dejar hueco.
+ * fijas. Un indicador con valor bajo (< 3) resta más de lo que suma como
+ * cifra de confianza, así que se oculta; si no queda ninguno (o el catálogo
+ * no cargó), la franja entera desaparece sin dejar hueco.
  * El layout es flexible: funciona igual con uno o dos indicadores.
  */
 export function HomeStats({ products }: { products: ProductWithImage[] | null }) {
@@ -18,7 +18,7 @@ export function HomeStats({ products }: { products: ProductWithImage[] | null })
   const items = [
     { value: products.length, label: "Productos en catálogo" },
     { value: categoryCount, label: "Categorías de producto" },
-  ].filter((item) => item.value > 0);
+  ].filter((item) => item.value >= 3);
 
   if (items.length === 0) return null;
 
@@ -28,7 +28,7 @@ export function HomeStats({ products }: { products: ProductWithImage[] | null })
         {items.map((item, index) => (
           <div
             key={item.label}
-            className={`flex items-baseline gap-3 sm:flex-col sm:gap-0 sm:pr-10 ${
+            className={`reveal flex items-baseline gap-3 sm:flex-col sm:gap-0 sm:pr-10 ${
               index > 0 ? "sm:border-l sm:border-white/15 sm:pl-10" : ""
             }`}
           >
@@ -38,14 +38,6 @@ export function HomeStats({ products }: { products: ProductWithImage[] | null })
             <span className="text-sm text-white/80">{item.label}</span>
           </div>
         ))}
-        <div className="sm:ml-auto">
-          <Link
-            href="/productos"
-            className="text-sm font-medium text-white underline-offset-4 hover:underline"
-          >
-            Ver catálogo completo →
-          </Link>
-        </div>
       </div>
     </section>
   );

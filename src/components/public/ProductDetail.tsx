@@ -3,12 +3,27 @@ import Link from "next/link";
 import { mediaUrl } from "@/lib/media";
 import { Markdown } from "@/lib/markdown";
 import type { ProductDetailData } from "@/lib/content";
+import type { SiteSettings } from "@/lib/supabase/types";
 
 /**
  * Detalle de producto. Se usa tanto en la página pública
  * /productos/[slug] como en la vista previa del panel admin.
+ * `settings` es opcional: con WhatsApp configurado, el CTA principal abre el
+ * chat con el nombre del producto prellenado; sin él, se degrada a /contacto.
  */
-export function ProductDetail({ product }: { product: ProductDetailData }) {
+export function ProductDetail({
+  product,
+  settings,
+}: {
+  product: ProductDetailData;
+  settings?: SiteSettings | null;
+}) {
+  const whatsappHref = settings?.whatsapp
+    ? `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
+        `Hola, me interesa el producto ${product.name}.`
+      )}`
+    : null;
+
   return (
     <article className="mx-auto max-w-6xl px-4 py-10">
       <nav aria-label="Ruta de navegación" className="mb-6 text-sm text-muted-foreground">
@@ -20,15 +35,18 @@ export function ProductDetail({ product }: { product: ProductDetailData }) {
 
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
+          {/* Lienzo blanco: el empaque completo, sin recortes. */}
           {product.image ? (
-            <Image
-              src={mediaUrl(product.image)}
-              alt={product.image.alt_text}
-              width={product.image.width ?? 800}
-              height={product.image.height ?? 800}
-              priority
-              className="w-full rounded-lg border border-border bg-surface-muted object-cover"
-            />
+            <div className="aspect-square w-full overflow-hidden rounded-lg border border-border bg-white p-6">
+              <Image
+                src={mediaUrl(product.image)}
+                alt={product.image.alt_text}
+                width={product.image.width ?? 800}
+                height={product.image.height ?? 800}
+                priority
+                className="h-full w-full object-contain object-center"
+              />
+            </div>
           ) : (
             <div
               aria-hidden="true"
@@ -42,13 +60,21 @@ export function ProductDetail({ product }: { product: ProductDetailData }) {
             <ul className="mt-4 grid grid-cols-4 gap-3">
               {product.gallery.map((asset) => (
                 <li key={asset.id}>
-                  <Image
-                    src={mediaUrl(asset)}
-                    alt={asset.alt_text}
-                    width={160}
-                    height={160}
-                    className="aspect-square w-full rounded-md border border-border bg-surface-muted object-cover"
-                  />
+                  {/* Enlace a la imagen completa: ampliación honesta sin JS. */}
+                  <a
+                    href={mediaUrl(asset)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block overflow-hidden rounded-md border border-border bg-white p-1.5 transition hover:border-petrol/30"
+                  >
+                    <Image
+                      src={mediaUrl(asset)}
+                      alt={asset.alt_text}
+                      width={160}
+                      height={160}
+                      className="aspect-square w-full object-contain"
+                    />
+                  </a>
                 </li>
               ))}
             </ul>
@@ -57,11 +83,11 @@ export function ProductDetail({ product }: { product: ProductDetailData }) {
 
         <div>
           {product.category ? (
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-primary">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
               {product.category.name}
             </p>
           ) : null}
-          <h1 className="text-3xl font-semibold">{product.name}</h1>
+          <h1 className="text-3xl font-semibold text-petrol">{product.name}</h1>
           {product.short_description ? (
             <p className="mt-3 text-lg text-muted-foreground">{product.short_description}</p>
           ) : null}
@@ -95,13 +121,32 @@ export function ProductDetail({ product }: { product: ProductDetailData }) {
             </section>
           ) : null}
 
-          <div className="mt-8">
-            <Link
-              href="/contacto"
-              className="inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover"
-            >
-              Solicitar información
-            </Link>
+          <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            {whatsappHref ? (
+              <>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  Pedir información por WhatsApp
+                </a>
+                <Link
+                  href="/contacto"
+                  className="text-sm font-medium text-petrol underline-offset-4 hover:underline"
+                >
+                  Otros canales de contacto
+                </Link>
+              </>
+            ) : (
+              <Link
+                href="/contacto"
+                className="inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition ease-out hover:bg-primary-hover active:scale-[0.98] motion-reduce:active:scale-100"
+              >
+                Solicitar información
+              </Link>
+            )}
           </div>
         </div>
       </div>

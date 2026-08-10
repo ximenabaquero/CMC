@@ -32,7 +32,7 @@ export function HomePillars({
           {pillars.map((pillar, index) => (
             <li
               key={pillar.title}
-              className={`flex gap-5 border-t border-border py-6 ${
+              className={`reveal flex gap-5 border-t border-border py-6 ${
                 isOdd && index === pillars.length - 1 ? "sm:col-span-2 sm:max-w-xl" : ""
               }`}
             >
