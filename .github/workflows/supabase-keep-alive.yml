@@ -1,0 +1,32 @@
+# Evita que Supabase pause el proyecto (plan gratuito) haciendo una consulta
+# real a la API tres veces al día. No requiere que ningún computador esté encendido.
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # Tres veces al día (UTC)
+    - cron: "17 8,16,23 * * *"
+
+  # Permite ejecutarlo manualmente desde la pestaña Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Consultar Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_TABLE: ${{ secrets.SUPABASE_TABLE }}
+        run: python supabase_keep_alive.py

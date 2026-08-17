@@ -21,6 +21,13 @@ límites gratuitos, el cliente asume directamente los costos.
 - **Supabase Free**: 500 MB de base, 50 000 usuarios auth, 5 GB de
   transferencia. **Los proyectos se pausan tras ~1 semana sin actividad** y
   se restauran con un clic. Sin copias de seguridad automáticas.
+  Mitigación: el workflow de GitHub Actions
+  `.github/workflows/supabase-keep-alive.yml` ejecuta
+  `supabase_keep_alive.py` tres veces al día (consulta `select` con la clave
+  anon a `site_settings` vía PostgREST). Requiere los secretos
+  `SUPABASE_URL`, `SUPABASE_ANON_KEY` y `SUPABASE_TABLE` en el repositorio
+  de GitHub. Reduce el riesgo de pausa pero no lo elimina por contrato; la
+  única garantía es Supabase Pro.
 - **Workers Free**: 100 000 solicitudes/día, 10 ms de CPU por solicitud,
   tamaño del Worker ≤ 3 MB comprimido (el nuestro: ~0,9 MB base; ver
   VERIFICATION_LOG.md).
