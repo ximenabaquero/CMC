@@ -5,7 +5,13 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { brandSchema } from "@/lib/validation";
-import { DB_ERROR_MESSAGE, type ActionState } from "@/lib/action-state";
+import {
+  DB_ERROR_MESSAGE,
+  actionError,
+  actionSuccess,
+  zodActionError,
+  type ActionState,
+} from "@/lib/action-state";
 import { saveUploadedImage, deleteManagedAsset } from "@/lib/media-upload";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 
@@ -32,14 +38,16 @@ export async function createBrand(_prev: ActionState, formData: FormData): Promi
   const supabase = await createSupabaseServerClient();
 
   const name = String(formData.get("name") ?? "").trim();
-  if (!name) return { success: null, error: "El nombre es obligatorio." };
+  if (!name) {
+    return actionError("El nombre es obligatorio.", { name: ["El nombre es obligatorio."] });
+  }
 
   const { data, error } = await supabase
     .from("brands")
     .insert({ name, status: "DRAFT", updated_by: userId })
     .select("id")
     .single();
-  if (error || !data) return { success: null, error: DB_ERROR_MESSAGE };
+  if (error || !data) return actionError(DB_ERROR_MESSAGE);
 
   // Un borrador no cambia el sitio público: no hay nada que revalidar.
   redirect(`/admin/marcas/${data.id}?creado=1`);
@@ -61,7 +69,7 @@ export async function updateBrand(
     internal_note: formData.get("internal_note"),
   });
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos." };
+    return zodActionError(parsed.error);
   }
 
   if (parsed.data.status === "PUBLISHED") {
@@ -71,7 +79,7 @@ export async function updateBrand(
       .eq("id", brandId)
       .maybeSingle();
     if (!brand?.logo_media_id) {
-      return { success: null, error: "Sube el logo antes de publicar la marca." };
+      return actionError("Sube el logo antes de publicar la marca.");
     }
   }
 
@@ -79,14 +87,18 @@ export async function updateBrand(
     .from("brands")
     .update({ ...parsed.data, updated_by: userId })
     .eq("id", brandId);
-  if (error) return { success: null, error: DB_ERROR_MESSAGE };
+  if (error) return actionError(DB_ERROR_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.brands);
   revalidatePath(`/admin/marcas/${brandId}`);
-  return { success: "Marca guardada. El sitio público se actualizó.", error: null };
+  return actionSuccess("Marca guardada. El sitio público se actualizó.");
 }
 
-export async function deleteBrand(brandId: string): Promise<void> {
+export async function deleteBrand(
+  brandId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
@@ -97,7 +109,7 @@ export async function deleteBrand(brandId: string): Promise<void> {
     .maybeSingle();
 
   const { error } = await supabase.from("brands").delete().eq("id", brandId);
-  if (error) throw new Error("No se pudo eliminar la marca.");
+  if (error) return actionError("No se pudo eliminar la marca. Intenta de nuevo.");
 
   await cleanupOrphanLogo(supabase, brand?.logo_media_id ?? null);
 
@@ -119,7 +131,7 @@ export async function uploadBrandLogo(
     .select("logo_media_id")
     .eq("id", brandId)
     .maybeSingle();
-  if (!brand) return { success: null, error: "La marca no existe." };
+  if (!brand) return actionError("La marca no existe.");
 
   const file = formData.get("file");
   const result = await saveUploadedImage(
@@ -129,7 +141,7 @@ export async function uploadBrandLogo(
     userId
   );
   if (result.error || !result.mediaId) {
-    return { success: null, error: result.error ?? "No se pudo subir el logo." };
+    return actionError(result.error ?? "No se pudo subir el logo.");
   }
 
   const { error } = await supabase
@@ -138,21 +150,25 @@ export async function uploadBrandLogo(
     .eq("id", brandId);
   if (error) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   await cleanupOrphanLogo(supabase, brand.logo_media_id);
 
   revalidatePublicContent(CACHE_TAGS.brands);
   revalidatePath(`/admin/marcas/${brandId}`);
-  return { success: "Logo actualizado.", error: null };
+  return actionSuccess("Logo actualizado.");
 }
 
 /**
  * Quita el logo de la marca. Si estaba publicada, vuelve a borrador:
  * una marca sin logo no puede seguir visible en el carrusel.
  */
-export async function removeBrandLogo(brandId: string): Promise<void> {
+export async function removeBrandLogo(
+  brandId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   const { userId } = await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
@@ -161,16 +177,17 @@ export async function removeBrandLogo(brandId: string): Promise<void> {
     .select("logo_media_id")
     .eq("id", brandId)
     .maybeSingle();
-  if (!brand?.logo_media_id) return;
+  if (!brand?.logo_media_id) return actionSuccess(null);
 
   const { error } = await supabase
     .from("brands")
     .update({ logo_media_id: null, status: "DRAFT", updated_by: userId })
     .eq("id", brandId);
-  if (error) throw new Error("No se pudo quitar el logo.");
+  if (error) return actionError("No se pudo quitar el logo.");
 
   await cleanupOrphanLogo(supabase, brand.logo_media_id);
 
   revalidatePublicContent(CACHE_TAGS.brands);
   revalidatePath(`/admin/marcas/${brandId}`);
+  return actionSuccess("Logo eliminado. La marca volvió a borrador.");
 }

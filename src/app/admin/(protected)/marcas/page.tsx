@@ -4,6 +4,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/media";
 import { BrandsMarquee } from "@/components/public/BrandsMarquee";
 import type { BrandWithLogo } from "@/lib/content";
+import { FlashToast } from "@/components/admin/FlashToast";
+import { PageHeader } from "@/components/admin/PageHeader";
+import { StatusBadge } from "@/components/admin/StatusBadge";
+import { EmptyState } from "@/components/admin/EmptyState";
 
 export const metadata = { title: "Marcas" };
 
@@ -34,27 +38,19 @@ export default async function AdminBrandsPage({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Marcas</h1>
-          <p className="text-sm text-muted-foreground">
-            Logos del carrusel de la página de inicio. Solo se muestran las marcas publicadas; si
-            no hay ninguna, la sección no aparece en el sitio.
-          </p>
-        </div>
-        <Link
-          href="/admin/marcas/nueva"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
-        >
-          + Nueva marca
-        </Link>
-      </div>
-
-      {params.eliminado ? (
-        <p role="status" className="mb-4 rounded-md border border-primary/40 bg-primary/10 p-3 text-sm text-primary">
-          Marca eliminada.
-        </p>
-      ) : null}
+      <FlashToast message={params.eliminado ? "Marca eliminada." : null} />
+      <PageHeader
+        title="Marcas"
+        description="Logos del carrusel de la página de inicio. Solo se muestran las marcas publicadas; si no hay ninguna, la sección no aparece en el sitio."
+        actions={
+          <Link
+            href="/admin/marcas/nueva"
+            className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 py-2 text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          >
+            + Nueva marca
+          </Link>
+        }
+      />
 
       {previewBrands.length > 0 ? (
         <section aria-labelledby="vista-previa-marcas" className="mb-6 rounded-lg border border-border bg-surface p-4">
@@ -70,10 +66,11 @@ export default async function AdminBrandsPage({
       ) : null}
 
       {(brands ?? []).length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-          Aún no hay marcas. Crea la primera con «Nueva marca»; podrás subir su logo y publicarla
-          cuando tengas la autorización de uso.
-        </p>
+        <EmptyState
+          title="Aún no hay marcas"
+          description="Podrás subir el logo y publicarla cuando tengas la autorización de uso."
+          cta={{ href: "/admin/marcas/nueva", label: "Crear primera marca" }}
+        />
       ) : (
         <ul className="space-y-2">
           {(brands ?? []).map((brand) => {
@@ -101,21 +98,13 @@ export default async function AdminBrandsPage({
                     </span>
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{brand.name}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
+                    <span className="block truncate text-base font-medium">{brand.name}</span>
+                    <span className="block truncate text-sm text-muted-foreground">
                       Orden: {brand.sort_order}
                       {logo ? "" : " — falta el logo para poder publicarla"}
                     </span>
                   </span>
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      brand.status === "PUBLISHED"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-surface-muted text-muted-foreground"
-                    }`}
-                  >
-                    {brand.status === "PUBLISHED" ? "Publicada" : "Borrador"}
-                  </span>
+                  <StatusBadge status={brand.status} publishedLabel="Publicada" />
                 </Link>
               </li>
             );

@@ -7,11 +7,20 @@ import { deletePost, removePostCover, uploadPostCover } from "@/actions/posts";
 import { PostForm } from "./PostForm";
 import { UploadImageForm } from "@/components/admin/UploadImageForm";
 import { ConfirmSubmitButton } from "@/components/admin/buttons";
+import { ActionForm } from "@/components/admin/ActionForm";
+import { FlashToast } from "@/components/admin/FlashToast";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export const metadata = { title: "Editar artículo" };
 
-export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function EditPostPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ creado?: string }>;
+}) {
+  const [{ id }, { creado }] = await Promise.all([params, searchParams]);
   const supabase = await createSupabaseServerClient();
 
   const { data: post, error } = await supabase
@@ -31,23 +40,24 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">
-            <Link href="/admin/blog" className="underline-offset-2 hover:underline">
-              Blog
-            </Link>{" "}
-            / {post.title}
-          </p>
-          <h1 className="text-2xl font-semibold">{post.title}</h1>
-        </div>
-        <Link
-          href={`/admin/blog/${post.id}/vista-previa`}
-          className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-surface-muted"
-        >
-          Vista previa
-        </Link>
-      </div>
+      <FlashToast
+        message={
+          creado ? "Artículo creado. Escribe el contenido y publícalo cuando esté listo." : null
+        }
+      />
+      <PageHeader
+        title={post.title}
+        backHref="/admin/blog"
+        backLabel="Blog"
+        actions={
+          <Link
+            href={`/admin/blog/${post.id}/vista-previa`}
+            className="inline-flex min-h-10 items-center rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-surface-muted"
+          >
+            Vista previa
+          </Link>
+        }
+      />
 
       {post.internal_note ? (
         <p className="rounded-md border border-secondary/40 bg-secondary/10 p-3 text-sm">
@@ -70,11 +80,14 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
               height={120}
               className="rounded-md border border-border object-cover"
             />
-            <form action={removePostCover.bind(null, post.id)}>
-              <ConfirmSubmitButton confirmMessage="¿Quitar la imagen de portada? Si fue subida desde el panel también se eliminará del almacenamiento.">
+            <ActionForm action={removePostCover.bind(null, post.id)}>
+              <ConfirmSubmitButton
+                pendingLabel="Quitando…"
+                confirmMessage="¿Quitar la imagen de portada? Si fue subida desde el panel también se eliminará del almacenamiento."
+              >
                 Quitar portada
               </ConfirmSubmitButton>
-            </form>
+            </ActionForm>
           </div>
         ) : (
           <p className="mb-4 text-sm text-muted-foreground">Este artículo no tiene portada.</p>
@@ -88,11 +101,11 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
       <section className="rounded-lg border border-accent/30 bg-surface p-5">
         <h2 className="mb-2 text-lg font-semibold">Eliminar artículo</h2>
         <p className="mb-3 text-sm text-muted-foreground">Esta acción no se puede deshacer.</p>
-        <form action={deletePost.bind(null, post.id)}>
+        <ActionForm action={deletePost.bind(null, post.id)}>
           <ConfirmSubmitButton confirmMessage={`¿Eliminar definitivamente "${post.title}"? Esta acción no se puede deshacer.`}>
             Eliminar artículo
           </ConfirmSubmitButton>
-        </form>
+        </ActionForm>
       </section>
     </div>
   );

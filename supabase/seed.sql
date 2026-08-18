@@ -146,25 +146,41 @@ on conflict (slug) do nothing;
 -- del importador (scripts/assets-manifest.json).
 -- ------------------------------------------------------------
 insert into public.media_assets (id, storage_provider, storage_path, file_name, mime_type, size_bytes, width, height, alt_text) values
-('e0000000-0000-4000-8000-000000000101', 'STATIC', '/images/products/dap-hojaldre/caja-dap-hojaldre.webp', 'caja-dap-hojaldre.webp', 'image/webp', 67876, 1200, 1200, 'Caja de Margarina DAP Hojaldre'),
-('e0000000-0000-4000-8000-000000000102', 'STATIC', '/images/products/dap-hojaldre/dap-hojaldre-con-productos.webp', 'dap-hojaldre-con-productos.webp', 'image/webp', 52354, 1200, 1200, 'Margarina DAP Hojaldre con preparaciones de hojaldre'),
-('e0000000-0000-4000-8000-000000000201', 'STATIC', '/images/products/dap-alta-reposteria-ponque/caja-dap-alta-reposteria-ponque.webp', 'caja-dap-alta-reposteria-ponque.webp', 'image/webp', 81612, 1200, 1200, 'Caja de Margarina DAP Alta Repostería Ponqué'),
-('e0000000-0000-4000-8000-000000000202', 'STATIC', '/images/products/dap-alta-reposteria-ponque/fotos-dap-alta-reposteria.webp', 'fotos-dap-alta-reposteria.webp', 'image/webp', 57742, 1200, 1200, 'Margarina DAP Alta Repostería Ponqué con productos horneados'),
-('e0000000-0000-4000-8000-000000000301', 'STATIC', '/images/products/dap-industrial/dap-industrial.webp', 'dap-industrial.webp', 'image/webp', 53004, 1200, 1200, 'Margarina DAP Industrial'),
-('e0000000-0000-4000-8000-000000000302', 'STATIC', '/images/products/dap-industrial/dap-industrial-1.webp', 'dap-industrial-1.webp', 'image/webp', 39466, 1200, 1200, 'Presentación de Margarina DAP Industrial'),
+('e0000000-0000-4000-8000-000000000101', 'STATIC', '/images/products/dap-hojaldre/dap-hojaldre-caja.webp', 'dap-hojaldre-caja.webp', 'image/webp', 67876, 1200, 1200, 'Caja de Margarina DAP Hojaldre'),
+('e0000000-0000-4000-8000-000000000102', 'STATIC', '/images/products/dap-hojaldre/dap-hojaldre-aplicacion-01.webp', 'dap-hojaldre-aplicacion-01.webp', 'image/webp', 52354, 1200, 1200, 'Margarina DAP Hojaldre con preparaciones de hojaldre'),
+('e0000000-0000-4000-8000-000000000201', 'STATIC', '/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-caja.webp', 'dap-alta-reposteria-ponque-caja.webp', 'image/webp', 81612, 1200, 1200, 'Caja de Margarina DAP Alta Repostería Ponqué'),
+('e0000000-0000-4000-8000-000000000202', 'STATIC', '/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-aplicacion-01.webp', 'dap-alta-reposteria-ponque-aplicacion-01.webp', 'image/webp', 57742, 1200, 1200, 'Margarina DAP Alta Repostería Ponqué con productos horneados'),
+('e0000000-0000-4000-8000-000000000301', 'STATIC', '/images/products/dap-industrial/dap-industrial-caja.webp', 'dap-industrial-caja.webp', 'image/webp', 53004, 1200, 1200, 'Caja de Margarina DAP Industrial'),
+('e0000000-0000-4000-8000-000000000302', 'STATIC', '/images/products/dap-industrial/dap-industrial-aplicacion-01.webp', 'dap-industrial-aplicacion-01.webp', 'image/webp', 39466, 1200, 1200, 'Margarina DAP Industrial con panes y galletería'),
 ('e0000000-0000-4000-8000-000000000401', 'STATIC', '/images/products/dap-multiproposito/dap-multiproposito-caja.webp', 'dap-multiproposito-caja.webp', 'image/webp', 79926, 1200, 1200, 'Caja de Margarina DAP Multipropósito'),
-('e0000000-0000-4000-8000-000000000402', 'STATIC', '/images/products/dap-multiproposito/2.webp', '2.webp', 'image/webp', 47130, 1200, 1200, 'Margarina DAP Multipropósito'),
+('e0000000-0000-4000-8000-000000000402', 'STATIC', '/images/products/dap-multiproposito/dap-multiproposito-aplicacion-01.webp', 'dap-multiproposito-aplicacion-01.webp', 'image/webp', 47130, 1200, 1200, 'Margarina DAP Multipropósito con panes aliñados y amasijos'),
 ('e0000000-0000-4000-8000-000000000501', 'STATIC', '/images/products/dap-reposteria/dap-reposteria-caja.webp', 'dap-reposteria-caja.webp', 'image/webp', 74728, 1200, 1200, 'Caja de Margarina DAP Repostería'),
-('e0000000-0000-4000-8000-000000000502', 'STATIC', '/images/products/dap-reposteria/dap-reposteria.webp', 'dap-reposteria.webp', 'image/webp', 35746, 1200, 1200, 'Margarina DAP Repostería'),
-('e0000000-0000-4000-8000-000000000601', 'STATIC', '/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-caja.webp', 'dap-semi-hojaldre-caja.webp', 'image/webp', 76780, 1200, 1200, 'Caja de Margarina DAP Semi Hojaldrados'),
-('e0000000-0000-4000-8000-000000000602', 'STATIC', '/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-con-productos.webp', 'dap-semi-hojaldre-con-productos.webp', 'image/webp', 48832, 1200, 1200, 'Margarina DAP Semi Hojaldrados con productos horneados'),
-('e0000000-0000-4000-8000-000000000701', 'STATIC', '/images/products/dap-alinado/dap-alinados.webp', 'dap-alinados.webp', 'image/webp', 57858, 1200, 1200, 'DAP Aliñado, preparado graso para panificación'),
-('e0000000-0000-4000-8000-000000000702', 'STATIC', '/images/products/dap-alinado/dap-alinados-1.webp', 'dap-alinados-1.webp', 'image/webp', 65602, 1200, 1200, 'Presentación de DAP Aliñado'),
-('e0000000-0000-4000-8000-000000000801', 'STATIC', '/images/products/dap-preparado-graso/preparado-graso-caja.webp', 'preparado-graso-caja.webp', 'image/webp', 63360, 1200, 1200, 'Caja de DAP Preparado Graso'),
-('e0000000-0000-4000-8000-000000000802', 'STATIC', '/images/products/dap-preparado-graso/preparado-graso-con-productos.webp', 'preparado-graso-con-productos.webp', 'image/webp', 37636, 1200, 1200, 'DAP Preparado Graso con panes'),
-('e0000000-0000-4000-8000-000000000803', 'STATIC', '/images/products/dap-preparado-graso/preparado-graso-con-productos-2.webp', 'preparado-graso-con-productos-2.webp', 'image/webp', 81470, 1200, 1200, 'DAP Preparado Graso con productos de panadería'),
+('e0000000-0000-4000-8000-000000000502', 'STATIC', '/images/products/dap-reposteria/dap-reposteria-aplicacion-01.webp', 'dap-reposteria-aplicacion-01.webp', 'image/webp', 35746, 1200, 1200, 'Margarina DAP Repostería con galletería y torta marmolada'),
+('e0000000-0000-4000-8000-000000000601', 'STATIC', '/images/products/dap-semi-hojaldrado/dap-semi-hojaldrado-caja.webp', 'dap-semi-hojaldrado-caja.webp', 'image/webp', 76780, 1200, 1200, 'Caja de Margarina DAP Semi Hojaldrados'),
+('e0000000-0000-4000-8000-000000000602', 'STATIC', '/images/products/dap-semi-hojaldrado/dap-semi-hojaldrado-aplicacion-01.webp', 'dap-semi-hojaldrado-aplicacion-01.webp', 'image/webp', 48832, 1200, 1200, 'Margarina DAP Semi Hojaldrados con productos horneados'),
+('e0000000-0000-4000-8000-000000000701', 'STATIC', '/images/products/dap-alinado/dap-alinado-caja.webp', 'dap-alinado-caja.webp', 'image/webp', 65602, 1200, 1200, 'Caja de DAP Aliñado'),
+('e0000000-0000-4000-8000-000000000702', 'STATIC', '/images/products/dap-alinado/dap-alinado-aplicacion-01.webp', 'dap-alinado-aplicacion-01.webp', 'image/webp', 57858, 1200, 1200, 'DAP Aliñado con canasta de panes'),
+('e0000000-0000-4000-8000-000000000801', 'STATIC', '/images/products/dap-preparado-graso/dap-preparado-graso-caja.webp', 'dap-preparado-graso-caja.webp', 'image/webp', 63360, 1200, 1200, 'Caja de DAP Preparado Graso'),
+('e0000000-0000-4000-8000-000000000802', 'STATIC', '/images/products/dap-preparado-graso/dap-preparado-graso-aplicacion-01.webp', 'dap-preparado-graso-aplicacion-01.webp', 'image/webp', 37636, 1200, 1200, 'DAP Preparado Graso con panes'),
+('e0000000-0000-4000-8000-000000000803', 'STATIC', '/images/products/dap-preparado-graso/dap-preparado-graso-aplicacion-02.webp', 'dap-preparado-graso-aplicacion-02.webp', 'image/webp', 81470, 1200, 1200, 'DAP Preparado Graso con productos de panadería'),
 ('e0000000-0000-4000-8000-000000000901', 'STATIC', '/images/products/dap-aceite-solido/dap-aceite-solido-caja.webp', 'dap-aceite-solido-caja.webp', 'image/webp', 67368, 1200, 1200, 'Caja de Aceite Sólido DAP'),
-('e0000000-0000-4000-8000-000000000902', 'STATIC', '/images/products/dap-aceite-solido/dap-aceite-solido.webp', 'dap-aceite-solido.webp', 'image/webp', 53592, 1200, 1200, 'Aceite Sólido DAP')
+('e0000000-0000-4000-8000-000000000902', 'STATIC', '/images/products/dap-aceite-solido/dap-aceite-solido-aplicacion-01.webp', 'dap-aceite-solido-aplicacion-01.webp', 'image/webp', 53592, 1200, 1200, 'Aceite Sólido DAP con canasta de fritos')
+on conflict (storage_path) do nothing;
+
+-- ------------------------------------------------------------
+-- Fichas técnicas PDF (proveedor STATIC, una por producto;
+-- id e0…0N90 donde N es el número del producto)
+-- ------------------------------------------------------------
+insert into public.media_assets (id, storage_provider, storage_path, file_name, mime_type, size_bytes, width, height, alt_text) values
+('e0000000-0000-4000-8000-000000000190', 'STATIC', '/images/products/dap-hojaldre/ficha-tecnica-dap-hojaldre.pdf', 'ficha-tecnica-dap-hojaldre.pdf', 'application/pdf', 572631, null, null, 'Ficha técnica de Margarina DAP Hojaldre (PDF)'),
+('e0000000-0000-4000-8000-000000000290', 'STATIC', '/images/products/dap-alta-reposteria-ponque/ficha-tecnica-dap-alta-reposteria-ponque.pdf', 'ficha-tecnica-dap-alta-reposteria-ponque.pdf', 'application/pdf', 1073793, null, null, 'Ficha técnica de Margarina DAP Alta Repostería Ponqué (PDF)'),
+('e0000000-0000-4000-8000-000000000390', 'STATIC', '/images/products/dap-industrial/ficha-tecnica-dap-industrial.pdf', 'ficha-tecnica-dap-industrial.pdf', 'application/pdf', 554990, null, null, 'Ficha técnica de Margarina DAP Industrial (PDF)'),
+('e0000000-0000-4000-8000-000000000490', 'STATIC', '/images/products/dap-multiproposito/ficha-tecnica-dap-multiproposito.pdf', 'ficha-tecnica-dap-multiproposito.pdf', 'application/pdf', 842577, null, null, 'Ficha técnica de Margarina DAP Multipropósito (PDF)'),
+('e0000000-0000-4000-8000-000000000590', 'STATIC', '/images/products/dap-reposteria/ficha-tecnica-dap-reposteria.pdf', 'ficha-tecnica-dap-reposteria.pdf', 'application/pdf', 570408, null, null, 'Ficha técnica de Margarina DAP Repostería (PDF)'),
+('e0000000-0000-4000-8000-000000000690', 'STATIC', '/images/products/dap-semi-hojaldrado/ficha-tecnica-dap-semi-hojaldrado.pdf', 'ficha-tecnica-dap-semi-hojaldrado.pdf', 'application/pdf', 497956, null, null, 'Ficha técnica de Margarina DAP Semi Hojaldrados (PDF)'),
+('e0000000-0000-4000-8000-000000000790', 'STATIC', '/images/products/dap-alinado/ficha-tecnica-dap-alinado.pdf', 'ficha-tecnica-dap-alinado.pdf', 'application/pdf', 500805, null, null, 'Ficha técnica de DAP Aliñado (PDF)'),
+('e0000000-0000-4000-8000-000000000890', 'STATIC', '/images/products/dap-preparado-graso/ficha-tecnica-dap-preparado-graso.pdf', 'ficha-tecnica-dap-preparado-graso.pdf', 'application/pdf', 445417, null, null, 'Ficha técnica de DAP Preparado Graso (PDF)'),
+('e0000000-0000-4000-8000-000000000990', 'STATIC', '/images/products/dap-aceite-solido/ficha-tecnica-dap-aceite-solido.pdf', 'ficha-tecnica-dap-aceite-solido.pdf', 'application/pdf', 414223, null, null, 'Ficha técnica de Aceite Sólido DAP (PDF)')
 on conflict (storage_path) do nothing;
 
 -- ------------------------------------------------------------
@@ -174,7 +190,7 @@ on conflict (storage_path) do nothing;
 -- apruebe y publique desde el CMS.
 -- ------------------------------------------------------------
 insert into public.products
-  (id, name, slug, short_description, description, category_id, main_image_id, features, presentation, sort_order, status, seo_title, seo_description, internal_note)
+  (id, name, slug, short_description, description, category_id, main_image_id, technical_sheet_media_id, features, presentation, sort_order, status, seo_title, seo_description, internal_note)
 values
 (
   'd0000000-0000-4000-8000-000000000001',
@@ -184,6 +200,7 @@ values
   'Margarina industrial fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles, con excelente plasticidad y resistencia al trabajo mecánico, que permite lograr la formación de láminas uniformes y de gran volumen. Estas láminas proporcionan al producto final una textura crujiente y a la vez suave, con agradable aroma y sabor.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000101',
+  'e0000000-0000-4000-8000-000000000190',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Indicada para hojaldres, croissants, pan danés y todo tipo de masa hojaldrada."},
     {"label": "Atemperado recomendado", "value": "Clima frío: 18 °C – 22 °C. Clima cálido: 22 °C – 25 °C."},
@@ -207,6 +224,7 @@ values
   'Margarina industrial fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es una margarina especial de consistencia cremosa y fácil incorporación a los ingredientes de la masa, a la cual proporciona gran volumen y rendimiento, una estructura de miga fina y homogénea, prolongado tiempo de vida útil y un delicioso sabor y aroma en el producto horneado.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000201',
+  'e0000000-0000-4000-8000-000000000290',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación."},
     {"label": "Color, olor y sabor", "value": "Amarillo crema, característicos a mantequilla."},
@@ -229,6 +247,7 @@ values
   'Margarina industrial fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles, de consistencia suave y fácil incorporación con los demás ingredientes. Proporciona gran volumen y rendimiento, y una estructura de miga fina y homogénea, contribuyendo al sabor, el aroma y la conservación.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000301',
+  'e0000000-0000-4000-8000-000000000390',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Especial para todo tipo de pan, ponqué, tortas y galletería."},
     {"label": "Atemperado recomendado", "value": "Clima frío: 18 °C – 22 °C. Clima cálido: 22 °C – 25 °C. Clima costa: 26 °C – 32 °C."},
@@ -252,6 +271,7 @@ values
   'Margarina industrial fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es una margarina de alto rendimiento, diseñada para lograr una rápida y homogénea incorporación de los ingredientes de la masa, con insuperable sabor y aroma, y un prolongado tiempo de vida útil. Proporciona excelente volumen en batidos, con una estructura de miga fina y homogénea.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000401',
+  'e0000000-0000-4000-8000-000000000490',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Especial para ponqué, torta y galletería industrial de alto rendimiento, y panes aliñados."},
     {"label": "Color, olor y sabor", "value": "Amarillo crema, característicos a mantequilla."},
@@ -274,6 +294,7 @@ values
   'Margarina fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es una margarina especial de consistencia cremosa y fácil incorporación a los ingredientes de la masa, a la cual proporciona gran volumen y rendimiento, una estructura de miga fina y homogénea, prolongado tiempo de vida útil y un delicioso sabor y aroma en el producto horneado.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000501',
+  'e0000000-0000-4000-8000-000000000590',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Especial para ponqué, torta y galletería industrial de alto rendimiento, y panes aliñados. Proporciona excelente volumen en batidos."},
     {"label": "Color, olor y sabor", "value": "Amarillo crema, característicos a mantequilla."},
@@ -296,6 +317,7 @@ values
   'Margarina industrial fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es una margarina especial que proporciona una elevada y rápida incorporación de aire en la masa de los cremados, logra alto volumen en el producto final y una estructura de miga fina y homogénea, prolongando el tiempo de vida útil, con un delicioso sabor y aroma en el producto horneado.',
   'a1000000-0000-4000-8000-000000000001',
   'e0000000-0000-4000-8000-000000000601',
+  'e0000000-0000-4000-8000-000000000690',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Especial para ponqués, tortas, galletería esponjosa, bizcochería fina y panes especiales."},
     {"label": "Atemperado recomendado", "value": "Clima frío (TB): 18 °C – 22 °C. Clima cálido (TD): 22 °C – 25 °C. Clima costa (TDC): 26 °C – 32 °C."},
@@ -319,12 +341,13 @@ values
   'Emulsión grasa fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es un preparado graso de suave textura plástica, de fácil manejo y rápida incorporación en la mezcla de la masa, con el que se obtiene un pan de buen volumen y suavidad, prolongando su tiempo de vida útil.',
   'a1000000-0000-4000-8000-000000000002',
   'e0000000-0000-4000-8000-000000000701',
+  'e0000000-0000-4000-8000-000000000790',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación. Indicado para todo tipo de pan: pan empacado, pan de molde, pan francés, tostadas, entre otros."},
     {"label": "Color, olor y sabor", "value": "Amarillo crema, característicos a mantequilla."},
     {"label": "Vida útil", "value": "Seis (6) meses en su empaque cerrado, conservando las condiciones de almacenamiento recomendadas."},
     {"label": "Almacenamiento", "value": "Lugar fresco, seco y libre de olores contaminantes, a temperatura ambiente no mayor a 38 °C. Evitar la luz solar directa."},
-    {"label": "Alérgenos", "value": "Elaborado en líneas donde se procesan productos que contienen lecitina de soya."}
+    {"label": "Alérgenos", "value": "Elaborado en líneas donde se procesan y empacan productos que contienen lecitina de soya."}
   ]'::jsonb,
   'Bloques de 15 kg (peso neto) en caja de cartón corrugado.',
   7,
@@ -341,6 +364,7 @@ values
   'Emulsión grasa fabricada a partir de una mezcla refinada de grasas y aceites vegetales comestibles. Es un preparado graso de suave textura plástica, de fácil manejo y rápida incorporación en la mezcla de la masa, con el que se obtiene un pan de buen volumen y suavidad, prolongando su tiempo de vida útil.',
   'a1000000-0000-4000-8000-000000000002',
   'e0000000-0000-4000-8000-000000000801',
+  'e0000000-0000-4000-8000-000000000890',
   '[
     {"label": "Uso previsto", "value": "Materia prima en panaderías, reposterías e industrias de panificación, para la elaboración de todo tipo de pan: pan empacado, pan de molde, pan francés, tostadas, entre otros."},
     {"label": "Color, olor y sabor", "value": "Amarillo crema, característicos a mantequilla."},
@@ -363,6 +387,7 @@ values
   'Mezcla de grasas y aceites vegetales comestibles de consistencia plástica, color crema y olor y sabor neutros. Ideal para fritura institucional e industrial, y para la preparación de bases para helados y rellenos de galletería y confitería.',
   'a1000000-0000-4000-8000-000000000003',
   'e0000000-0000-4000-8000-000000000901',
+  'e0000000-0000-4000-8000-000000000990',
   '[
     {"label": "Uso previsto", "value": "Fritura institucional e industrial. Preparación de bases para helados y rellenos de galletería y confitería."},
     {"label": "Color, olor y sabor", "value": "Color crema; olor y sabor neutros."},
@@ -381,21 +406,21 @@ values
   'd0000000-0000-4000-8000-000000000010',
   'Producto pendiente de definir (1)',
   'producto-pendiente-1',
-  null, null, null, null, '[]'::jsonb, null, 10, 'DRAFT', null, null,
+  null, null, null, null, null, '[]'::jsonb, null, 10, 'DRAFT', null, null,
   'CONTENIDO PENDIENTE: el contrato contempla 12 productos y el material entregado incluye 9. Completar con la información que envíe Ana (ver docs/CONTENT_PENDING.md).'
 ),
 (
   'd0000000-0000-4000-8000-000000000011',
   'Producto pendiente de definir (2)',
   'producto-pendiente-2',
-  null, null, null, null, '[]'::jsonb, null, 11, 'DRAFT', null, null,
+  null, null, null, null, null, '[]'::jsonb, null, 11, 'DRAFT', null, null,
   'CONTENIDO PENDIENTE: el contrato contempla 12 productos y el material entregado incluye 9. Completar con la información que envíe Ana (ver docs/CONTENT_PENDING.md).'
 ),
 (
   'd0000000-0000-4000-8000-000000000012',
   'Producto pendiente de definir (3)',
   'producto-pendiente-3',
-  null, null, null, null, '[]'::jsonb, null, 12, 'DRAFT', null, null,
+  null, null, null, null, null, '[]'::jsonb, null, 12, 'DRAFT', null, null,
   'CONTENIDO PENDIENTE: el contrato contempla 12 productos y el material entregado incluye 9. Completar con la información que envíe Ana (ver docs/CONTENT_PENDING.md).'
 )
 on conflict (slug) do nothing;
@@ -403,26 +428,28 @@ on conflict (slug) do nothing;
 -- ------------------------------------------------------------
 -- Galerías de producto (tabla normalizada product_media)
 -- ------------------------------------------------------------
+-- sort_order 0-based: la posición 0 es siempre la imagen principal
+-- (la caja del empaque); las fotos de aplicación van de 1 en adelante.
 insert into public.product_media (product_id, media_asset_id, sort_order) values
-('d0000000-0000-4000-8000-000000000001', 'e0000000-0000-4000-8000-000000000101', 1),
-('d0000000-0000-4000-8000-000000000001', 'e0000000-0000-4000-8000-000000000102', 2),
-('d0000000-0000-4000-8000-000000000002', 'e0000000-0000-4000-8000-000000000201', 1),
-('d0000000-0000-4000-8000-000000000002', 'e0000000-0000-4000-8000-000000000202', 2),
-('d0000000-0000-4000-8000-000000000003', 'e0000000-0000-4000-8000-000000000301', 1),
-('d0000000-0000-4000-8000-000000000003', 'e0000000-0000-4000-8000-000000000302', 2),
-('d0000000-0000-4000-8000-000000000004', 'e0000000-0000-4000-8000-000000000401', 1),
-('d0000000-0000-4000-8000-000000000004', 'e0000000-0000-4000-8000-000000000402', 2),
-('d0000000-0000-4000-8000-000000000005', 'e0000000-0000-4000-8000-000000000501', 1),
-('d0000000-0000-4000-8000-000000000005', 'e0000000-0000-4000-8000-000000000502', 2),
-('d0000000-0000-4000-8000-000000000006', 'e0000000-0000-4000-8000-000000000601', 1),
-('d0000000-0000-4000-8000-000000000006', 'e0000000-0000-4000-8000-000000000602', 2),
-('d0000000-0000-4000-8000-000000000007', 'e0000000-0000-4000-8000-000000000701', 1),
-('d0000000-0000-4000-8000-000000000007', 'e0000000-0000-4000-8000-000000000702', 2),
-('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000801', 1),
-('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000802', 2),
-('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000803', 3),
-('d0000000-0000-4000-8000-000000000009', 'e0000000-0000-4000-8000-000000000901', 1),
-('d0000000-0000-4000-8000-000000000009', 'e0000000-0000-4000-8000-000000000902', 2)
+('d0000000-0000-4000-8000-000000000001', 'e0000000-0000-4000-8000-000000000101', 0),
+('d0000000-0000-4000-8000-000000000001', 'e0000000-0000-4000-8000-000000000102', 1),
+('d0000000-0000-4000-8000-000000000002', 'e0000000-0000-4000-8000-000000000201', 0),
+('d0000000-0000-4000-8000-000000000002', 'e0000000-0000-4000-8000-000000000202', 1),
+('d0000000-0000-4000-8000-000000000003', 'e0000000-0000-4000-8000-000000000301', 0),
+('d0000000-0000-4000-8000-000000000003', 'e0000000-0000-4000-8000-000000000302', 1),
+('d0000000-0000-4000-8000-000000000004', 'e0000000-0000-4000-8000-000000000401', 0),
+('d0000000-0000-4000-8000-000000000004', 'e0000000-0000-4000-8000-000000000402', 1),
+('d0000000-0000-4000-8000-000000000005', 'e0000000-0000-4000-8000-000000000501', 0),
+('d0000000-0000-4000-8000-000000000005', 'e0000000-0000-4000-8000-000000000502', 1),
+('d0000000-0000-4000-8000-000000000006', 'e0000000-0000-4000-8000-000000000601', 0),
+('d0000000-0000-4000-8000-000000000006', 'e0000000-0000-4000-8000-000000000602', 1),
+('d0000000-0000-4000-8000-000000000007', 'e0000000-0000-4000-8000-000000000701', 0),
+('d0000000-0000-4000-8000-000000000007', 'e0000000-0000-4000-8000-000000000702', 1),
+('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000801', 0),
+('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000802', 1),
+('d0000000-0000-4000-8000-000000000008', 'e0000000-0000-4000-8000-000000000803', 2),
+('d0000000-0000-4000-8000-000000000009', 'e0000000-0000-4000-8000-000000000901', 0),
+('d0000000-0000-4000-8000-000000000009', 'e0000000-0000-4000-8000-000000000902', 1)
 on conflict (product_id, media_asset_id) do nothing;
 
 -- ------------------------------------------------------------

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { logout } from "@/actions/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { ToastProvider } from "@/components/admin/toast";
 
 export const metadata: Metadata = {
   title: { default: "Panel administrativo", template: "%s — Panel administrativo" },
@@ -37,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <form action={logout}>
             <button
               type="submit"
-              className="w-full rounded-md border border-border px-3 py-2 text-sm font-medium transition hover:bg-surface-muted"
+              className="min-h-11 w-full rounded-md border border-border px-3 py-2 text-sm font-medium transition hover:bg-surface-muted"
             >
               Cerrar sesión
             </button>
@@ -51,7 +52,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </Link>
         </div>
       </aside>
-      <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      <ToastProvider>
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      </ToastProvider>
     </div>
   );
 }

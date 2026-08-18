@@ -3,7 +3,13 @@
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { siteSettingsSchema } from "@/lib/validation";
-import { DB_ERROR_MESSAGE, type ActionState } from "@/lib/action-state";
+import {
+  DB_ERROR_MESSAGE,
+  actionError,
+  actionSuccess,
+  zodActionError,
+  type ActionState,
+} from "@/lib/action-state";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 
 export async function updateSiteSettings(
@@ -31,7 +37,7 @@ export async function updateSiteSettings(
   });
 
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos." };
+    return zodActionError(parsed.error);
   }
 
   const { error } = await supabase
@@ -39,12 +45,10 @@ export async function updateSiteSettings(
     .update({ ...parsed.data, updated_by: userId })
     .eq("id", 1);
 
-  if (error) return { success: null, error: DB_ERROR_MESSAGE };
+  if (error) return actionError(DB_ERROR_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.settings);
-  return {
-    success:
-      "Información guardada. El sitio público solo muestra los canales de contacto que tengan datos.",
-    error: null,
-  };
+  return actionSuccess(
+    "Información guardada. El sitio público solo muestra los canales de contacto que tengan datos."
+  );
 }

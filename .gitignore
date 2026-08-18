@@ -42,6 +42,11 @@ next-env.d.ts
 
 # uploads locales del CMS (adaptador de desarrollo)
 /public/uploads
+/.uploads-local
+
+# material fuente del cliente (originales sin optimizar; la copia
+# canónica vive fuera del repo — ver docs/ARCHITECTURE.md)
+/content-source
 
 # artefactos de OpenNext / wrangler
 /.open-next

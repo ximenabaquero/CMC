@@ -5,7 +5,13 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { faqSchema } from "@/lib/validation";
-import { DB_ERROR_MESSAGE, type ActionState } from "@/lib/action-state";
+import {
+  DB_ERROR_MESSAGE,
+  actionError,
+  actionSuccess,
+  zodActionError,
+  type ActionState,
+} from "@/lib/action-state";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 
 function parseFaqForm(formData: FormData) {
@@ -24,11 +30,11 @@ export async function createFaq(_prev: ActionState, formData: FormData): Promise
 
   const parsed = parseFaqForm(formData);
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos." };
+    return zodActionError(parsed.error);
   }
 
   const { error } = await supabase.from("faqs").insert({ ...parsed.data, updated_by: userId });
-  if (error) return { success: null, error: DB_ERROR_MESSAGE };
+  if (error) return actionError(DB_ERROR_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.faqs);
   redirect("/admin/preguntas-frecuentes?creado=1");
@@ -44,26 +50,30 @@ export async function updateFaq(
 
   const parsed = parseFaqForm(formData);
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos." };
+    return zodActionError(parsed.error);
   }
 
   const { error } = await supabase
     .from("faqs")
     .update({ ...parsed.data, updated_by: userId })
     .eq("id", faqId);
-  if (error) return { success: null, error: DB_ERROR_MESSAGE };
+  if (error) return actionError(DB_ERROR_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.faqs);
   revalidatePath(`/admin/preguntas-frecuentes/${faqId}`);
-  return { success: "Pregunta guardada. El sitio público se actualizó.", error: null };
+  return actionSuccess("Pregunta guardada. El sitio público se actualizó.");
 }
 
-export async function deleteFaq(faqId: string): Promise<void> {
+export async function deleteFaq(
+  faqId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.from("faqs").delete().eq("id", faqId);
-  if (error) throw new Error("No se pudo eliminar la pregunta.");
+  if (error) return actionError("No se pudo eliminar la pregunta. Intenta de nuevo.");
 
   revalidatePublicContent(CACHE_TAGS.faqs);
   redirect("/admin/preguntas-frecuentes?eliminado=1");

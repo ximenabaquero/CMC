@@ -1,56 +1,42 @@
 "use client";
 
 import { useActionState } from "react";
-import { login, type AuthFormState } from "@/actions/auth";
-
-const initialState: AuthFormState = { error: null };
+import { login } from "@/actions/auth";
+import { initialActionState } from "@/lib/action-state";
+import { ActionFeedback, TextField } from "@/components/admin/fields";
+import { SubmitButton } from "@/components/admin/buttons";
+import { useAdminForm } from "@/components/admin/useAdminForm";
 
 export function LoginForm() {
-  const [state, formAction, pending] = useActionState(login, initialState);
+  const [state, formAction] = useActionState(login, initialActionState);
+  const { formProps } = useAdminForm(state);
+  const fieldErrors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="space-y-4" noValidate>
-      <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium">
-          Correo electrónico
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm"
-        />
-      </div>
+    <form {...formProps} action={formAction} className="space-y-4" noValidate>
+      <TextField
+        label="Correo electrónico"
+        name="email"
+        type="email"
+        required
+        autoComplete="email"
+        error={fieldErrors.email?.[0]}
+      />
+      <TextField
+        label="Contraseña"
+        name="password"
+        type="password"
+        required
+        autoComplete="current-password"
+        error={fieldErrors.password?.[0]}
+      />
 
-      <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium">
-          Contraseña
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm"
-        />
-      </div>
+      {/* El login está fuera del ToastProvider: el error va inline. */}
+      {!state.fieldErrors ? <ActionFeedback state={state} /> : null}
 
-      {state.error ? (
-        <p role="alert" className="rounded-md border border-accent/40 bg-accent/10 p-3 text-sm text-accent">
-          {state.error}
-        </p>
-      ) : null}
-
-      <button
-        type="submit"
-        disabled={pending}
-        className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover disabled:opacity-60"
-      >
-        {pending ? "Iniciando sesión…" : "Iniciar sesión"}
-      </button>
+      <SubmitButton pendingLabel="Iniciando sesión…" className="w-full">
+        Iniciar sesión
+      </SubmitButton>
     </form>
   );
 }

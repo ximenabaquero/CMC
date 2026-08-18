@@ -24,6 +24,7 @@ const contentTypeByExt: Record<string, string> = {
   ".png": "image/png",
   ".webp": "image/webp",
   ".avif": "image/avif",
+  ".pdf": "application/pdf",
 };
 
 export const localStorageAdapter: StorageAdapter = {

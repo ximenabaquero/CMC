@@ -105,6 +105,7 @@ export const getPublishedProducts = unstable_cache(fetchPublishedProducts, ["pro
 
 export interface ProductDetailData extends ProductWithImage {
   gallery: MediaAsset[];
+  technicalSheet: MediaAsset | null;
 }
 
 export const getProductBySlug = unstable_cache(
@@ -129,9 +130,11 @@ export const getProductBySlug = unstable_cache(
         : Promise.resolve({ data: null }),
     ]);
 
-    const galleryIds = (gallery ?? []).map((g) => g.media_asset_id);
-    const { data: assets } = galleryIds.length
-      ? await supabase.from("media_assets").select("*").in("id", galleryIds)
+    // Además de la galería se resuelve la ficha técnica (PDF).
+    const assetIds = (gallery ?? []).map((g) => g.media_asset_id);
+    if (product.technical_sheet_media_id) assetIds.push(product.technical_sheet_media_id);
+    const { data: assets } = assetIds.length
+      ? await supabase.from("media_assets").select("*").in("id", assetIds)
       : { data: [] as MediaAsset[] };
     const assetById = new Map((assets ?? []).map((a) => [a.id, a]));
     const orderedGallery = (gallery ?? [])
@@ -143,6 +146,9 @@ export const getProductBySlug = unstable_cache(
       image: product.main_image_id ? (assetById.get(product.main_image_id) ?? null) : null,
       category: category ?? null,
       gallery: orderedGallery,
+      technicalSheet: product.technical_sheet_media_id
+        ? (assetById.get(product.technical_sheet_media_id) ?? null)
+        : null,
     };
   },
   ["product-by-slug"],

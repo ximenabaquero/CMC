@@ -18,8 +18,11 @@ como base de datos y **R2** para medios. Todo el contenido, copy, comentarios y 
 - **Autorización real** = políticas RLS (`supabase/migrations/0002_rls.sql` + `0003_brands.sql`):
   anon solo `SELECT` de filas `PUBLISHED`; escritura solo con `public.is_admin()`.
 - **Medios**: dos proveedores en `media_assets.storage_provider` — `STATIC` (versionado en
-  `public/`, importado con `scripts/import-assets.mjs`) y `R2` (subidas CMS vía
-  `src/lib/storage/`, servidas por `/api/media/<key>`). `next/image` con `unoptimized: true`.
+  `public/`, importado con `scripts/import-assets.mjs` desde `content-source/`, carpeta
+  gitignored con los originales del cliente) y `R2` (subidas CMS vía `src/lib/storage/`,
+  servidas por `/api/media/<key>`). Dos clases de medio con validación separada: imágenes
+  (`src/lib/media-upload.ts`) y documentos PDF/fichas técnicas (`src/lib/document-upload.ts`;
+  `products.technical_sheet_media_id`, migración 0004). `next/image` con `unoptimized: true`.
 - **Infra**: caché incremental en R2 + tag cache en D1, sin cola (`open-next.config.ts`,
   `wrangler.jsonc`). El despliegue a producción está **bloqueado** hasta aprobación del cliente.
 - Detalle completo en `docs/ARCHITECTURE.md` (incluye las restricciones no negociables al final).

@@ -5,7 +5,7 @@ través de Ana y (b) las afirmaciones que quedaron **en revisión** y no se
 publican hasta ser verificadas.
 
 Responsable de recopilar y aprobar el contenido: **Ana** (según acuerdo de la
-reunión 1, punto 2). Última actualización: 2026-08-04.
+reunión 1, punto 2). Última actualización: 2026-08-17.
 
 ## 1. Afirmaciones en revisión (NO publicadas)
 
@@ -16,9 +16,42 @@ reunión 1, punto 2). Última actualización: 2026-08-04.
 | «Según la OMS, el consumo de 250 g de pan al día es beneficioso» | Artículo «Los beneficios de comer pan» (borrador, nota interna) | Fuente verificable de la OMS o reformulación sin la atribución |
 | Datos de contacto que aparecen en el pie de las fichas técnicas (NIT 901.320.225-1; Av. 68 # 75a-50, Torre Ofiespacios, Of. 325-326, C.C. Metrópolis, Bogotá D.C.; tel. 301 466 2902 / 323 439 6358) | Solo en este documento — NO cargados al CMS | Confirmación de Ana de que son los canales oficiales y vigentes para el sitio web |
 
-> Los cuatro artículos del blog y los 12 productos están en estado
-> **borrador** y no aparecen en el sitio público hasta que el cliente los
-> apruebe y publique desde el panel.
+> Los cuatro artículos del blog nacieron en estado **borrador**. Nota
+> (2026-08-17): se detectó que los 12 productos figuran **PUBLICADOS** en la
+> base de datos de desarrollo, incluidos los 3 placeholders «Producto
+> pendiente de definir (1/2/3)», que por regla no deben aparecer en el
+> sitio. El script `supabase/scripts/2026-08-17-normalizacion-catalogo.sql`
+> los devuelve a borrador (pendiente de ejecución autorizada).
+
+## 1b. Hallazgos de la normalización del catálogo (2026-08-17)
+
+- **Clasificación de los 18 PDF del material de productos**: cada carpeta
+  traía 2 PDF. Los que empiezan por «Ficha Técnica» (400 KB–1 MB) son las
+  fichas técnicas oficiales y quedaron publicables como descarga en cada
+  producto. Los 9 PDF cortos (~24 KB, p. ej. `DAP Hojaldre.pdf`) son **copy
+  comercial para la web** (Descripción + Usos), no fichas: no se importan y
+  permanecen en `content-source/Productos/<slug>/` como referencia. No hay
+  fichas duplicadas ni contradictorias entre sí.
+- **DAP Alta Repostería Ponqué — conflicto CONFIRMADO en la ficha oficial**:
+  la «Descripción del producto» y el «Uso previsto» de la ficha traen texto
+  de margarina de hojaldre («Esta margarina tipo hojaldre está indicada
+  para la elaboración de masas hojaldradas», «formación de láminas
+  uniformes… textura crujiente»), mientras la sección «Propiedades» del
+  mismo documento describe el perfil real de ponqué (consistencia cremosa,
+  volumen, miga fina). El sitio usa el texto de «Propiedades» y omite el
+  uso previsto contradictorio. **Ana debe confirmar el uso previsto
+  correcto con el fabricante** antes de publicar esa afirmación.
+- **Aceite Sólido DAP — errata en la ficha**: la ficha (y el copy web)
+  dicen «fritura **instruccional**»; el sitio publica «fritura
+  **institucional**» por ser la lectura evidente. Confirmar con Ana.
+- **Atemperado**: solo las fichas de Hojaldre, Industrial y Semi
+  Hojaldrados traen recomendación de atemperado; el resto de productos no
+  publica ese dato (no se inventa).
+- **Fotografías adicionales (38 archivos)**: inventariadas en
+  `docs/FOTOS_ADICIONALES.md`; todas en estado PENDIENTE de aprobación.
+  ⚠️ Las 6 fotos de bodega/transporte presentan indicios claros de haber
+  sido **generadas con IA** (texto corrupto en las cajas, marca de agua de
+  generador): no se publican como evidencia real sin confirmación de Ana.
 
 ## 2. Material pendiente por recibir de Ana
 

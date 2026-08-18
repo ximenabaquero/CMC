@@ -39,7 +39,20 @@ export const ALLOWED_MIME_TYPES: Record<string, string> = {
   "image/avif": "avif",
 };
 
+/**
+ * Clase de medio documental (fichas técnicas): validación separada de la
+ * de imágenes — un PDF nunca entra por la vía de saveUploadedImage.
+ */
+export const ALLOWED_DOCUMENT_MIME_TYPES: Record<string, string> = {
+  "application/pdf": "pdf",
+};
+
 export function maxUploadBytes(): number {
   const mb = Number(process.env.MAX_UPLOAD_MB ?? "5");
   return (Number.isFinite(mb) && mb > 0 ? mb : 5) * 1024 * 1024;
+}
+
+export function maxDocumentUploadBytes(): number {
+  const mb = Number(process.env.MAX_DOCUMENT_UPLOAD_MB ?? "10");
+  return (Number.isFinite(mb) && mb > 0 ? mb : 10) * 1024 * 1024;
 }

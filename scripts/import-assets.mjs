@@ -12,14 +12,17 @@
  *   - no sobrescribe archivos existentes salvo con --force,
  *   - pre-dimensiona imágenes de producto (máx. 1200 px) y las convierte a WebP,
  *   - copia los logos sin recomprimir (PNG con transparencia),
- *   - escribe un manifiesto con dimensiones en scripts/assets-manifest.json,
+ *   - copia las fichas técnicas PDF (archivos "ficha-tecnica-*.pdf" por
+ *     carpeta de producto) como ficha-tecnica-<slug>.pdf, sin transformar,
+ *   - actualiza scripts/assets-manifest.json fusionando con el contenido
+ *     previo (no descarta entradas de corridas anteriores),
  *   - imprime un resumen final.
  *
  * Los archivos importados quedan versionados en public/brand y
  * public/images/products (proveedor STATIC en media_assets).
  */
 import { existsSync } from "node:fs";
-import { mkdir, readdir, stat, copyFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, stat, copyFile, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -27,6 +30,8 @@ import sharp from "sharp";
 
 const MAX_WIDTH = 1200;
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif"]);
+// Fichas técnicas oficiales: único PDF que se importa por producto.
+const TECHNICAL_SHEET_PATTERN = /^ficha[ -]?t[eé]cnica/i;
 
 function parseArgs(argv) {
   const args = { source: null, force: false, dryRun: false };
@@ -51,6 +56,18 @@ async function collectImages(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   return entries
     .filter((e) => e.isFile() && IMAGE_EXTENSIONS.has(path.extname(e.name).toLowerCase()))
+    .map((e) => path.join(dir, e.name));
+}
+
+async function collectTechnicalSheets(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  return entries
+    .filter(
+      (e) =>
+        e.isFile() &&
+        path.extname(e.name).toLowerCase() === ".pdf" &&
+        TECHNICAL_SHEET_PATTERN.test(e.name)
+    )
     .map((e) => path.join(dir, e.name));
 }
 
@@ -104,6 +121,21 @@ async function main() {
           productSlug,
         });
       }
+      const sheets = await collectTechnicalSheets(path.join(productsSource, dir.name));
+      if (sheets.length > 1) {
+        console.error(
+          `Aviso: ${dir.name} tiene ${sheets.length} fichas técnicas; se importa solo la primera (${path.basename(sheets[0])}).`
+        );
+      }
+      if (sheets.length > 0) {
+        jobs.push({
+          action: "copiar",
+          from: sheets[0],
+          to: path.join(productsDest, productSlug, `ficha-tecnica-${productSlug}.pdf`),
+          kind: "document",
+          productSlug,
+        });
+      }
     }
   }
 
@@ -122,7 +154,20 @@ async function main() {
     return;
   }
 
-  const manifest = [];
+  const manifestPath = path.join(repoRoot, "scripts", "assets-manifest.json");
+  // Fusión con el manifiesto previo: las corridas parciales no deben
+  // descartar entradas anteriores (marca, archivos omitidos, etc.).
+  const manifestByPath = new Map();
+  if (existsSync(manifestPath)) {
+    try {
+      for (const entry of JSON.parse(await readFile(manifestPath, "utf8"))) {
+        manifestByPath.set(entry.path, entry);
+      }
+    } catch {
+      console.error("Aviso: no se pudo leer el manifiesto previo; se regenera desde cero.");
+    }
+  }
+
   let written = 0;
   let skipped = 0;
 
@@ -133,18 +178,19 @@ async function main() {
     }
     await mkdir(path.dirname(job.to), { recursive: true });
 
-    if (job.kind === "brand") {
-      await copyFile(job.from, job.to);
-    } else {
+    if (job.kind === "product") {
       await sharp(job.from)
         .resize({ width: MAX_WIDTH, withoutEnlargement: true })
         .webp({ quality: 82 })
         .toFile(job.to);
+    } else {
+      // brand y document se copian sin transformar.
+      await copyFile(job.from, job.to);
     }
 
-    const meta = await sharp(job.to).metadata();
+    const meta = job.kind === "document" ? {} : await sharp(job.to).metadata();
     const info = await stat(job.to);
-    manifest.push({
+    manifestByPath.set("/" + path.relative(path.join(repoRoot, "public"), job.to).split(path.sep).join("/"), {
       kind: job.kind,
       productSlug: job.productSlug ?? null,
       path: "/" + path.relative(path.join(repoRoot, "public"), job.to).split(path.sep).join("/"),
@@ -155,12 +201,21 @@ async function main() {
     written++;
   }
 
-  const manifestPath = path.join(repoRoot, "scripts", "assets-manifest.json");
+  // Poda: una entrada cuyo archivo ya no existe en public/ está obsoleta.
+  let pruned = 0;
+  const manifest = [...manifestByPath.values()]
+    .filter((entry) => {
+      const exists = existsSync(path.join(repoRoot, "public", ...entry.path.split("/").filter(Boolean)));
+      if (!exists) pruned++;
+      return exists;
+    })
+    .sort((a, b) => a.path.localeCompare(b.path));
   await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + "\n", "utf8");
 
   console.log("\nResumen:");
   console.log(`  Escritos:  ${written}`);
   console.log(`  Omitidos (ya existían, usa --force para sobrescribir): ${skipped}`);
+  console.log(`  Entradas obsoletas retiradas del manifiesto: ${pruned}`);
   console.log(`  Manifiesto: ${path.relative(repoRoot, manifestPath)}`);
 }
 

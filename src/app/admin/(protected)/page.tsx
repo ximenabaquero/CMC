@@ -36,9 +36,9 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-5xl">
       <h1 className="mb-2 text-2xl font-semibold">Bienvenida al panel</h1>
-      <p className="mb-8 text-sm text-muted-foreground">
+      <p className="mb-8 max-w-prose text-base text-muted-foreground">
         Desde aquí puedes actualizar los textos, las imágenes, los productos, el blog y las
         preguntas frecuentes del sitio. Los cambios se publican en el sitio público al guardar.
       </p>
@@ -48,11 +48,19 @@ export default async function AdminDashboardPage() {
           <Link
             key={item.href}
             href={item.href}
-            className="rounded-lg border border-border bg-surface p-5 transition hover:border-primary"
+            className="group rounded-lg border border-border bg-surface p-5 transition hover:border-primary"
           >
-            <h2 className="mb-3 text-sm font-semibold">{item.titulo}</h2>
+            <h2 className="mb-3 flex items-center justify-between gap-2 text-base font-semibold">
+              {item.titulo}
+              <span
+                aria-hidden="true"
+                className="text-muted-foreground transition group-hover:text-primary"
+              >
+                →
+              </span>
+            </h2>
             <p className="text-3xl font-semibold text-primary">{item.publicados}</p>
-            <p className="text-xs text-muted-foreground">publicados</p>
+            <p className="text-sm text-muted-foreground">publicados</p>
             <p className="mt-2 text-sm text-muted-foreground">
               {item.borradores} en borrador
             </p>
@@ -61,8 +69,8 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mt-8 rounded-lg border border-border bg-surface p-5">
-        <h2 className="mb-2 text-sm font-semibold">¿Cómo funciona?</h2>
-        <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
+        <h2 className="mb-2 text-base font-semibold">¿Cómo funciona?</h2>
+        <ul className="list-inside list-disc space-y-1 text-base text-muted-foreground">
           <li>
             <strong>Borrador:</strong> el contenido se guarda pero no aparece en el sitio público.
           </li>

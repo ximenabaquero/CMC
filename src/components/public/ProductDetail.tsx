@@ -123,22 +123,14 @@ export function ProductDetail({
 
           <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             {whatsappHref ? (
-              <>
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
-                >
-                  Pedir información por WhatsApp
-                </a>
-                <Link
-                  href="/contacto"
-                  className="text-sm font-medium text-petrol underline-offset-4 hover:underline"
-                >
-                  Otros canales de contacto
-                </Link>
-              </>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+              >
+                Pedir información por WhatsApp
+              </a>
             ) : (
               <Link
                 href="/contacto"
@@ -147,6 +139,24 @@ export function ProductDetail({
                 Solicitar información
               </Link>
             )}
+            {product.technicalSheet ? (
+              // CTA secundario: descarga de la ficha técnica oficial (PDF).
+              <a
+                href={mediaUrl(product.technicalSheet)}
+                download={`ficha-tecnica-${product.slug}.pdf`}
+                className="inline-block rounded-md border-2 border-petrol px-6 py-[10px] text-sm font-semibold text-petrol transition ease-out hover:bg-petrol hover:text-white active:scale-[0.98] motion-reduce:active:scale-100"
+              >
+                Descargar ficha técnica (PDF)
+              </a>
+            ) : null}
+            {whatsappHref ? (
+              <Link
+                href="/contacto"
+                className="text-sm font-medium text-petrol underline-offset-4 hover:underline"
+              >
+                Otros canales de contacto
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

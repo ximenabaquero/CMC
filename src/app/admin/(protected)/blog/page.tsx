@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { FlashToast } from "@/components/admin/FlashToast";
+import { PageHeader } from "@/components/admin/PageHeader";
+import { StatusBadge } from "@/components/admin/StatusBadge";
+import { EmptyState } from "@/components/admin/EmptyState";
 
 export const metadata = { title: "Blog" };
 
@@ -20,25 +24,26 @@ export default async function AdminBlogPage({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Blog</h1>
-          <p className="text-sm text-muted-foreground">
-            Los artículos en borrador no aparecen en el sitio público.
-          </p>
-        </div>
-        <Link
-          href="/admin/blog/nuevo"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
-        >
-          + Nuevo artículo
-        </Link>
-      </div>
+      <FlashToast message={params.eliminado ? "Artículo eliminado." : null} />
+      <PageHeader
+        title="Blog"
+        description="Los artículos en borrador no aparecen en el sitio público."
+        actions={
+          <Link
+            href="/admin/blog/nuevo"
+            className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 py-2 text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          >
+            + Nuevo artículo
+          </Link>
+        }
+      />
 
-      {params.eliminado ? (
-        <p role="status" className="mb-4 rounded-md border border-primary/40 bg-primary/10 p-3 text-sm text-primary">
-          Artículo eliminado.
-        </p>
+      {posts.length === 0 ? (
+        <EmptyState
+          title="Aún no hay artículos"
+          description="Crea el primer artículo del blog; quedará en borrador hasta que lo publiques."
+          cta={{ href: "/admin/blog/nuevo", label: "Crear primer artículo" }}
+        />
       ) : null}
 
       <ul className="space-y-2">
@@ -49,23 +54,15 @@ export default async function AdminBlogPage({
               className="flex items-center gap-4 rounded-lg border border-border bg-surface p-4 transition hover:border-primary"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium">{post.title}</span>
-                <span className="block truncate text-xs text-muted-foreground">/blog/{post.slug}</span>
+                <span className="block truncate text-base font-medium">{post.title}</span>
+                <span className="block truncate text-sm text-muted-foreground">/blog/{post.slug}</span>
                 {post.internal_note ? (
                   <span className="mt-1 block truncate text-xs text-secondary">
                     Nota: {post.internal_note}
                   </span>
                 ) : null}
               </span>
-              <span
-                className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  post.status === "PUBLISHED"
-                    ? "bg-primary/10 text-primary"
-                    : "bg-surface-muted text-muted-foreground"
-                }`}
-              >
-                {post.status === "PUBLISHED" ? "Publicado" : "Borrador"}
-              </span>
+              <StatusBadge status={post.status} />
             </Link>
           </li>
         ))}

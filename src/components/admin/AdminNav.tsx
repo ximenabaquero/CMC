@@ -27,7 +27,7 @@ export function AdminNav() {
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`block rounded-md px-3 py-2 text-sm transition ${
+                className={`block min-h-11 rounded-md px-3 py-2.5 text-[15px] font-medium transition ${
                   active
                     ? "bg-primary text-primary-foreground"
                     : "text-foreground hover:bg-surface-muted"

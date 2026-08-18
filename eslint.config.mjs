@@ -12,6 +12,16 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    rules: {
+      // Convención: los parámetros con prefijo _ son intencionalmente no usados
+      // (ej. `_prev`/`_formData` en Server Actions que ignoran el formulario).
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
+  {
     ignores: [
       "node_modules/**",
       ".next/**",

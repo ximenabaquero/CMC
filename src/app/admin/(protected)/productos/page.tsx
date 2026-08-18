@@ -2,6 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/media";
+import { FlashToast } from "@/components/admin/FlashToast";
+import { PageHeader } from "@/components/admin/PageHeader";
+import { StatusBadge } from "@/components/admin/StatusBadge";
+import { EmptyState } from "@/components/admin/EmptyState";
 
 export const metadata = { title: "Productos" };
 
@@ -31,25 +35,26 @@ export default async function AdminProductsPage({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Productos</h1>
-          <p className="text-sm text-muted-foreground">
-            El catálogo público solo muestra los productos publicados.
-          </p>
-        </div>
-        <Link
-          href="/admin/productos/nuevo"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
-        >
-          + Nuevo producto
-        </Link>
-      </div>
+      <FlashToast message={params.eliminado ? "Producto eliminado." : null} />
+      <PageHeader
+        title="Productos"
+        description="El catálogo público solo muestra los productos publicados."
+        actions={
+          <Link
+            href="/admin/productos/nuevo"
+            className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 py-2 text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          >
+            + Nuevo producto
+          </Link>
+        }
+      />
 
-      {params.eliminado ? (
-        <p role="status" className="mb-4 rounded-md border border-primary/40 bg-primary/10 p-3 text-sm text-primary">
-          Producto eliminado.
-        </p>
+      {products.length === 0 ? (
+        <EmptyState
+          title="Aún no hay productos"
+          description="Crea el primer producto del catálogo; quedará en borrador hasta que lo publiques."
+          cta={{ href: "/admin/productos/nuevo", label: "Crear primer producto" }}
+        />
       ) : null}
 
       <ul className="space-y-2">
@@ -67,7 +72,7 @@ export default async function AdminProductsPage({
                     alt=""
                     width={56}
                     height={56}
-                    className="h-14 w-14 rounded-md border border-border object-cover"
+                    className="h-14 w-14 rounded-md border border-border bg-white object-contain p-0.5"
                   />
                 ) : (
                   <span
@@ -78,18 +83,10 @@ export default async function AdminProductsPage({
                   </span>
                 )}
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium">{product.name}</span>
-                  <span className="block truncate text-xs text-muted-foreground">/{product.slug}</span>
+                  <span className="block truncate text-base font-medium">{product.name}</span>
+                  <span className="block truncate text-sm text-muted-foreground">/{product.slug}</span>
                 </span>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    product.status === "PUBLISHED"
-                      ? "bg-primary/10 text-primary"
-                      : "bg-surface-muted text-muted-foreground"
-                  }`}
-                >
-                  {product.status === "PUBLISHED" ? "Publicado" : "Borrador"}
-                </span>
+                <StatusBadge status={product.status} />
               </Link>
             </li>
           );

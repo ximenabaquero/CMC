@@ -12,6 +12,8 @@ import {
   TextField,
 } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
+import { useActionToast } from "@/components/admin/toast";
+import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
 
 export function ProductForm({
   product,
@@ -22,20 +24,35 @@ export function ProductForm({
 }) {
   const action = updateProduct.bind(null, product.id);
   const [state, formAction] = useActionState(action, initialActionState);
+  useActionToast(state);
+  const { formProps, dirty } = useAdminForm(state);
   const [features, setFeatures] = useState<ProductFeature[]>(product.features ?? []);
+  const fieldErrors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-border bg-surface p-5">
+    <form
+      {...formProps}
+      action={formAction}
+      className="space-y-4 rounded-lg border border-border bg-surface p-5"
+    >
       <input type="hidden" name="features_json" value={JSON.stringify(features)} />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField label="Nombre" name="name" defaultValue={product.name} required maxLength={150} />
+        <TextField
+          label="Nombre"
+          name="name"
+          defaultValue={product.name}
+          required
+          maxLength={150}
+          error={fieldErrors.name?.[0]}
+        />
         <TextField
           label="Slug (dirección web)"
           name="slug"
           defaultValue={product.slug}
           required
           hint="Solo minúsculas, números y guiones."
+          error={fieldErrors.slug?.[0]}
         />
       </div>
 
@@ -46,6 +63,7 @@ export function ProductForm({
         rows={2}
         maxLength={300}
         hint="Se muestra en las tarjetas del catálogo."
+        error={fieldErrors.short_description?.[0]}
       />
 
       <TextAreaField
@@ -54,6 +72,7 @@ export function ProductForm({
         defaultValue={product.description}
         rows={6}
         hint="Se muestra en la página del producto. Admite párrafos separados por línea en blanco."
+        error={fieldErrors.description?.[0]}
       />
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -65,6 +84,7 @@ export function ProductForm({
             { value: "", label: "Sin categoría" },
             ...categories.map((c) => ({ value: c.id, label: c.name })),
           ]}
+          error={fieldErrors.category_id?.[0]}
         />
         <TextField
           label="Presentación"
@@ -72,6 +92,7 @@ export function ProductForm({
           defaultValue={product.presentation}
           maxLength={300}
           hint="Ej.: Bloques de 15 kg en caja corrugada."
+          error={fieldErrors.presentation?.[0]}
         />
         <TextField
           label="Orden"
@@ -79,6 +100,7 @@ export function ProductForm({
           type="number"
           defaultValue={String(product.sort_order)}
           hint="Menor número aparece primero."
+          error={fieldErrors.sort_order?.[0]}
         />
       </div>
 
@@ -101,7 +123,7 @@ export function ProductForm({
                     prev.map((f, i) => (i === index ? { ...f, label: e.target.value } : f))
                   )
                 }
-                className="rounded-md border border-border bg-surface px-3 py-2 text-sm"
+                className="rounded-md border border-border bg-surface px-3 py-2 text-base"
               />
               <input
                 type="text"
@@ -113,12 +135,12 @@ export function ProductForm({
                     prev.map((f, i) => (i === index ? { ...f, value: e.target.value } : f))
                   )
                 }
-                className="rounded-md border border-border bg-surface px-3 py-2 text-sm"
+                className="rounded-md border border-border bg-surface px-3 py-2 text-base"
               />
               <button
                 type="button"
                 onClick={() => setFeatures((prev) => prev.filter((_, i) => i !== index))}
-                className="rounded-md border border-border px-2 py-1 text-xs hover:bg-surface-muted"
+                className="min-h-10 rounded-md border border-border px-2.5 py-1 text-sm hover:bg-surface-muted"
               >
                 Quitar
               </button>
@@ -129,7 +151,7 @@ export function ProductForm({
           type="button"
           onClick={() => setFeatures((prev) => [...prev, { label: "", value: "" }])}
           disabled={features.length >= 20}
-          className="mt-3 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-muted disabled:opacity-50"
+          className="mt-3 min-h-10 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-muted disabled:opacity-50"
         >
           + Agregar característica
         </button>
@@ -144,6 +166,7 @@ export function ProductForm({
             defaultValue={product.seo_title}
             maxLength={70}
             hint="Si se deja vacío se usa el nombre del producto."
+            error={fieldErrors.seo_title?.[0]}
           />
           <TextAreaField
             label="Descripción SEO"
@@ -151,14 +174,18 @@ export function ProductForm({
             defaultValue={product.seo_description}
             rows={2}
             maxLength={170}
+            error={fieldErrors.seo_description?.[0]}
           />
         </div>
       </fieldset>
 
-      <StatusField defaultValue={product.status} />
+      <StatusField defaultValue={product.status} error={fieldErrors.status?.[0]} />
 
-      <ActionFeedback success={state.success} error={state.error} />
-      <SubmitButton>Guardar cambios</SubmitButton>
+      <ActionFeedback state={state} />
+      <div className="flex flex-wrap items-center gap-3">
+        <SubmitButton>Guardar cambios</SubmitButton>
+        <UnsavedBadge dirty={dirty} />
+      </div>
     </form>
   );
 }

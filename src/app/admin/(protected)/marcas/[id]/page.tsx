@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -7,11 +6,20 @@ import { deleteBrand, removeBrandLogo, uploadBrandLogo } from "@/actions/brands"
 import { BrandForm } from "./BrandForm";
 import { UploadImageForm } from "@/components/admin/UploadImageForm";
 import { ConfirmSubmitButton } from "@/components/admin/buttons";
+import { ActionForm } from "@/components/admin/ActionForm";
+import { FlashToast } from "@/components/admin/FlashToast";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export const metadata = { title: "Editar marca" };
 
-export default async function EditBrandPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function EditBrandPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ creado?: string }>;
+}) {
+  const [{ id }, { creado }] = await Promise.all([params, searchParams]);
   const supabase = await createSupabaseServerClient();
 
   const { data: brand, error } = await supabase.from("brands").select("*").eq("id", id).maybeSingle();
@@ -25,16 +33,11 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
   const maxUploadMb = Number(process.env.MAX_UPLOAD_MB ?? "5");
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
-      <div>
-        <p className="text-xs text-muted-foreground">
-          <Link href="/admin/marcas" className="underline-offset-2 hover:underline">
-            Marcas
-          </Link>{" "}
-          / {brand.name}
-        </p>
-        <h1 className="text-2xl font-semibold">{brand.name}</h1>
-      </div>
+    <div className="mx-auto max-w-3xl space-y-8">
+      <FlashToast
+        message={creado ? "Marca creada. Sube el logo y publícala cuando esté lista." : null}
+      />
+      <PageHeader title={brand.name} backHref="/admin/marcas" backLabel="Marcas" />
 
       {brand.internal_note ? (
         <p className="rounded-md border border-secondary/40 bg-secondary/10 p-3 text-sm">
@@ -62,11 +65,14 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
               <p className="mb-2 text-xs text-muted-foreground" title={logo.alt_text}>
                 {logo.alt_text}
               </p>
-              <form action={removeBrandLogo.bind(null, brand.id)}>
-                <ConfirmSubmitButton confirmMessage="¿Quitar el logo? Si la marca estaba publicada volverá a borrador, y el archivo se eliminará del almacenamiento si no se usa en otro lugar.">
+              <ActionForm action={removeBrandLogo.bind(null, brand.id)}>
+                <ConfirmSubmitButton
+                  pendingLabel="Quitando…"
+                  confirmMessage="¿Quitar el logo? Si la marca estaba publicada volverá a borrador, y el archivo se eliminará del almacenamiento si no se usa en otro lugar."
+                >
                   Quitar logo
                 </ConfirmSubmitButton>
-              </form>
+              </ActionForm>
             </div>
           </div>
         ) : (
@@ -85,11 +91,11 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
           Esta acción no se puede deshacer. La marca desaparecerá del carrusel de la página de
           inicio.
         </p>
-        <form action={deleteBrand.bind(null, brand.id)}>
+        <ActionForm action={deleteBrand.bind(null, brand.id)}>
           <ConfirmSubmitButton confirmMessage={`¿Eliminar definitivamente "${brand.name}"? Esta acción no se puede deshacer.`}>
             Eliminar marca
           </ConfirmSubmitButton>
-        </form>
+        </ActionForm>
       </section>
     </div>
   );

@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { SECTION_LABELS } from "@/lib/section-labels";
 import { SectionForm } from "./SectionForm";
+import { PageHeader } from "@/components/admin/PageHeader";
 import type { PillarItem } from "@/lib/supabase/types";
 
 export const metadata = { title: "Editar sección" };
@@ -44,18 +44,12 @@ export default async function EditSectionPage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <p className="text-xs text-muted-foreground">
-          <Link href="/admin/empresa" className="underline-offset-2 hover:underline">
-            Contenido de la empresa
-          </Link>{" "}
-          / {meta.label}
-        </p>
-        <h1 className="text-2xl font-semibold">{meta.label}</h1>
-        {meta.location ? (
-          <p className="text-sm text-muted-foreground">Se muestra en: {meta.location}</p>
-        ) : null}
-      </div>
+      <PageHeader
+        title={meta.label}
+        description={meta.location ? `Se muestra en: ${meta.location}` : undefined}
+        backHref="/admin/empresa"
+        backLabel="Contenido de la empresa"
+      />
 
       {section.internal_note ? (
         <p className="rounded-md border border-secondary/40 bg-secondary/10 p-3 text-sm">

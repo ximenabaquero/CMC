@@ -38,9 +38,10 @@ export default async function ProductPreviewPage({
       : Promise.resolve({ data: null }),
   ]);
 
-  const galleryIds = (gallery ?? []).map((g) => g.media_asset_id);
-  const { data: assets } = galleryIds.length
-    ? await supabase.from("media_assets").select("*").in("id", galleryIds)
+  const assetIds = (gallery ?? []).map((g) => g.media_asset_id);
+  if (product.technical_sheet_media_id) assetIds.push(product.technical_sheet_media_id);
+  const { data: assets } = assetIds.length
+    ? await supabase.from("media_assets").select("*").in("id", assetIds)
     : { data: [] as MediaAsset[] };
   const assetById = new Map((assets ?? []).map((a) => [a.id, a]));
 
@@ -67,6 +68,9 @@ export default async function ProductPreviewPage({
             gallery: (gallery ?? [])
               .map((g) => assetById.get(g.media_asset_id))
               .filter((a): a is MediaAsset => Boolean(a)),
+            technicalSheet: product.technical_sheet_media_id
+              ? (assetById.get(product.technical_sheet_media_id) ?? null)
+              : null,
           }}
         />
       </div>

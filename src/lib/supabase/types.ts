@@ -95,6 +95,7 @@ type ProductRow = {
   description: string | null;
   category_id: string | null;
   main_image_id: string | null;
+  technical_sheet_media_id: string | null;
   features: ProductFeature[];
   presentation: string | null;
   sort_order: number;
@@ -211,6 +212,7 @@ export type Database = {
           | "description"
           | "category_id"
           | "main_image_id"
+          | "technical_sheet_media_id"
           | "features"
           | "presentation"
           | "sort_order"
@@ -277,6 +279,18 @@ export type Database = {
       is_admin: {
         Args: Record<string, never>;
         Returns: boolean;
+      };
+      set_product_main_image: {
+        Args: { p_product_id: string; p_media_asset_id: string };
+        Returns: undefined;
+      };
+      swap_product_media_order: {
+        Args: { p_product_id: string; p_media_asset_id: string; p_direction: "up" | "down" };
+        Returns: undefined;
+      };
+      remove_product_media_entry: {
+        Args: { p_product_id: string; p_media_asset_id: string };
+        Returns: string | null;
       };
     };
     Enums: Record<string, never>;

@@ -44,6 +44,16 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   - No hay pings artificiales para impedir el pausado.
 - Los fetchers **lanzan** ante errores (nunca se cachea un fallo); cada
   página captura y decide su estado de error.
+- **Feedback del panel admin**: toda Server Action devuelve
+  `ActionState { status, message, fieldErrors?, ts? }`
+  (`src/lib/action-state.ts`, helpers `actionSuccess`/`actionError`/
+  `zodActionError`); ninguna devuelve `void` ni lanza hacia el usuario.
+  El resultado se comunica con un sistema de toasts propio y accesible
+  (`src/components/admin/toast.tsx`, montado en el layout protegido,
+  región `aria-live` pre-montada, sin dependencias), toasts tras redirect
+  vía `?creado=1`/`?eliminado=1` + `FlashToast`, y errores de validación
+  por campo (`fieldErrors` → `aria-invalid`/`aria-describedby`). El
+  error boundary `error.tsx` queda solo para fallos de carga de página.
 
 ### Autenticación y autorización
 
@@ -83,6 +93,29 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - Subidas: validación de tipo (JPEG/PNG/WebP/AVIF), tamaño configurable
   (`MAX_UPLOAD_MB`), nombre único (UUID), `alt_text` obligatorio, metadatos
   en `media_assets`, y limpieza del objeto si falla el registro.
+- **Clase de medio documental** (fichas técnicas PDF, 2026-08-17): validación
+  separada de las imágenes en `src/lib/document-upload.ts`
+  (`saveUploadedDocument`): MIME `application/pdf` + extensión `.pdf` +
+  firma real `%PDF-`, límite propio `MAX_DOCUMENT_UPLOAD_MB` (default 10 MB),
+  clave interna UUID y nombre visible aparte en `media_assets.file_name`.
+  `media-upload.ts` (imágenes) no se relajó. La ruta `/api/media` envía
+  `X-Content-Type-Options: nosniff` en todas las respuestas y, para PDF,
+  `Content-Disposition: attachment` con el `file_name` registrado (lookup
+  anónimo por `storage_path`). Las fichas de los 9 productos DAP son
+  `STATIC` (versionadas en `public/images/products/<slug>/ficha-tecnica-<slug>.pdf`,
+  servidas por ASSETS con atributo `download`; ASSETS no permite fijar
+  esos headers — riesgo residual aceptado); las subidas futuras desde el
+  CMS van a R2 y sí llevan los headers completos.
+- **Material fuente** (`content-source/`, en `.gitignore`): originales del
+  cliente ya normalizados a kebab-case (`Productos/<slug>/<slug>-caja.png`,
+  `<slug>-aplicacion-NN.png`, `ficha-tecnica-<slug>.pdf` + los PDF de copy
+  comercial sin importar) y `fotos-adicionales/` (inventario en
+  `docs/FOTOS_ADICIONALES.md`). `scripts/import-assets.mjs` importa desde
+  ahí (`npm run import-assets -- --source=content-source`): imágenes →
+  WebP ≤ 1200 px, fichas `ficha-tecnica-*.pdf` → copia sin transformar; el
+  manifiesto `scripts/assets-manifest.json` (entradas `brand` / `product` /
+  `document`) se fusiona con el previo y poda entradas cuyo archivo ya no
+  existe. El puente manifest → BD sigue siendo manual (seed).
 - `next/image` con `unoptimized: true` (Workers no trae el optimizador de
   Next y Cloudflare Images es de pago). Mitigación: pre-dimensionado de los
   activos importados (WebP ≤ 1200 px) y límite de tamaño en las subidas.
@@ -96,7 +129,16 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - Bloques institucionales editables por clave (`company_content`), con
   formularios estructurados (no hay page builder).
 - Galería de productos normalizada en `product_media` (FK + orden +
-  unicidad), no jsonb.
+  unicidad), no jsonb. Desde la migración `0004`: `sort_order` es 0-based
+  con **invariante «la posición 0 es siempre `products.main_image_id`»**
+  (la caja del empaque), constraint `unique (product_id, sort_order)`
+  diferible, y tres funciones SQL `security invoker` que mantienen el
+  invariante de forma atómica: `set_product_main_image` (elige principal y
+  renumera), `swap_product_media_order` (sube/baja secundarias) y
+  `remove_product_media_entry` (quita, renumera y promueve principal).
+- Ficha técnica por producto: `products.technical_sheet_media_id`
+  (nullable → `media_assets`, `on delete set null`). El detalle público
+  muestra «Descargar ficha técnica (PDF)» solo si existe.
 - Estados `DRAFT`/`PUBLISHED` en todo el contenido; `internal_note`
   documenta el contenido en revisión editorial dentro del propio CMS.
 

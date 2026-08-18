@@ -3,8 +3,36 @@
  * Válidos tanto en componentes cliente como servidor.
  */
 
-const inputClass =
-  "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-secondary";
+import type { ActionState } from "@/lib/action-state";
+
+export const inputClass =
+  "w-full rounded-md border border-border bg-surface px-3 py-2.5 text-base focus:border-secondary";
+
+const inputErrorClass = "border-accent";
+
+/** Compone aria-describedby con el error y/o la ayuda del campo. */
+function describedBy(name: string, error?: string, hint?: string): string | undefined {
+  const ids = [error ? `${name}-error` : null, hint ? `${name}-hint` : null].filter(Boolean);
+  return ids.length ? ids.join(" ") : undefined;
+}
+
+function FieldError({ name, error }: { name: string; error?: string }) {
+  if (!error) return null;
+  return (
+    <p id={`${name}-error`} className="mt-1 text-sm text-accent">
+      {error}
+    </p>
+  );
+}
+
+function FieldHint({ name, hint }: { name: string; hint?: string }) {
+  if (!hint) return null;
+  return (
+    <p id={`${name}-hint`} className="mt-1 text-xs text-muted-foreground">
+      {hint}
+    </p>
+  );
+}
 
 export function TextField({
   label,
@@ -14,6 +42,8 @@ export function TextField({
   type = "text",
   hint,
   maxLength,
+  error,
+  autoComplete,
 }: {
   label: string;
   name: string;
@@ -22,6 +52,8 @@ export function TextField({
   type?: string;
   hint?: string;
   maxLength?: number;
+  error?: string;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -36,9 +68,13 @@ export function TextField({
         defaultValue={defaultValue ?? ""}
         required={required}
         maxLength={maxLength}
-        className={inputClass}
+        autoComplete={autoComplete}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(name, error, hint)}
+        className={`${inputClass}${error ? ` ${inputErrorClass}` : ""}`}
       />
-      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+      <FieldError name={name} error={error} />
+      <FieldHint name={name} hint={hint} />
     </div>
   );
 }
@@ -51,6 +87,7 @@ export function TextAreaField({
   rows = 4,
   hint,
   maxLength,
+  error,
 }: {
   label: string;
   name: string;
@@ -59,6 +96,7 @@ export function TextAreaField({
   rows?: number;
   hint?: string;
   maxLength?: number;
+  error?: string;
 }) {
   return (
     <div>
@@ -73,9 +111,12 @@ export function TextAreaField({
         required={required}
         rows={rows}
         maxLength={maxLength}
-        className={inputClass}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(name, error, hint)}
+        className={`${inputClass}${error ? ` ${inputErrorClass}` : ""}`}
       />
-      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+      <FieldError name={name} error={error} />
+      <FieldHint name={name} hint={hint} />
     </div>
   );
 }
@@ -86,36 +127,47 @@ export function SelectField({
   defaultValue,
   options,
   hint,
+  error,
 }: {
   label: string;
   name: string;
   defaultValue?: string | null;
   options: { value: string; label: string }[];
   hint?: string;
+  error?: string;
 }) {
   return (
     <div>
       <label htmlFor={name} className="mb-1 block text-sm font-medium">
         {label}
       </label>
-      <select id={name} name={name} defaultValue={defaultValue ?? ""} className={inputClass}>
+      <select
+        id={name}
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(name, error, hint)}
+        className={`${inputClass}${error ? ` ${inputErrorClass}` : ""}`}
+      >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
-      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+      <FieldError name={name} error={error} />
+      <FieldHint name={name} hint={hint} />
     </div>
   );
 }
 
-export function StatusField({ defaultValue }: { defaultValue: string }) {
+export function StatusField({ defaultValue, error }: { defaultValue: string; error?: string }) {
   return (
     <SelectField
       label="Estado"
       name="status"
       defaultValue={defaultValue}
+      error={error}
       options={[
         { value: "DRAFT", label: "Borrador (no visible al público)" },
         { value: "PUBLISHED", label: "Publicado (visible al público)" },
@@ -142,7 +194,7 @@ export function CheckboxField({
         name={name}
         type="checkbox"
         defaultChecked={defaultChecked}
-        className="mt-1 h-4 w-4 rounded border-border"
+        className="mt-1 h-5 w-5 rounded border-border"
       />
       <div>
         <label htmlFor={name} className="text-sm font-medium">
@@ -154,20 +206,15 @@ export function CheckboxField({
   );
 }
 
-export function ActionFeedback({ success, error }: { success: string | null; error: string | null }) {
-  if (error) {
-    return (
-      <p role="alert" className="rounded-md border border-accent/40 bg-accent/10 p-3 text-sm text-accent">
-        {error}
-      </p>
-    );
-  }
-  if (success) {
-    return (
-      <p role="status" className="rounded-md border border-primary/40 bg-primary/10 p-3 text-sm text-primary">
-        {success}
-      </p>
-    );
-  }
-  return null;
+/**
+ * Error general del formulario, persistente (el toast se desvanece).
+ * El éxito se comunica solo por toast: aquí no se renderiza nada.
+ */
+export function ActionFeedback({ state }: { state: ActionState }) {
+  if (state.status !== "error" || !state.message) return null;
+  return (
+    <p role="alert" className="rounded-md border border-accent/40 bg-accent/10 p-3 text-sm text-accent">
+      {state.message}
+    </p>
+  );
 }

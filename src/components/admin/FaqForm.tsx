@@ -12,6 +12,8 @@ import {
   TextField,
 } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
+import { useActionToast } from "@/components/admin/toast";
+import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
 
 export function FaqForm({
   faq,
@@ -21,9 +23,16 @@ export function FaqForm({
   action: (prev: ActionState, formData: FormData) => Promise<ActionState>;
 }) {
   const [state, formAction] = useActionState(action, initialActionState);
+  useActionToast(state);
+  const { formProps, dirty } = useAdminForm(state);
+  const fieldErrors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-border bg-surface p-5">
+    <form
+      {...formProps}
+      action={formAction}
+      className="space-y-4 rounded-lg border border-border bg-surface p-5"
+    >
       <TextAreaField
         label="Pregunta"
         name="question"
@@ -31,6 +40,7 @@ export function FaqForm({
         required
         rows={2}
         maxLength={300}
+        error={fieldErrors.question?.[0]}
       />
       <TextAreaField
         label="Respuesta"
@@ -40,6 +50,7 @@ export function FaqForm({
         rows={6}
         maxLength={5000}
         hint="Para listas comienza la línea con «- »."
+        error={fieldErrors.answer?.[0]}
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
@@ -48,16 +59,22 @@ export function FaqForm({
           type="number"
           defaultValue={String(faq?.sort_order ?? 0)}
           hint="Menor número aparece primero."
+          error={fieldErrors.sort_order?.[0]}
         />
-        <StatusField defaultValue={faq?.status ?? "DRAFT"} />
+        <StatusField defaultValue={faq?.status ?? "DRAFT"} error={fieldErrors.status?.[0]} />
       </div>
       <CheckboxField
         label="Destacar en la página de Inicio"
         name="featured"
         defaultChecked={faq?.featured}
       />
-      <ActionFeedback success={state.success} error={state.error} />
-      <SubmitButton>{faq ? "Guardar cambios" : "Crear pregunta"}</SubmitButton>
+      <ActionFeedback state={state} />
+      <div className="flex flex-wrap items-center gap-3">
+        <SubmitButton pendingLabel={faq ? "Guardando…" : "Creando…"}>
+          {faq ? "Guardar cambios" : "Crear pregunta"}
+        </SubmitButton>
+        <UnsavedBadge dirty={dirty} />
+      </div>
     </form>
   );
 }

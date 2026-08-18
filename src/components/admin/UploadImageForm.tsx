@@ -1,9 +1,12 @@
 "use client";
 
-import { useActionState, useRef, useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import type { ActionState } from "@/lib/action-state";
 import { initialActionState } from "@/lib/action-state";
-import { ActionFeedback } from "./fields";
+import { ActionFeedback, inputClass } from "./fields";
+import { SubmitButton } from "./buttons";
+import { useActionToast } from "./toast";
+import { useAdminForm } from "./useAdminForm";
 
 /**
  * Formulario de carga de imagen con texto alternativo obligatorio.
@@ -18,15 +21,17 @@ export function UploadImageForm({
   buttonLabel?: string;
   maxUploadMb: number;
 }) {
-  const [state, formAction, pending] = useActionState(action, initialActionState);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction] = useActionState(action, initialActionState);
+  useActionToast(state);
+  const { formProps } = useAdminForm(state);
+  const fieldErrors = state.fieldErrors ?? {};
 
   useEffect(() => {
-    if (state.success) formRef.current?.reset();
-  }, [state.success]);
+    if (state.status === "success") formProps.ref.current?.reset();
+  }, [state, formProps.ref]);
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-3">
+    <form {...formProps} action={formAction} className="space-y-3">
       <div>
         <label htmlFor="file" className="mb-1 block text-sm font-medium">
           Archivo (JPEG, PNG, WebP o AVIF; máx. {maxUploadMb} MB)
@@ -52,17 +57,20 @@ export function UploadImageForm({
           minLength={3}
           maxLength={300}
           placeholder="Ej.: Caja de Margarina DAP Hojaldre"
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm"
+          aria-invalid={fieldErrors.alt_text ? true : undefined}
+          aria-describedby={fieldErrors.alt_text ? "alt_text-error" : undefined}
+          className={inputClass}
         />
+        {fieldErrors.alt_text ? (
+          <p id="alt_text-error" className="mt-1 text-sm text-accent">
+            {fieldErrors.alt_text[0]}
+          </p>
+        ) : null}
       </div>
-      <ActionFeedback success={state.success} error={state.error} />
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-secondary px-4 py-2 text-sm font-medium text-white transition hover:bg-secondary-hover disabled:opacity-60"
-      >
-        {pending ? "Subiendo…" : buttonLabel}
-      </button>
+      <ActionFeedback state={state} />
+      <SubmitButton variant="secondary" pendingLabel="Subiendo…">
+        {buttonLabel}
+      </SubmitButton>
     </form>
   );
 }

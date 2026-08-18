@@ -5,7 +5,13 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { blogPostSchema, slugSchema } from "@/lib/validation";
-import { DB_ERROR_MESSAGE, type ActionState } from "@/lib/action-state";
+import {
+  DB_ERROR_MESSAGE,
+  actionError,
+  actionSuccess,
+  zodActionError,
+  type ActionState,
+} from "@/lib/action-state";
 import { saveUploadedImage, deleteManagedAsset } from "@/lib/media-upload";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 
@@ -15,9 +21,12 @@ export async function createPost(_prev: ActionState, formData: FormData): Promis
 
   const title = String(formData.get("title") ?? "").trim();
   const slugResult = slugSchema.safeParse(formData.get("slug"));
-  if (!title) return { success: null, error: "El título es obligatorio." };
+  if (!title) {
+    return actionError("El título es obligatorio.", { title: ["El título es obligatorio."] });
+  }
   if (!slugResult.success) {
-    return { success: null, error: slugResult.error.issues[0]?.message ?? "Slug inválido." };
+    const message = slugResult.error.issues[0]?.message ?? "Slug inválido.";
+    return actionError(message, { slug: [message] });
   }
 
   const { data, error } = await supabase
@@ -34,9 +43,11 @@ export async function createPost(_prev: ActionState, formData: FormData): Promis
 
   if (error || !data) {
     if (error?.code === "23505") {
-      return { success: null, error: "Ya existe un artículo con ese slug." };
+      return actionError("Ya existe un artículo con ese slug.", {
+        slug: ["Ya existe un artículo con ese slug."],
+      });
     }
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   redirect(`/admin/blog/${data.id}?creado=1`);
@@ -61,7 +72,7 @@ export async function updatePost(
   });
 
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos del formulario." };
+    return zodActionError(parsed.error);
   }
 
   // Registrar la fecha de publicación la primera vez que pasa a PUBLISHED.
@@ -83,17 +94,23 @@ export async function updatePost(
 
   if (error) {
     if (error.code === "23505") {
-      return { success: null, error: "Ya existe un artículo con ese slug." };
+      return actionError("Ya existe un artículo con ese slug.", {
+        slug: ["Ya existe un artículo con ese slug."],
+      });
     }
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   revalidatePublicContent(CACHE_TAGS.posts);
   revalidatePath(`/admin/blog/${postId}`);
-  return { success: "Artículo guardado. El sitio público se actualizó.", error: null };
+  return actionSuccess("Artículo guardado. El sitio público se actualizó.");
 }
 
-export async function deletePost(postId: string): Promise<void> {
+export async function deletePost(
+  postId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
@@ -104,7 +121,7 @@ export async function deletePost(postId: string): Promise<void> {
     .maybeSingle();
 
   const { error } = await supabase.from("blog_posts").delete().eq("id", postId);
-  if (error) throw new Error("No se pudo eliminar el artículo.");
+  if (error) return actionError("No se pudo eliminar el artículo. Intenta de nuevo.");
 
   if (post?.cover_image_id) {
     await deleteManagedAsset(supabase, post.cover_image_id);
@@ -130,7 +147,7 @@ export async function uploadPostCover(
     userId
   );
   if (result.error || !result.mediaId) {
-    return { success: null, error: result.error ?? "No se pudo subir la imagen." };
+    return actionError(result.error ?? "No se pudo subir la imagen.");
   }
 
   // Reemplazo: eliminar la portada anterior si era gestionada por el CMS.
@@ -147,7 +164,7 @@ export async function uploadPostCover(
 
   if (error) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   if (post?.cover_image_id) {
@@ -156,10 +173,14 @@ export async function uploadPostCover(
 
   revalidatePublicContent(CACHE_TAGS.posts);
   revalidatePath(`/admin/blog/${postId}`);
-  return { success: "Imagen de portada actualizada.", error: null };
+  return actionSuccess("Imagen de portada actualizada.");
 }
 
-export async function removePostCover(postId: string): Promise<void> {
+export async function removePostCover(
+  postId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   const { userId } = await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
@@ -168,16 +189,17 @@ export async function removePostCover(postId: string): Promise<void> {
     .select("cover_image_id")
     .eq("id", postId)
     .maybeSingle();
-  if (!post?.cover_image_id) return;
+  if (!post?.cover_image_id) return actionSuccess(null);
 
   const { error } = await supabase
     .from("blog_posts")
     .update({ cover_image_id: null, updated_by: userId })
     .eq("id", postId);
-  if (error) throw new Error("No se pudo quitar la portada.");
+  if (error) return actionError("No se pudo quitar la portada.");
 
   await deleteManagedAsset(supabase, post.cover_image_id);
 
   revalidatePublicContent(CACHE_TAGS.posts);
   revalidatePath(`/admin/blog/${postId}`);
+  return actionSuccess("Imagen de portada eliminada.");
 }

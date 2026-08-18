@@ -3,8 +3,10 @@
 import { useActionState, useState } from "react";
 import { createPost } from "@/actions/posts";
 import { initialActionState } from "@/lib/action-state";
-import { ActionFeedback } from "@/components/admin/fields";
+import { ActionFeedback, inputClass } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
+import { useActionToast } from "@/components/admin/toast";
+import { useAdminForm } from "@/components/admin/useAdminForm";
 
 function slugify(value: string): string {
   return value
@@ -17,11 +19,18 @@ function slugify(value: string): string {
 
 export function NewPostForm() {
   const [state, formAction] = useActionState(createPost, initialActionState);
+  useActionToast(state);
+  const { formProps } = useAdminForm(state);
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
+  const fieldErrors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-border bg-surface p-5">
+    <form
+      {...formProps}
+      action={formAction}
+      className="space-y-4 rounded-lg border border-border bg-surface p-5"
+    >
       <div>
         <label htmlFor="title" className="mb-1 block text-sm font-medium">
           Título del artículo *
@@ -35,8 +44,15 @@ export function NewPostForm() {
           onChange={(e) => {
             if (!slugTouched) setSlug(slugify(e.target.value));
           }}
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm"
+          aria-invalid={fieldErrors.title ? true : undefined}
+          aria-describedby={fieldErrors.title ? "title-error" : undefined}
+          className={inputClass}
         />
+        {fieldErrors.title ? (
+          <p id="title-error" className="mt-1 text-sm text-accent">
+            {fieldErrors.title[0]}
+          </p>
+        ) : null}
       </div>
       <div>
         <label htmlFor="slug" className="mb-1 block text-sm font-medium">
@@ -53,14 +69,21 @@ export function NewPostForm() {
             setSlug(e.target.value);
           }}
           pattern="[a-z0-9]+(-[a-z0-9]+)*"
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm"
+          aria-invalid={fieldErrors.slug ? true : undefined}
+          aria-describedby={fieldErrors.slug ? "slug-error slug-hint" : "slug-hint"}
+          className={inputClass}
         />
-        <p className="mt-1 text-xs text-muted-foreground">
+        {fieldErrors.slug ? (
+          <p id="slug-error" className="mt-1 text-sm text-accent">
+            {fieldErrors.slug[0]}
+          </p>
+        ) : null}
+        <p id="slug-hint" className="mt-1 text-xs text-muted-foreground">
           Aparecerá en la dirección: /blog/{slug || "…"}
         </p>
       </div>
-      <ActionFeedback success={state.success} error={state.error} />
-      <SubmitButton>Crear borrador</SubmitButton>
+      <ActionFeedback state={state} />
+      <SubmitButton pendingLabel="Creando…">Crear borrador</SubmitButton>
     </form>
   );
 }

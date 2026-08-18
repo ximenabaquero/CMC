@@ -34,71 +34,103 @@
   {
     "kind": "product",
     "productSlug": "dap-aceite-solido",
-    "path": "/images/products/dap-aceite-solido/dap-aceite-solido-caja.webp",
-    "width": 1200,
-    "height": 1200,
-    "sizeBytes": 67368
-  },
-  {
-    "kind": "product",
-    "productSlug": "dap-aceite-solido",
-    "path": "/images/products/dap-aceite-solido/dap-aceite-solido.webp",
+    "path": "/images/products/dap-aceite-solido/dap-aceite-solido-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 53592
   },
   {
     "kind": "product",
-    "productSlug": "dap-alinado",
-    "path": "/images/products/dap-alinado/dap-alinados-1.webp",
+    "productSlug": "dap-aceite-solido",
+    "path": "/images/products/dap-aceite-solido/dap-aceite-solido-caja.webp",
     "width": 1200,
     "height": 1200,
-    "sizeBytes": 65602
+    "sizeBytes": 67368
+  },
+  {
+    "kind": "document",
+    "productSlug": "dap-aceite-solido",
+    "path": "/images/products/dap-aceite-solido/ficha-tecnica-dap-aceite-solido.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 414223
   },
   {
     "kind": "product",
     "productSlug": "dap-alinado",
-    "path": "/images/products/dap-alinado/dap-alinados.webp",
+    "path": "/images/products/dap-alinado/dap-alinado-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 57858
   },
   {
     "kind": "product",
-    "productSlug": "dap-alta-reposteria-ponque",
-    "path": "/images/products/dap-alta-reposteria-ponque/caja-dap-alta-reposteria-ponque.webp",
+    "productSlug": "dap-alinado",
+    "path": "/images/products/dap-alinado/dap-alinado-caja.webp",
     "width": 1200,
     "height": 1200,
-    "sizeBytes": 81612
+    "sizeBytes": 65602
+  },
+  {
+    "kind": "document",
+    "productSlug": "dap-alinado",
+    "path": "/images/products/dap-alinado/ficha-tecnica-dap-alinado.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 500805
   },
   {
     "kind": "product",
     "productSlug": "dap-alta-reposteria-ponque",
-    "path": "/images/products/dap-alta-reposteria-ponque/fotos-dap-alta-reposteria.webp",
+    "path": "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 57742
   },
   {
     "kind": "product",
-    "productSlug": "dap-hojaldre",
-    "path": "/images/products/dap-hojaldre/caja-dap-hojaldre.webp",
+    "productSlug": "dap-alta-reposteria-ponque",
+    "path": "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-caja.webp",
     "width": 1200,
     "height": 1200,
-    "sizeBytes": 67876
+    "sizeBytes": 81612
+  },
+  {
+    "kind": "document",
+    "productSlug": "dap-alta-reposteria-ponque",
+    "path": "/images/products/dap-alta-reposteria-ponque/ficha-tecnica-dap-alta-reposteria-ponque.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 1073793
   },
   {
     "kind": "product",
     "productSlug": "dap-hojaldre",
-    "path": "/images/products/dap-hojaldre/dap-hojaldre-con-productos.webp",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 52354
   },
   {
     "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-caja.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 67876
+  },
+  {
+    "kind": "document",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/ficha-tecnica-dap-hojaldre.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 572631
+  },
+  {
+    "kind": "product",
     "productSlug": "dap-industrial",
-    "path": "/images/products/dap-industrial/dap-industrial-1.webp",
+    "path": "/images/products/dap-industrial/dap-industrial-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 39466
@@ -106,15 +138,23 @@
   {
     "kind": "product",
     "productSlug": "dap-industrial",
-    "path": "/images/products/dap-industrial/dap-industrial.webp",
+    "path": "/images/products/dap-industrial/dap-industrial-caja.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 53004
   },
   {
+    "kind": "document",
+    "productSlug": "dap-industrial",
+    "path": "/images/products/dap-industrial/ficha-tecnica-dap-industrial.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 554990
+  },
+  {
     "kind": "product",
     "productSlug": "dap-multiproposito",
-    "path": "/images/products/dap-multiproposito/2.webp",
+    "path": "/images/products/dap-multiproposito/dap-multiproposito-aplicacion-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 47130
@@ -128,17 +168,25 @@
     "sizeBytes": 79926
   },
   {
-    "kind": "product",
-    "productSlug": "dap-preparado-graso",
-    "path": "/images/products/dap-preparado-graso/preparado-graso-caja.webp",
-    "width": 1200,
-    "height": 1200,
-    "sizeBytes": 63360
+    "kind": "document",
+    "productSlug": "dap-multiproposito",
+    "path": "/images/products/dap-multiproposito/ficha-tecnica-dap-multiproposito.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 842577
   },
   {
     "kind": "product",
     "productSlug": "dap-preparado-graso",
-    "path": "/images/products/dap-preparado-graso/preparado-graso-con-productos-2.webp",
+    "path": "/images/products/dap-preparado-graso/dap-preparado-graso-aplicacion-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 37636
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-preparado-graso",
+    "path": "/images/products/dap-preparado-graso/dap-preparado-graso-aplicacion-02.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 81470
@@ -146,10 +194,26 @@
   {
     "kind": "product",
     "productSlug": "dap-preparado-graso",
-    "path": "/images/products/dap-preparado-graso/preparado-graso-con-productos.webp",
+    "path": "/images/products/dap-preparado-graso/dap-preparado-graso-caja.webp",
     "width": 1200,
     "height": 1200,
-    "sizeBytes": 37636
+    "sizeBytes": 63360
+  },
+  {
+    "kind": "document",
+    "productSlug": "dap-preparado-graso",
+    "path": "/images/products/dap-preparado-graso/ficha-tecnica-dap-preparado-graso.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 445417
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-reposteria",
+    "path": "/images/products/dap-reposteria/dap-reposteria-aplicacion-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 35746
   },
   {
     "kind": "product",
@@ -160,27 +224,35 @@
     "sizeBytes": 74728
   },
   {
-    "kind": "product",
+    "kind": "document",
     "productSlug": "dap-reposteria",
-    "path": "/images/products/dap-reposteria/dap-reposteria.webp",
-    "width": 1200,
-    "height": 1200,
-    "sizeBytes": 35746
+    "path": "/images/products/dap-reposteria/ficha-tecnica-dap-reposteria.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 570408
   },
   {
     "kind": "product",
     "productSlug": "dap-semi-hojaldrado",
-    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-caja.webp",
+    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldrado-aplicacion-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 48832
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-semi-hojaldrado",
+    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldrado-caja.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 76780
   },
   {
-    "kind": "product",
+    "kind": "document",
     "productSlug": "dap-semi-hojaldrado",
-    "path": "/images/products/dap-semi-hojaldrado/dap-semi-hojaldre-con-productos.webp",
-    "width": 1200,
-    "height": 1200,
-    "sizeBytes": 48832
+    "path": "/images/products/dap-semi-hojaldrado/ficha-tecnica-dap-semi-hojaldrado.pdf",
+    "width": null,
+    "height": null,
+    "sizeBytes": 497956
   }
 ]

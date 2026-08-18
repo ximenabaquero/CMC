@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { SettingsForm } from "./SettingsForm";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export const metadata = { title: "Información de contacto" };
 
@@ -16,11 +17,10 @@ export default async function AdminContactPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="mb-2 text-2xl font-semibold">Información de contacto y datos generales</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        El sitio público solo muestra los canales que tengan datos. Si dejas un campo vacío, ese
-        canal se oculta sin romper el diseño.
-      </p>
+      <PageHeader
+        title="Información de contacto y datos generales"
+        description="El sitio público solo muestra los canales que tengan datos. Si dejas un campo vacío, ese canal se oculta sin romper el diseño."
+      />
       <SettingsForm settings={settings} />
     </div>
   );

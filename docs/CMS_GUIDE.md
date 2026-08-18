@@ -18,6 +18,17 @@ Guía para administrar el contenido del sitio **sin conocimientos técnicos**.
 - **Publicado**: visible para todos los visitantes.
 - Al guardar cualquier cambio, el sitio público se actualiza
   automáticamente en unos segundos.
+- Cada vez que guardas, subes o eliminas algo, aparece una **notificación
+  flotante** en la parte superior que confirma el resultado («Producto
+  guardado», «La imagen se cargó correctamente», etc.). Desaparece sola a
+  los pocos segundos; también puedes cerrarla con la ✕.
+- Si algo sale mal, la notificación es roja y el error aparece además
+  **debajo del campo que hay que corregir**. Lo que escribiste no se
+  pierde.
+- Mientras una operación está en curso, el botón se desactiva y muestra
+  «Guardando…», «Subiendo…» o «Eliminando…»; así no se envía dos veces.
+- Si editas un formulario y aún no guardas, verás la nota «Cambios sin
+  guardar» junto al botón Guardar.
 - Antes de eliminar algo, el sistema siempre pide confirmación. Las
   eliminaciones no se pueden deshacer.
 - Algunos contenidos tienen una **nota interna** (solo visible en el
@@ -53,11 +64,24 @@ si dejas un campo vacío, ese canal se oculta sin dañar el diseño.
   presentación, características (pares título/valor, ej. «Vida útil»),
   SEO y estado.
 - **Imágenes**: en la sección «Imágenes» puedes subir fotos (JPEG, PNG,
-  WebP o AVIF), marcar una como **principal**, o quitarlas. El **texto
-  alternativo** es obligatorio: describe la imagen para personas con
-  lectores de pantalla y para los buscadores.
+  WebP o AVIF; máx. 5 MB), quitarlas y **editar el texto alternativo** de
+  cada una (obligatorio: describe la imagen para personas con lectores de
+  pantalla y para los buscadores).
+  - La imagen marcada como **Principal** es la que se usa en las tarjetas
+    del catálogo y de la página de inicio, y siempre ocupa la primera
+    posición de la galería. Para cambiarla usa «Usar como principal»: el
+    sistema reordena el resto automáticamente.
+  - Las demás imágenes se reordenan con los botones **↑ Subir / ↓ Bajar**.
+  - Recomendación: la **caja del empaque sola** como principal y las fotos
+    con panes o preparaciones después.
+- **Ficha técnica (PDF)**: cada producto puede tener una ficha técnica.
+  En la sección «Ficha técnica (PDF)» puedes **cargarla, descargarla,
+  reemplazarla o eliminarla** (solo PDF, máx. 10 MB); se muestra el nombre
+  del documento y su fecha de actualización. Si el producto tiene ficha,
+  el sitio público muestra el botón «Descargar ficha técnica (PDF)» en la
+  página del producto; si no, el botón no aparece.
 - **Vista previa**: muestra el producto tal como se verá publicado, aunque
-  esté en borrador.
+  esté en borrador (incluido el botón de la ficha técnica).
 - Mientras no haya productos publicados, el sitio muestra
   «Catálogo en preparación».
 

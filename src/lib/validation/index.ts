@@ -126,3 +126,10 @@ export const altTextSchema = z
   .trim()
   .min(3, "El texto alternativo es obligatorio (describe la imagen).")
   .max(300);
+
+/** Nombre visible de un documento (ficha técnica PDF). */
+export const documentNameSchema = z
+  .string()
+  .trim()
+  .min(3, "El nombre del documento es obligatorio (mínimo 3 caracteres).")
+  .max(150, "El nombre del documento es demasiado largo.");

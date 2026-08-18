@@ -1,9 +1,10 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { deleteFaq, updateFaq } from "@/actions/faqs";
 import { FaqForm } from "@/components/admin/FaqForm";
+import { ActionForm } from "@/components/admin/ActionForm";
 import { ConfirmSubmitButton } from "@/components/admin/buttons";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export const metadata = { title: "Editar pregunta frecuente" };
 
@@ -16,16 +17,12 @@ export default async function EditFaqPage({ params }: { params: Promise<{ id: st
   if (!faq) notFound();
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
-      <div>
-        <p className="text-xs text-muted-foreground">
-          <Link href="/admin/preguntas-frecuentes" className="underline-offset-2 hover:underline">
-            Preguntas frecuentes
-          </Link>{" "}
-          / Editar
-        </p>
-        <h1 className="text-2xl font-semibold">Editar pregunta</h1>
-      </div>
+    <div className="mx-auto max-w-3xl space-y-8">
+      <PageHeader
+        title="Editar pregunta"
+        backHref="/admin/preguntas-frecuentes"
+        backLabel="Preguntas frecuentes"
+      />
 
       {faq.internal_note ? (
         <p className="rounded-md border border-secondary/40 bg-secondary/10 p-3 text-sm">
@@ -37,11 +34,11 @@ export default async function EditFaqPage({ params }: { params: Promise<{ id: st
 
       <section className="rounded-lg border border-accent/30 bg-surface p-5">
         <h2 className="mb-2 text-lg font-semibold">Eliminar pregunta</h2>
-        <form action={deleteFaq.bind(null, faq.id)}>
+        <ActionForm action={deleteFaq.bind(null, faq.id)}>
           <ConfirmSubmitButton confirmMessage="¿Eliminar definitivamente esta pregunta? Esta acción no se puede deshacer.">
             Eliminar pregunta
           </ConfirmSubmitButton>
-        </form>
+        </ActionForm>
       </section>
     </div>
   );

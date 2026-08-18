@@ -4,11 +4,40 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { productSchema, slugSchema } from "@/lib/validation";
-import { DB_ERROR_MESSAGE, type ActionState } from "@/lib/action-state";
+import { altTextSchema, productSchema, slugSchema } from "@/lib/validation";
+import {
+  DB_ERROR_MESSAGE,
+  actionError,
+  actionSuccess,
+  zodActionError,
+  type ActionState,
+} from "@/lib/action-state";
 import { saveUploadedImage, deleteManagedAsset } from "@/lib/media-upload";
+import { saveUploadedDocument } from "@/lib/document-upload";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 import type { ProductFeature } from "@/lib/supabase/types";
+
+type SupabaseServer = Awaited<ReturnType<typeof createSupabaseServerClient>>;
+
+/**
+ * Elimina un asset del almacenamiento si ya no lo referencia ninguna
+ * galería, imagen principal ni ficha técnica (los STATIC nunca se
+ * borran: deleteManagedAsset los rechaza y aquí solo se desvinculan).
+ */
+async function deleteAssetIfOrphan(supabase: SupabaseServer, mediaId: string): Promise<void> {
+  const [{ data: inGalleries }, { data: usedAsMain }, { data: usedAsSheet }] = await Promise.all([
+    supabase.from("product_media").select("id").eq("media_asset_id", mediaId).limit(1),
+    supabase.from("products").select("id").eq("main_image_id", mediaId).limit(1),
+    supabase.from("products").select("id").eq("technical_sheet_media_id", mediaId).limit(1),
+  ]);
+  if (
+    (inGalleries?.length ?? 0) === 0 &&
+    (usedAsMain?.length ?? 0) === 0 &&
+    (usedAsSheet?.length ?? 0) === 0
+  ) {
+    await deleteManagedAsset(supabase, mediaId);
+  }
+}
 
 function parseFeatures(raw: unknown): ProductFeature[] | { error: string } {
   if (typeof raw !== "string" || raw.trim() === "") return [];
@@ -30,9 +59,12 @@ export async function createProduct(_prev: ActionState, formData: FormData): Pro
 
   const name = String(formData.get("name") ?? "").trim();
   const slugResult = slugSchema.safeParse(formData.get("slug"));
-  if (!name) return { success: null, error: "El nombre es obligatorio." };
+  if (!name) {
+    return actionError("El nombre es obligatorio.", { name: ["El nombre es obligatorio."] });
+  }
   if (!slugResult.success) {
-    return { success: null, error: slugResult.error.issues[0]?.message ?? "Slug inválido." };
+    const message = slugResult.error.issues[0]?.message ?? "Slug inválido.";
+    return actionError(message, { slug: [message] });
   }
 
   const { data, error } = await supabase
@@ -43,9 +75,11 @@ export async function createProduct(_prev: ActionState, formData: FormData): Pro
 
   if (error || !data) {
     if (error?.code === "23505") {
-      return { success: null, error: "Ya existe un producto con ese slug." };
+      return actionError("Ya existe un producto con ese slug.", {
+        slug: ["Ya existe un producto con ese slug."],
+      });
     }
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   redirect(`/admin/productos/${data.id}?creado=1`);
@@ -61,7 +95,7 @@ export async function updateProduct(
 
   const features = parseFeatures(formData.get("features_json"));
   if ("error" in features && !Array.isArray(features)) {
-    return { success: null, error: features.error };
+    return actionError(features.error);
   }
 
   const parsed = productSchema.safeParse({
@@ -79,7 +113,7 @@ export async function updateProduct(
   });
 
   if (!parsed.success) {
-    return { success: null, error: parsed.error.issues[0]?.message ?? "Revisa los campos del formulario." };
+    return zodActionError(parsed.error);
   }
 
   const { error } = await supabase
@@ -89,23 +123,29 @@ export async function updateProduct(
 
   if (error) {
     if (error.code === "23505") {
-      return { success: null, error: "Ya existe un producto con ese slug." };
+      return actionError("Ya existe un producto con ese slug.", {
+        slug: ["Ya existe un producto con ese slug."],
+      });
     }
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   revalidatePublicContent(CACHE_TAGS.products);
   revalidatePath(`/admin/productos/${productId}`);
-  return { success: "Producto guardado. El sitio público se actualizó.", error: null };
+  return actionSuccess("Producto guardado. El sitio público se actualizó.");
 }
 
-export async function deleteProduct(productId: string): Promise<void> {
+export async function deleteProduct(
+  productId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.from("products").delete().eq("id", productId);
   if (error) {
-    throw new Error("No se pudo eliminar el producto.");
+    return actionError("No se pudo eliminar el producto. Intenta de nuevo.");
   }
 
   revalidatePublicContent(CACHE_TAGS.products);
@@ -129,7 +169,7 @@ export async function uploadProductImage(
     userId
   );
   if (result.error || !result.mediaId) {
-    return { success: null, error: result.error ?? "No se pudo subir la imagen." };
+    return actionError(result.error ?? "No se pudo subir la imagen.");
   }
 
   const { data: existing } = await supabase
@@ -139,7 +179,8 @@ export async function uploadProductImage(
     .order("sort_order", { ascending: false })
     .limit(1);
 
-  const nextOrder = (existing?.[0]?.sort_order ?? 0) + 1;
+  // Galería 0-based: la posición 0 es la imagen principal.
+  const nextOrder = existing?.length ? existing[0].sort_order + 1 : 0;
 
   const { error } = await supabase.from("product_media").insert({
     product_id: productId,
@@ -149,7 +190,7 @@ export async function uploadProductImage(
 
   if (error) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return { success: null, error: DB_ERROR_MESSAGE };
+    return actionError(DB_ERROR_MESSAGE);
   }
 
   // Si el producto no tiene imagen principal, usar esta.
@@ -164,68 +205,205 @@ export async function uploadProductImage(
 
   revalidatePublicContent(CACHE_TAGS.products);
   revalidatePath(`/admin/productos/${productId}`);
-  return { success: "Imagen agregada a la galería.", error: null };
-}
-
-/** Marca una imagen de la galería como imagen principal. */
-export async function setProductMainImage(productId: string, mediaId: string): Promise<void> {
-  await requireAdmin();
-  const supabase = await createSupabaseServerClient();
-
-  const { error } = await supabase
-    .from("products")
-    .update({ main_image_id: mediaId })
-    .eq("id", productId);
-  if (error) throw new Error("No se pudo actualizar la imagen principal.");
-
-  revalidatePublicContent(CACHE_TAGS.products);
-  revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess("La imagen se cargó correctamente.");
 }
 
 /**
- * Quita una imagen de la galería. Si el archivo fue subido desde el
- * CMS (proveedor R2) y no se usa en otro lugar, también se elimina
- * del almacenamiento. Los activos STATIC solo se desvinculan.
+ * Marca una imagen de la galería como imagen principal. Operación
+ * atómica en la base (rpc set_product_main_image): actualiza
+ * main_image_id, valida que la imagen pertenezca a la galería y
+ * renumera la galería (elegida = 0, resto 1..n) sin posibilidad de
+ * dos imágenes en la posición 0.
  */
-export async function removeProductImage(productId: string, mediaId: string): Promise<void> {
+export async function setProductMainImage(
+  productId: string,
+  mediaId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
   await requireAdmin();
   const supabase = await createSupabaseServerClient();
 
-  const { error } = await supabase
-    .from("product_media")
-    .delete()
-    .eq("product_id", productId)
-    .eq("media_asset_id", mediaId);
-  if (error) throw new Error("No se pudo quitar la imagen de la galería.");
+  const { error } = await supabase.rpc("set_product_main_image", {
+    p_product_id: productId,
+    p_media_asset_id: mediaId,
+  });
+  if (error) return actionError("No se pudo actualizar la imagen principal.");
 
-  // Si era la imagen principal, elegir otra o dejar vacío.
-  const { data: product } = await supabase
-    .from("products")
-    .select("main_image_id")
-    .eq("id", productId)
-    .maybeSingle();
-  if (product?.main_image_id === mediaId) {
-    const { data: rest } = await supabase
-      .from("product_media")
-      .select("media_asset_id")
-      .eq("product_id", productId)
-      .order("sort_order")
-      .limit(1);
-    await supabase
-      .from("products")
-      .update({ main_image_id: rest?.[0]?.media_asset_id ?? null })
-      .eq("id", productId);
+  revalidatePublicContent(CACHE_TAGS.products);
+  revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess("La imagen principal fue actualizada.");
+}
+
+/**
+ * Sube o baja una imagen secundaria de la galería (posiciones >= 1).
+ * La posición 0 solo cambia con "Usar como principal".
+ */
+export async function moveProductImage(
+  productId: string,
+  mediaId: string,
+  direction: "up" | "down",
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
+  await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase.rpc("swap_product_media_order", {
+    p_product_id: productId,
+    p_media_asset_id: mediaId,
+    p_direction: direction,
+  });
+  if (error) return actionError("No se pudo reordenar la galería.");
+
+  revalidatePublicContent(CACHE_TAGS.products);
+  revalidatePath(`/admin/productos/${productId}`);
+  // Éxito silencioso: el nuevo orden es visible de inmediato.
+  return actionSuccess(null);
+}
+
+/** Actualiza el texto alternativo de una imagen de la galería. */
+export async function updateMediaAltText(
+  mediaId: string,
+  productId: string,
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const { userId } = await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const alt = altTextSchema.safeParse(formData.get("alt_text"));
+  if (!alt.success) {
+    const message = alt.error.issues[0]?.message ?? "Texto alternativo inválido.";
+    return actionError(message, { alt_text: [message] });
   }
 
-  // Eliminar el archivo si ya no está referenciado (solo R2).
-  const [{ data: stillUsed }, { data: usedAsMain }] = await Promise.all([
-    supabase.from("product_media").select("id").eq("media_asset_id", mediaId).limit(1),
-    supabase.from("products").select("id").eq("main_image_id", mediaId).limit(1),
-  ]);
-  if ((stillUsed?.length ?? 0) === 0 && (usedAsMain?.length ?? 0) === 0) {
-    await deleteManagedAsset(supabase, mediaId);
+  const { error } = await supabase
+    .from("media_assets")
+    .update({ alt_text: alt.data, updated_by: userId })
+    .eq("id", mediaId);
+  if (error) return actionError(DB_ERROR_MESSAGE);
+
+  revalidatePublicContent(CACHE_TAGS.products);
+  revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess("Texto alternativo actualizado.");
+}
+
+/**
+ * Quita una imagen de la galería (rpc remove_product_media_entry:
+ * borra, renumera 0..n y promueve nueva principal si hacía falta).
+ * Si el archivo fue subido desde el CMS (proveedor R2) y no se usa
+ * en otro lugar, también se elimina del almacenamiento; los activos
+ * STATIC solo se desvinculan.
+ */
+export async function removeProductImage(
+  productId: string,
+  mediaId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
+  await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase.rpc("remove_product_media_entry", {
+    p_product_id: productId,
+    p_media_asset_id: mediaId,
+  });
+  if (error) return actionError("No se pudo quitar la imagen de la galería.");
+
+  await deleteAssetIfOrphan(supabase, mediaId);
+
+  revalidatePublicContent(CACHE_TAGS.products);
+  revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess("Imagen quitada de la galería.");
+}
+
+/** Sube (o reemplaza) la ficha técnica PDF del producto. */
+export async function uploadTechnicalSheet(
+  productId: string,
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const { userId } = await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const { data: product } = await supabase
+    .from("products")
+    .select("name, technical_sheet_media_id")
+    .eq("id", productId)
+    .maybeSingle();
+  if (!product) {
+    return actionError("El producto no existe.");
+  }
+
+  const rawName = formData.get("display_name");
+  const displayName =
+    typeof rawName === "string" && rawName.trim() !== ""
+      ? rawName
+      : `Ficha técnica de ${product.name}`;
+
+  const file = formData.get("file");
+  const result = await saveUploadedDocument(
+    supabase,
+    file instanceof File ? file : null,
+    displayName,
+    userId
+  );
+  if (result.error || !result.mediaId) {
+    return actionError(result.error ?? "No se pudo subir la ficha técnica.");
+  }
+
+  const { error } = await supabase
+    .from("products")
+    .update({ technical_sheet_media_id: result.mediaId, updated_by: userId })
+    .eq("id", productId);
+  if (error) {
+    await deleteManagedAsset(supabase, result.mediaId);
+    return actionError(DB_ERROR_MESSAGE);
+  }
+
+  // Limpiar la ficha anterior si quedó huérfana (los STATIC solo se desvinculan).
+  const previousSheetId = product.technical_sheet_media_id;
+  const replaced = previousSheetId !== null && previousSheetId !== result.mediaId;
+  if (replaced) {
+    await deleteAssetIfOrphan(supabase, previousSheetId);
   }
 
   revalidatePublicContent(CACHE_TAGS.products);
   revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess(
+    replaced
+      ? "La ficha técnica fue reemplazada. El sitio público se actualizó."
+      : "Ficha técnica guardada. El sitio público se actualizó."
+  );
+}
+
+/** Quita la ficha técnica del producto (y borra el PDF huérfano si era del CMS). */
+export async function removeTechnicalSheet(
+  productId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
+  const { userId } = await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const { data: product } = await supabase
+    .from("products")
+    .select("technical_sheet_media_id")
+    .eq("id", productId)
+    .maybeSingle();
+  if (!product?.technical_sheet_media_id) return actionSuccess(null);
+
+  const previousId = product.technical_sheet_media_id;
+  const { error } = await supabase
+    .from("products")
+    .update({ technical_sheet_media_id: null, updated_by: userId })
+    .eq("id", productId);
+  if (error) return actionError("No se pudo quitar la ficha técnica.");
+
+  await deleteAssetIfOrphan(supabase, previousId);
+
+  revalidatePublicContent(CACHE_TAGS.products);
+  revalidatePath(`/admin/productos/${productId}`);
+  return actionSuccess("Ficha técnica eliminada.");
 }
