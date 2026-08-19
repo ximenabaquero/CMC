@@ -111,12 +111,23 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   cliente ya normalizados a kebab-case (`Productos/<slug>/<slug>-caja.png`,
   `<slug>-aplicacion-NN.png`, `ficha-tecnica-<slug>.pdf` + los PDF de copy
   comercial sin importar) y `fotos-adicionales/` (inventario en
-  `docs/FOTOS_ADICIONALES.md`). `scripts/import-assets.mjs` importa desde
+  `docs/FOTOS_ADICIONALES.md`; las aprobadas se copian renombradas a
+  `fotos-adicionales/aprobadas/`). `scripts/import-assets.mjs` importa desde
   ahí (`npm run import-assets -- --source=content-source`): imágenes →
-  WebP ≤ 1200 px, fichas `ficha-tecnica-*.pdf` → copia sin transformar; el
-  manifiesto `scripts/assets-manifest.json` (entradas `brand` / `product` /
-  `document`) se fusiona con el previo y poda entradas cuyo archivo ya no
-  existe. El puente manifest → BD sigue siendo manual (seed).
+  WebP ≤ 1200 px, fichas `ficha-tecnica-*.pdf` → copia sin transformar,
+  fotos editoriales aprobadas → `public/images/photos/` (kind `photo`,
+  2026-08-19); el manifiesto `scripts/assets-manifest.json` (entradas
+  `brand` / `product` / `document` / `photo`) se fusiona con el previo y
+  poda entradas cuyo archivo ya no existe. El puente manifest → BD sigue
+  siendo manual (seed).
+- **Fotos editoriales** (`public/images/photos/`, 2026-08-19): panes y
+  preparaciones aprobadas, referenciadas por **ruta literal en JSX** (banda
+  del hero en `HomeHero`, «¿Quiénes somos?» en la home, banner y figura de
+  Nosotros) — **sin fila en `media_assets`**, igual que los GIFs de marca.
+  Solo las fotos que entran a una galería de producto pasan por
+  `media_assets`/`product_media` (vía script SQL manual, p. ej.
+  `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`, pendiente de
+  ejecución).
 - `next/image` con `unoptimized: true` (Workers no trae el optimizador de
   Next y Cloudflare Images es de pago). Mitigación: pre-dimensionado de los
   activos importados (WebP ≤ 1200 px) y límite de tamaño en las subidas.
@@ -164,18 +175,33 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `hero` y `settings`; la composición derecha muestra el logo CMC animado
   sobre un círculo blanco, sin anillo naranja — decisión de la clienta
   2026-08-19; antes iba el packshot del primer producto publicado sobre el
-  círculo ámbar), `HomeStats` (indicadores calculados del catálogo; oculta
-  cifras < 3 y desaparece sin datos), `HomePillars` (numeración editorial;
-  también lo reutiliza `/nosotros`), `HomeProductCard` y `HomePostsSection`
-  (destacado + secundarios; también encabeza el índice de `/blog`) y
-  `HomeCta` (canales de `site_settings`; con WhatsApp configurado el botón
-  principal abre el chat directo). Los compartidos de `shared.tsx`
-  (`ProductCard`, `PostCard`, `SectionHeading` con `tone="warm"` por defecto,
-  `EditorialCover` para posts sin portada…) siguen usándose en `/productos`,
-  `/blog` y las vistas previas del admin. Las imágenes de producto van
-  siempre sobre lienzo blanco con `object-contain`: el empaque nunca se
-  recorta (también en `ProductDetail`, que acepta `settings` para el CTA de
-  WhatsApp con producto prellenado).
+  círculo ámbar. Desde el 2026-08-19 cierra con una **banda editorial** de
+  tres fotos reales de preparaciones en tarjetas blancas, `loading="lazy"`,
+  sin rotación — el logo sigue siendo el único protagonista), `HomeStats`
+  (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
+  datos), `HomePillars` (numeración editorial; también lo reutiliza
+  `/nosotros`), `HomeProductCard` y `HomePostsSection` (destacado +
+  secundarios; también encabeza el índice de `/blog`) y `HomeCta` (canales
+  de `site_settings`; con WhatsApp configurado el botón principal abre el
+  chat directo). Los compartidos de `shared.tsx` (`ProductCard`, `PostCard`,
+  `SectionHeading` con `tone="warm"` por defecto, `EditorialCover` para
+  posts sin portada…) siguen usándose en `/productos`, `/blog` y las vistas
+  previas del admin. Las imágenes de producto van siempre sobre lienzo
+  blanco con `object-contain`: el empaque nunca se recorta (también en
+  `ProductDetail`, que acepta `settings` para el CTA de WhatsApp con
+  producto prellenado). La home («¿Quiénes somos?») y `/nosotros` llevan
+  fotos editoriales estáticas de `public/images/photos/` (2026-08-19).
+- **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
+  client component (el segundo público junto a `MobileNav`) que recibe
+  `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue
+  siendo Server Component). Miniaturas como botones con `aria-pressed`,
+  navegación por flechas/Home/End, áreas táctiles ≥ 44 px, imágenes
+  apiladas en una celda de grid (cross-fade `--dur-fast`, sin layout
+  shift) y visor `<dialog>` nativo (`showModal`: Escape, focus trap y
+  retorno de foco nativos; estilos en `.product-lightbox` de
+  `globals.css`). Sustituyó a las miniaturas-enlace que abrían el `.webp`
+  crudo en pestaña nueva. La vista previa del admin reutiliza el mismo
+  componente.
 - **Motion**: vocabulario CSS-first al final de `globals.css` (tokens
   `--ease-out`/`--dur-*`, entrada del hero `.enter*`, reveal scroll-driven
   `.reveal` con `animation-timeline: view()` bajo `@supports`, acordeón FAQ

@@ -93,7 +93,7 @@ export default async function PublicLayout({ children }: { children: React.React
       </main>
 
       <footer className="border-t border-border bg-cream-deep">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_auto]">
           <div>
             {/* Logo estático: el momento animado de marca vive solo en el
                 header; repetir el mismo GIF aquí devaluaba el gesto. */}
@@ -161,6 +161,17 @@ export default async function PublicLayout({ children }: { children: React.React
                 ))}
               </ul>
             ) : null}
+          </div>
+
+          {/* Puerta de entrada al panel: discreta a propósito (pedido de la
+              clienta, 2026-08-19) — jerarquía mínima, no compite con los CTA. */}
+          <div className="sm:justify-self-end">
+            <Link
+              href="/admin"
+              className="inline-block rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:border-petrol hover:text-petrol"
+            >
+              Admin
+            </Link>
           </div>
         </div>
         <div className="border-t border-border py-4">

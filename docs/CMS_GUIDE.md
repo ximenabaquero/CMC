@@ -4,7 +4,8 @@ Guía para administrar el contenido del sitio **sin conocimientos técnicos**.
 
 ## Ingresar al panel
 
-1. Abre `https://TU-SITIO/admin` (en pruebas: `http://localhost:3000/admin`).
+1. Abre `https://TU-SITIO/admin` (en pruebas: `http://localhost:3000/admin`),
+   o usa el botón **Admin** en la esquina derecha del pie de página del sitio.
 2. Escribe tu correo y contraseña de administrador.
 3. Para salir, usa el botón **Cerrar sesión** en el menú lateral.
 

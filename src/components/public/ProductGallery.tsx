@@ -129,11 +129,13 @@ export function ProductGallery({
           if (event.target === dialogRef.current) dialogRef.current?.close();
         }}
       >
+        {/* Controles en petrol-deep translúcido: contrastan tanto sobre el
+            backdrop oscuro como sobre el lienzo blanco de la imagen. */}
         <button
           type="button"
           onClick={() => dialogRef.current?.close()}
           aria-label="Cerrar visor"
-          className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition ease-out hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
+          className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-petrol-deep/70 text-white transition ease-out hover:bg-petrol-deep/90 focus-visible:outline-2 focus-visible:outline-white"
         >
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -160,7 +162,7 @@ export function ProductGallery({
               type="button"
               onClick={goPrev}
               aria-label="Imagen anterior"
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition ease-out hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white sm:absolute sm:left-3 sm:top-1/2 sm:-translate-y-1/2"
+              className="grid h-11 w-11 place-items-center rounded-full bg-petrol-deep/70 text-white transition ease-out hover:bg-petrol-deep/90 focus-visible:outline-2 focus-visible:outline-white sm:absolute sm:left-3 sm:top-1/2 sm:-translate-y-1/2"
             >
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M11 3L5 9l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -170,7 +172,7 @@ export function ProductGallery({
               type="button"
               onClick={goNext}
               aria-label="Imagen siguiente"
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition ease-out hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white sm:absolute sm:right-3 sm:top-1/2 sm:-translate-y-1/2"
+              className="grid h-11 w-11 place-items-center rounded-full bg-petrol-deep/70 text-white transition ease-out hover:bg-petrol-deep/90 focus-visible:outline-2 focus-visible:outline-white sm:absolute sm:right-3 sm:top-1/2 sm:-translate-y-1/2"
             >
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M7 3l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
