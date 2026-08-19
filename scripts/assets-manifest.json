@@ -34,6 +34,14 @@
   {
     "kind": "photo",
     "productSlug": null,
+    "path": "/images/photos/amasijo-bunuelo-01-recorte.webp",
+    "width": 800,
+    "height": 954,
+    "sizeBytes": 54728
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
     "path": "/images/photos/amasijo-bunuelo-01.webp",
     "width": 1200,
     "height": 1200,
@@ -58,10 +66,26 @@
   {
     "kind": "photo",
     "productSlug": null,
+    "path": "/images/photos/composicion-hojaldres-dap-hero-01-recorte.webp",
+    "width": 1200,
+    "height": 486,
+    "sizeBytes": 96302
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
     "path": "/images/photos/composicion-hojaldres-dap-hero-01.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 53054
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/composicion-surtido-amasijos-01-recorte.webp",
+    "width": 800,
+    "height": 865,
+    "sizeBytes": 96036
   },
   {
     "kind": "photo",
@@ -78,6 +102,14 @@
     "width": 1200,
     "height": 1200,
     "sizeBytes": 48392
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/palmerita-hojaldre-01-recorte.webp",
+    "width": 800,
+    "height": 551,
+    "sizeBytes": 77982
   },
   {
     "kind": "photo",

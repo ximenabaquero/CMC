@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteSettings } from "@/lib/content";
 import { DesktopNav, MobileNav } from "@/components/public/MobileNav";
+import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { NAV_ITEMS } from "@/lib/nav";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -45,6 +46,10 @@ export default async function PublicLayout({ children }: { children: React.React
       >
         Saltar al contenido
       </a>
+
+      {/* Ornamento de obrador dibujado a mano, fijo en el margen izquierdo
+          (solo desktop). Decorativo puro: no afecta layout ni interacción. */}
+      <BakerySideOrnament />
 
       <header className="sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">

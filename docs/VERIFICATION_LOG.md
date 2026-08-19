@@ -179,3 +179,51 @@ intactos.
 | Home | Intacta: 3 `details` con indicador `+` (`FaqList` sin cambios) |
 | `prefers-reduced-motion` | Por código: apertura vía la regla global existente de `::details-content` (encerrada en `no-preference`), chevron `motion-reduce:transition-none`, CTA `motion-reduce:active:scale-100`; sin verificación manual con el ajuste del SO |
 | **Pendiente manual (usuaria)** | Revisión de las capturas 1280/375 antes del commit; cierre animado del acordeón exclusivo en Chromium (según versión puede cerrar en seco — aceptado) |
+
+## 2026-08-19 — Recortes con transparencia en todas las fotos editoriales
+
+Cambios: `scripts/recortar-foto-panes.mjs` → `scripts/recortar-fotos-editoriales.mjs`
+(`git mv` + tabla de trabajos: 5 fotos, `detectHoles` solo en la canasta,
+`--solo=<slug>`, `--previews` con lienzo dividido fondo-destino/petrol-deep).
+Presentación sin tarjetas blancas: banda del hero (recortes en base común,
+`object-bottom` + altura fija por breakpoint), «¿Quiénes somos?» y cierre de
+/nosotros en proporción natural. Banner de /nosotros (escena real) y FAQ
+intactos. Patrón «Recorte editorial flotante» documentado en DESIGN.md.
+
+| Verificación | Resultado |
+|---|---|
+| Muestreo de bordes de los 6 originales | 5 packshots con borde 100 % blanco puro; `hero-mesa-panaderia-01` solo 9.5 % (escena) → excluida del recorte por diseño |
+| Recortes generados (5) | palmerita 800×551 (78 KB), buñuelos 800×954 (55 KB), canasta 800×745 (99.8 KB, **byte-idéntica** a la de la FAQ), surtido 800×865 (96 KB), hojaldres DAP 1200×486 (96 KB) — todos < 150 KB |
+| QA previews (doble fondo crema/petróleo) | **5/5 sin ajustes**: sin halos, plato de secciones íntegro, bol metálico sin perforar, hueco del asa transparente |
+| Manifest | 5 entradas `-recorte.webp` presentes tras una sola escritura |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Home 1280×800 (CDP headless) | Banda sin cajas, tres recortes apoyados en base común sobre el crema; «¿Quiénes somos?» flotante con plato íntegro; sin errores de consola |
+| Home 375 (banda enfocada) | Base común conservada, palmerita levemente más baja por límite de ancho (aceptado); sin overflow horizontal |
+| /nosotros 1280 y 375 | Cierre flotante en proporción natural (tira ≈2.47:1); banner de escena real intacto con su marco |
+| /preguntas-frecuentes 1280 | Intacta: mismo derivado de canasta, panel y acordeón sin cambios |
+| CLS | `width`/`height` reales de cada derivado en el JSX (reserva de espacio correcta) |
+| **Pendiente manual (usuaria)** | Revisión de capturas antes del commit; producción seguirá mostrando las tarjetas blancas hasta el próximo deploy |
+
+## 2026-08-19 — Ornamento lateral de obrador (`BakerySideOrnament`)
+
+Cambios: dibujo botánico a mano (887×1774, 138 KB, tinta solo en la franja
+izquierda del lienzo: x 100–280 px ⇒ borde derecho del trazo al 31.7% del
+ancho) movido a `public/images/decorative/borde-ornamental-cmc.png`; nuevo
+componente `BakerySideOrnament` montado en `(public)/layout.tsx`; geometría
+en `.bakery-side-ornament` (globals.css): fijo en el margen izquierdo,
+centrado en el viewport, altura `clamp(700px, 95vh, 1100px)`, opacidad 0.7,
+`z-index: 1`, oculto < 64rem; `left` con `clamp()` que desliza el dibujo
+fuera del lienzo en viewports angostos para que la tinta no invada el texto.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| `npm run build` (26 páginas) | OK |
+| Home 1440×900 (CDP headless, top y scroll medio) | Ornamento completo en el margen, fijo al hacer scroll, curvas rozando la columna sin tocar texto; visible sobre crema, blanco y hueso |
+| Home 1280×800 | Deslizado parcialmente fuera del lienzo; solo puntas de curva alcanzan el borde del texto (trazos finos a 0.7, legible) |
+| Home 1024×800 | Solo puntas mínimas visibles en el borde izquierdo — presencia sin invasión |
+| Home 375×812 | `display: none` verificado por `getComputedStyle` |
+| Overflow horizontal | `scrollWidth ≤ innerWidth` en 1440/1280/1024/375 (sin scrollbar horizontal) |
+| Consola | Sin errores en ninguna resolución |
+| Accesibilidad/interacción | `alt=""` + `aria-hidden`, `pointer-events: none`, `user-select: none`, `draggable={false}` — por código |
+| **Pendiente manual (usuaria)** | Revisión de las capturas de escritorio antes del commit |

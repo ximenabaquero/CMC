@@ -9,18 +9,26 @@ const FALLBACK_BODY =
 
 // Banda editorial: preparaciones reales elaboradas con productos CMC
 // (fotos aprobadas del lote 2026-08-19; ver docs/FOTOS_ADICIONALES.md).
+// Recortes con transparencia generados por scripts/recortar-fotos-editoriales.mjs;
+// width/height son las dimensiones reales de cada derivado (reserva de espacio).
 const HERO_PHOTOS = [
   {
-    src: "/images/photos/palmerita-hojaldre-01.webp",
+    src: "/images/photos/palmerita-hojaldre-01-recorte.webp",
     alt: "Palmeritas de hojaldre caramelizadas con azúcar",
+    width: 800,
+    height: 551,
   },
   {
-    src: "/images/photos/amasijo-bunuelo-01.webp",
+    src: "/images/photos/amasijo-bunuelo-01-recorte.webp",
     alt: "Buñuelos colombianos apilados",
+    width: 800,
+    height: 954,
   },
   {
-    src: "/images/photos/canasta-panes-surtidos-01.webp",
+    src: "/images/photos/canasta-panes-surtidos-01-recorte.webp",
     alt: "Canasta de mimbre con surtido de panes artesanales recién horneados",
+    width: 800,
+    height: 745,
   },
 ] as const;
 
@@ -105,26 +113,25 @@ export function HomeHero({
         </div>
       </div>
 
-      {/* Banda editorial: tres preparaciones reales en tarjetas blancas
-          quietas, sin rotación. El logo sigue siendo el único protagonista
-          del viewport (One Hero Rule; decisión de la clienta, 2026-08-19),
-          por eso la banda va bajo el grid y en carga diferida. */}
+      {/* Banda editorial: tres preparaciones reales recortadas con
+          transparencia, apoyadas directamente sobre el crema en una línea de
+          base común (object-bottom) — sin tarjetas ni sombras (Flat-At-Rest).
+          El logo sigue siendo el único protagonista del viewport (One Hero
+          Rule; decisión de la clienta, 2026-08-19), por eso la banda va bajo
+          el grid y en carga diferida. */}
       <ul
         aria-label="Preparaciones elaboradas con productos CMC"
         className="reveal mx-auto grid max-w-6xl grid-cols-3 gap-3 px-4 pb-10 sm:gap-4 lg:pb-14"
       >
         {HERO_PHOTOS.map((photo) => (
-          <li
-            key={photo.src}
-            className="overflow-hidden rounded-lg border border-border bg-white p-3 sm:p-4"
-          >
+          <li key={photo.src}>
             <Image
               src={photo.src}
               alt={photo.alt}
-              width={1200}
-              height={1200}
+              width={photo.width}
+              height={photo.height}
               loading="lazy"
-              className="aspect-square w-full object-contain"
+              className="h-20 w-full object-contain object-bottom sm:h-40 lg:h-56"
             />
           </li>
         ))}

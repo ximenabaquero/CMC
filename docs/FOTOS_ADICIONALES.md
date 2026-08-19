@@ -23,16 +23,21 @@ publica (montaje digital o indicios de IA).
 > Las 6 fotos de bodega/transporte y los 2 montajes espejo quedan
 > **descartados de publicación** por decisión de esta fase.
 
-> **Actualización 2026-08-19 — recorte para la página FAQ.** De la aprobada
-> `canasta-panes-surtidos-01` se generó el derivado con canal alfa
-> `public/images/photos/canasta-panes-surtidos-01-recorte.webp` (script
-> `scripts/recortar-foto-panes.mjs`: recorta el fondo blanco puro por
-> flood-fill, gradúa el alfa en bordes/sombras y vacía el hueco del asa;
-> entrada registrada en `scripts/assets-manifest.json`) para el panel
-> editorial de `/preguntas-frecuentes`. Es la única foto presente en dos
-> lugares (banda del hero y FAQ): se aceptó porque el recorte cambia por
-> completo la presentación. Si el manifest se regenerara desde cero, volver
-> a ejecutar el script.
+> **Actualización 2026-08-19 — recortes editoriales con transparencia.** Las
+> 5 fotos aprobadas de packshot (todas menos `hero-mesa-panaderia-01`, que es
+> una escena real con solo ~9.5 % de borde blanco y no se recorta) tienen un
+> derivado con canal alfa `public/images/photos/<slug>-recorte.webp` generado
+> por `scripts/recortar-fotos-editoriales.mjs` (recorta el fondo blanco puro
+> por flood-fill, gradúa el alfa en bordes/sombras, des-mezcla el blanco y —
+> solo en la canasta — vacía el hueco del asa; entradas registradas en
+> `scripts/assets-manifest.json`). El sitio usa los recortes flotando sin
+> tarjeta blanca (banda del hero, «¿Quiénes somos?», cierre de /nosotros,
+> panel FAQ); los `.webp` de lienzo completo siguen en `public/` porque el
+> importador los regeneraría. La canasta aparece en dos lugares con el mismo
+> recorte (banda del hero y FAQ): repetición aceptada por ser contextos
+> distintos (crema vs panel petróleo). Si el manifest se regenerara desde
+> cero, volver a ejecutar el script. Las 5 pasaron el QA sin exclusiones
+> (plato de secciones y bol metálico íntegros).
 
 > ⚠️ **Alerta — posibles imágenes generadas con IA.** Los 6 JPEG de
 > bodega/transporte presentan texto ilegible o corrupto en las cajas
@@ -65,25 +70,25 @@ publica (montaje digital o indicios de IA).
 | 4 (1).png | Cinco tajadas de pan de molde en abanico | PAN | pan-molde-tajadas-01 | Tajadas de pan de molde dispuestas en abanico sobre fondo blanco | galería producto / decoración | PENDIENTE |
 | 5.png | Caja DAP Hojaldre 10 kg con tres bloques de 500 g al lado | PRODUCTO | dap-hojaldre-caja-bloques-01 | Caja de 10 kg de margarina DAP Hojaldre junto a bloques de 500 g | galería DAP Hojaldre (SQL pendiente) | APROBADA (2026-08-19) |
 | 5 (1).png | Amasijo redondo gratinado con queso (¿pan de queso/mogolla?) | PENDIENTE | amasijo-queso-gratinado-01 | Pan redondo artesanal gratinado con queso dorado al horno | galería producto | PENDIENTE |
-| 6.png | Franja baja: bol de margarina + bloques DAP + surtido de hojaldres; mucho aire blanco arriba | COMPOSICION | composicion-hojaldres-dap-hero-01 | Surtido de hojaldres elaborados con margarina DAP junto a bol de margarina cremada | Nosotros (figura de cierre) | APROBADA (2026-08-19) |
+| 6.png | Franja baja: bol de margarina + bloques DAP + surtido de hojaldres; mucho aire blanco arriba | COMPOSICION | composicion-hojaldres-dap-hero-01 | Surtido de hojaldres elaborados con margarina DAP junto a bol de margarina cremada | Nosotros (figura de cierre), recorte con alfa | APROBADA (2026-08-19) |
 | 6 (1).png | Pastel hojaldrado redondo con borde repulgado | PASTELERIA | pastel-hojaldre-redondo-01 | Pastel de hojaldre redondo con borde sellado y dorado brillante | galería producto | PENDIENTE |
 | 7.png | Croissant relleno gratinado con queso | PASTELERIA | croissant-gratinado-01 | Croissant dorado gratinado con queso rallado por encima | galería producto / decoración | PENDIENTE |
 | 8.png | Rollo tipo cachito liso, ¿pan suave u hojaldre? | PENDIENTE | pan-rollo-mantequilla-01 | Rollo de pan dorado tipo cachito con espiral marcada | galería producto | PENDIENTE |
-| 9.png | Tres palmeritas de hojaldre azucaradas (inequívocas) | PASTELERIA | palmerita-hojaldre-01 | Palmeritas de hojaldre caramelizadas con azúcar | banda hero (home) | APROBADA (2026-08-19) |
+| 9.png | Tres palmeritas de hojaldre azucaradas (inequívocas) | PASTELERIA | palmerita-hojaldre-01 | Palmeritas de hojaldre caramelizadas con azúcar | banda hero (home), recorte con alfa | APROBADA (2026-08-19) |
 | 10.png | Dos pastelitos de hojaldre azucarados con relleno rojizo (¿guayaba?) | PASTELERIA | hojaldre-relleno-dulce-01 | Pastelitos de hojaldre azucarados con relleno de fruta roja | galería producto / blog | PENDIENTE |
 | 11.png | Torres de panecillos dorados apiladas (montaje digital espejo evidente) | PENDIENTE | pan-suave-apilado-01 | — | no publicar | DESCARTADA (2026-08-19, montaje digital) |
 | 12.png | Dos pasteles cuadrados de hojaldre gratinados con queso | PASTELERIA | hojaldre-queso-cuadrado-01 | Pasteles cuadrados de hojaldre gratinados con queso | galería producto (DAP Hojaldre) | PENDIENTE |
 | 13.png | Hojaldre redondo azucarado abierto con crema pastelera | PASTELERIA | hojaldre-crema-pastelera-01 | Hojaldre relleno de crema pastelera partido a la mitad | galería producto / blog | PENDIENTE |
 | 14.png | Dos rollos de canela hojaldrados (duplicación espejo digital) | PASTELERIA | rollo-canela-01 | — | no publicar | DESCARTADA (2026-08-19, montaje digital) |
 | 15.png | Palitos de hojaldre con ajonjolí | PASTELERIA | palito-hojaldre-ajonjoli-01 | Palitos de hojaldre dorados con semillas de ajonjolí | galería producto / decoración | PENDIENTE |
-| 16.png | Canasta de mimbre con panes surtidos (mogolla integral, pan de maíz, panes suaves) | COMPOSICION | canasta-panes-surtidos-01 | Canasta de mimbre con surtido de panes artesanales recién horneados | banda hero (home); recorte con alfa en FAQ | APROBADA (2026-08-19) |
+| 16.png | Canasta de mimbre con panes surtidos (mogolla integral, pan de maíz, panes suaves) | COMPOSICION | canasta-panes-surtidos-01 | Canasta de mimbre con surtido de panes artesanales recién horneados | banda hero (home) y FAQ — mismo recorte con alfa | APROBADA (2026-08-19) |
 | 17.png | Cuatro bollos ovalados dorados (¿pan aliñado/pan de leche?) | PENDIENTE | pan-bollo-ovalado-01 | Cuatro panes ovalados de corteza dorada sobre fondo blanco | galería producto | PENDIENTE |
 | 18.png | Pan de molde integral con ajonjolí y linaza | PAN | pan-molde-integral-01 | Pan de molde integral con semillas de ajonjolí sobre fondo blanco | galería producto / blog | PENDIENTE |
 | 19.png | Barra con cortes diagonales y espolvoreo de harina | PENDIENTE | pan-barra-cortes-01 | Barra de pan dorada con cortes diagonales y harina sobre fondo blanco | galería producto | PENDIENTE |
 | 20.png | Cuatro roscas amarillas (¿pandebono/rosquilla?) | PENDIENTE | amasijo-rosca-01 | Cuatro roscas de amasijo doradas sobre fondo blanco | galería producto | PENDIENTE |
-| 21.png | Cuatro buñuelos colombianos apilados (inequívocos) | AMASIJO | amasijo-bunuelo-01 | Buñuelos colombianos apilados | banda hero (home); candidata cover blog amasijos | APROBADA (2026-08-19) |
+| 21.png | Cuatro buñuelos colombianos apilados (inequívocos) | AMASIJO | amasijo-bunuelo-01 | Buñuelos colombianos apilados | banda hero (home), recorte con alfa; candidata cover blog amasijos | APROBADA (2026-08-19) |
 | 22.png | Dos piezas en herradura (¿pandeyuca?) | PENDIENTE | amasijo-herradura-01 | Dos amasijos en forma de herradura sobre fondo blanco | galería producto | PENDIENTE |
-| 23.png | Plato de secciones con surtido de panes y amasijos | COMPOSICION | composicion-surtido-amasijos-01 | Surtido de panes y amasijos colombianos en plato de secciones | home «¿Quiénes somos?» | APROBADA (2026-08-19) |
+| 23.png | Plato de secciones con surtido de panes y amasijos | COMPOSICION | composicion-surtido-amasijos-01 | Surtido de panes y amasijos colombianos en plato de secciones | home «¿Quiénes somos?», recorte con alfa | APROBADA (2026-08-19) |
 | 24.png | Torta marmolada tipo bundt, cupcakes y postre con fruta | PASTELERIA | pasteleria-surtido-tortas-cupcakes-01 | Surtido de pastelería: torta marmolada, cupcakes y postre con frutas | galería producto / blog | PENDIENTE |
 | 25.png | Rejilla dorada con surtido de galletería y pastelería | PASTELERIA | pasteleria-galleteria-rejilla-01 | Surtido de galletas y pastelería sobre rejilla dorada | galería producto / blog / decoración | PENDIENTE |
 | 26.png | Torta marmolada con almendras laminadas e hilos de chocolate | PASTELERIA | pasteleria-torta-marmolada-01 | Torta marmolada con almendras laminadas e hilos de chocolate | galería producto / blog | PENDIENTE |

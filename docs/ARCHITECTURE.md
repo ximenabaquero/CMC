@@ -176,8 +176,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   sobre un círculo blanco, sin anillo naranja — decisión de la clienta
   2026-08-19; antes iba el packshot del primer producto publicado sobre el
   círculo ámbar. Desde el 2026-08-19 cierra con una **banda editorial** de
-  tres fotos reales de preparaciones en tarjetas blancas, `loading="lazy"`,
-  sin rotación — el logo sigue siendo el único protagonista), `HomeStats`
+  tres preparaciones reales como recortes con transparencia (`-recorte.webp`)
+  apoyados en una línea de base común sobre el crema, sin tarjetas ni
+  sombras, `loading="lazy"` — el logo sigue siendo el único protagonista),
+  `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
   datos), `HomePillars` (numeración editorial; también lo reutiliza
   `/nosotros`), `HomeProductCard` y `HomePostsSection` (destacado +
@@ -190,7 +192,21 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   blanco con `object-contain`: el empaque nunca se recorta (también en
   `ProductDetail`, que acepta `settings` para el CTA de WhatsApp con
   producto prellenado). La home («¿Quiénes somos?») y `/nosotros` llevan
-  fotos editoriales estáticas de `public/images/photos/` (2026-08-19).
+  fotos editoriales estáticas de `public/images/photos/` (2026-08-19); desde
+  el mismo día las composiciones de packshot se muestran como **recortes con
+  alfa flotando sin tarjeta** (`scripts/recortar-fotos-editoriales.mjs`,
+  derivados `-recorte.webp` en el manifest; los `.webp` de lienzo completo
+  conviven en `public/` porque el importador los regeneraría). La única
+  escena real (`hero-mesa-panaderia-01`, banner de /nosotros) no se recorta.
+- **Ornamento lateral de obrador** (`BakerySideOrnament`, 2026-08-19): dibujo
+  botánico a mano (`public/images/decorative/borde-ornamental-cmc.png`, ruta
+  literal sin `media_assets`) montado en `(public)/layout.tsx`. Decorativo
+  puro (`alt=""`, `aria-hidden`, `pointer-events: none`), `position: fixed`
+  en el margen izquierdo, centrado verticalmente, opacidad 0.7, solo ≥ lg.
+  Toda la geometría vive en `.bakery-side-ornament` (globals.css): altura
+  `clamp(700px, 95vh, 1100px)`, `z-index: 1` (sobre fondos de sección, bajo
+  header/overlays) y un `left` calculado para que la tinta quede en el margen
+  y se deslice fuera del lienzo en viewports angostos sin tocar el texto.
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue
@@ -206,7 +222,7 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   columnas (`max-w-6xl`, 40/60). Panel `bg-petrol-deep` con eyebrow ámbar
   (el naranja no contrasta sobre petróleo oscuro), círculo mostaza y el
   recorte con transparencia `canasta-panes-surtidos-01-recorte.webp`
-  (generado por `scripts/recortar-foto-panes.mjs` desde el original
+  (generado por `scripts/recortar-fotos-editoriales.mjs` desde el original
   aprobado; entrada propia en `scripts/assets-manifest.json`). Acordeón
   propio `FaqAccordion` (server component): numeración naranja, chevron en
   círculo mostaza, encabezado abierto en petróleo con texto blanco,

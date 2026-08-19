@@ -234,6 +234,47 @@ h6 {
 }
 
 /* ------------------------------------------------------------
+   Ornamento lateral de obrador (BakerySideOrnament): dibujo a mano
+   fijo en el margen izquierdo, centrado en el viewport, solo ≥ lg.
+   La tinta del PNG ocupa la franja izquierda del lienzo (el borde
+   derecho del trazo llega al 31.7% del ancho; ancho = alto / 2, así
+   que en píxeles es alto × 0.158). `left` se calcula para que las
+   curvas apenas rocen la columna de contenido (--container-max) y,
+   en viewports angostos (1024–1400px), el dibujo se deslice fuera
+   del lienzo en vez de invadir el texto: siempre queda al menos una
+   punta de curva visible (mínimo del clamp). Al ser fixed nunca
+   genera scroll horizontal ni afecta el layout.
+   ------------------------------------------------------------ */
+.bakery-side-ornament {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .bakery-side-ornament {
+    --ornament-h: clamp(700px, 95vh, 1100px);
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: clamp(
+      calc(32px - var(--ornament-h) * 0.158),
+      calc((100vw - var(--container-max)) / 2 + 56px - var(--ornament-h) * 0.158),
+      0px
+    );
+    /* Sobre los fondos de sección (algunos son positioned, p. ej. el
+       hero `relative isolate`); muy por debajo del header (z-40),
+       drawer y overlays. La legibilidad la garantiza la geometría de
+       `left`, no esta capa. */
+    z-index: 1;
+    height: var(--ornament-h);
+    width: auto;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+/* ------------------------------------------------------------
    Motion del sitio público. CSS puro (SSG): sin JavaScript ni
    observers. Todo respeta prefers-reduced-motion.
    ------------------------------------------------------------ */

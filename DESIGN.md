@@ -94,7 +94,8 @@ en mayúsculas, titulares Fraunces con mucho aire, y el producto real (la caja D
 
 La densidad es baja y el ritmo pausado: secciones generosas (`py-16/20`) que alternan
 fondos blanco → crema → crema profunda → petróleo. El color estructura la página; la
-decoración se limita a círculos ámbar recortados y GIFs de marca usados con moderación.
+decoración se limita a círculos ámbar recortados, GIFs de marca usados con moderación y
+el ornamento botánico dibujado a mano del margen izquierdo (desktop, 2026-08-19).
 
 **Key Characteristics:**
 - Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo).
@@ -194,6 +195,21 @@ clienta — y círculo ámbar del CTA, recortados por `overflow-hidden`).
 Las imágenes de producto van sobre lienzo blanco uniforme con `object-contain` y una
 rotación sutil (-2°) con `mix-blend-multiply` en composiciones hero.
 
+**Ornamento de obrador (2026-08-19).** Un dibujo botánico a mano (vid, espigas, gotas de
+aceite — `BakerySideOrnament`) vive fijo en el margen izquierdo en desktop, centrado en el
+viewport, a opacidad 0.7. Es tinta sobre el margen, nunca protagonista: sin fondo, sombra,
+filtro ni animación; solo en el lado izquierdo, sin repetirse como patrón. Su geometría
+(`.bakery-side-ornament` en globals.css) mantiene el trazo en el margen y lo desliza fuera
+del lienzo en viewports angostos para no invadir jamás la columna de lectura.
+
+**Recorte editorial flotante (2026-08-19).** Las fotos editoriales aprobadas de packshot
+(fondo blanco puro) se publican como recortes con canal alfa (`-recorte.webp`, generados
+por `scripts/recortar-fotos-editoriales.mjs`) que **flotan directamente** sobre crema,
+hueso o petróleo — sin tarjeta, sin borde, sin sombra (Flat-At-Rest) — y, cuando van en
+serie, apoyados en una línea de base común (`object-bottom`). El lienzo blanco +
+`object-contain` queda reservado a los packshots de producto (empaques); las escenas
+reales (p. ej. la mesa de panadería de /nosotros) no se recortan y conservan su marco.
+
 ## Components
 
 ### Buttons
@@ -228,6 +244,12 @@ Solo existen en el admin (fuera de este sistema); el sitio público no tiene for
   `text-sm font-medium`; el activo lleva subrayado naranja (`DesktopNav`). Móvil: drawer
   con cierre por Escape y navegación.
 - Footer sobre crema profunda, 3 columnas.
+
+### Banda editorial del hero
+Tres preparaciones reales (recortes editoriales flotantes) bajo el grid del hero, en
+`grid-cols-3` con altura fija por breakpoint y base común — subordinadas al logo por la
+One Hero Rule, con `loading="lazy"` y `reveal` de entrada. Sin tarjetas: los recortes se
+apoyan sobre el crema.
 
 ### Acordeón FAQ (signature)
 `details/summary` nativo, sin JavaScript, en dos variantes:

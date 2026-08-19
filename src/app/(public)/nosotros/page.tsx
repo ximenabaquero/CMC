@@ -95,17 +95,18 @@ export default async function AboutPage() {
           </div>
         ) : null}
 
-        {/* Composición con producto DAP real y hojaldres elaborados:
-            cierra la sección institucional conectando materia prima y
-            resultado (foto aprobada 2026-08-19). */}
-        <figure className="reveal mt-14 overflow-hidden rounded-lg border border-border bg-white">
+        {/* Composición con producto DAP real y hojaldres elaborados,
+            recortada con transparencia: tira ancha en proporción natural que
+            flota sobre el hueso y cierra la sección institucional conectando
+            materia prima y resultado (foto aprobada 2026-08-19). */}
+        <figure className="reveal mt-14">
           <Image
-            src="/images/photos/composicion-hojaldres-dap-hero-01.webp"
+            src="/images/photos/composicion-hojaldres-dap-hero-01-recorte.webp"
             alt="Surtido de hojaldres elaborados con margarina DAP junto a bol de margarina cremada"
             width={1200}
-            height={1200}
+            height={486}
             loading="lazy"
-            className="aspect-[16/6] w-full object-cover object-center"
+            className="w-full"
           />
         </figure>
       </div>
