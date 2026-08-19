@@ -23,6 +23,32 @@ import {
   SectionHeading,
 } from "@/components/public/shared";
 
+// Preparaciones reales elaboradas con productos CMC (fotos aprobadas del
+// lote 2026-08-19; ver docs/FOTOS_ADICIONALES.md). Recortes con transparencia
+// generados por scripts/recortar-fotos-editoriales.mjs; width/height son las
+// dimensiones reales de cada derivado. Viven en «Propuesta de valor» desde el
+// 2026-08-19 (antes cerraban el hero como banda — pedido de la clienta).
+const PROMESA_PHOTOS = [
+  {
+    src: "/images/photos/palmerita-hojaldre-01-recorte.webp",
+    alt: "Palmeritas de hojaldre caramelizadas con azúcar",
+    width: 800,
+    height: 551,
+  },
+  {
+    src: "/images/photos/amasijo-bunuelo-01-recorte.webp",
+    alt: "Buñuelos colombianos apilados",
+    width: 800,
+    height: 954,
+  },
+  {
+    src: "/images/photos/canasta-panes-surtidos-01-recorte.webp",
+    alt: "Canasta de mimbre con surtido de panes artesanales recién horneados",
+    width: 800,
+    height: 745,
+  },
+] as const;
+
 export default async function HomePage() {
   const [
     sectionsResult,
@@ -79,16 +105,17 @@ export default async function HomePage() {
               >
                 {intro.title ?? "¿Quiénes somos?"}
               </h2>
-              {/* Canasta de panes (foto aprobada 2026-08-19; elegida por la
-                  clienta para esta sección), recortada con transparencia:
-                  flota directo sobre el hueso, sin tarjeta, y equilibra la
-                  columna corta del grid sin competir con el texto. */}
+              {/* Surtido de amasijos (foto aprobada 2026-08-19), recortado
+                  con transparencia: flota directo sobre el hueso, sin
+                  tarjeta, y equilibra la columna corta del grid sin competir
+                  con el texto. La canasta se movió con la composición de
+                  «Propuesta de valor» (pedido de la clienta, 2026-08-19). */}
               <figure className="reveal mt-8">
                 <Image
-                  src="/images/photos/canasta-panes-surtidos-01-recorte.webp"
-                  alt="Canasta de mimbre con surtido de panes artesanales recién horneados"
+                  src="/images/photos/composicion-surtido-amasijos-01-recorte.webp"
+                  alt="Surtido de panes y amasijos colombianos en plato de secciones"
                   width={800}
-                  height={745}
+                  height={865}
                   loading="lazy"
                   className="w-full"
                 />
@@ -193,7 +220,7 @@ export default async function HomePage() {
       {/* Propuesta de valor */}
       {valueProposition ? (
         <section className="border-y border-border bg-cream-deep" aria-labelledby="propuesta">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-20 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-14">
             <div className="max-w-3xl">
               <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
                 Propuesta de valor
@@ -223,6 +250,26 @@ export default async function HomePage() {
                 </div>
               ) : null}
             </div>
+            {/* Tres preparaciones reales recortadas con transparencia,
+                apoyadas en una línea de base común (object-bottom) sobre la
+                crema profunda — sin tarjetas ni sombras (Flat-At-Rest). */}
+            <ul
+              aria-label="Preparaciones elaboradas con productos CMC"
+              className="reveal grid grid-cols-3 gap-3 sm:gap-4"
+            >
+              {PROMESA_PHOTOS.map((photo) => (
+                <li key={photo.src}>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    width={photo.width}
+                    height={photo.height}
+                    loading="lazy"
+                    className="h-24 w-full object-contain object-bottom sm:h-32 lg:h-36"
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       ) : null}

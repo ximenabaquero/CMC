@@ -7,31 +7,6 @@ const FALLBACK_TITLE = "Productos confiables para cada preparación";
 const FALLBACK_BODY =
   "Margarinas, mantequillas y aceites para panaderías, pastelerías e industrias que necesitan calidad, consistencia y respaldo en cada proceso.";
 
-// Banda editorial: preparaciones reales elaboradas con productos CMC
-// (fotos aprobadas del lote 2026-08-19; ver docs/FOTOS_ADICIONALES.md).
-// Recortes con transparencia generados por scripts/recortar-fotos-editoriales.mjs;
-// width/height son las dimensiones reales de cada derivado (reserva de espacio).
-const HERO_PHOTOS = [
-  {
-    src: "/images/photos/palmerita-hojaldre-01-recorte.webp",
-    alt: "Palmeritas de hojaldre caramelizadas con azúcar",
-    width: 800,
-    height: 551,
-  },
-  {
-    src: "/images/photos/amasijo-bunuelo-01-recorte.webp",
-    alt: "Buñuelos colombianos apilados",
-    width: 800,
-    height: 954,
-  },
-  {
-    src: "/images/photos/canasta-panes-surtidos-01-recorte.webp",
-    alt: "Canasta de mimbre con surtido de panes artesanales recién horneados",
-    width: 800,
-    height: 745,
-  },
-] as const;
-
 /**
  * Hero de la home. El texto (título y párrafo) viene de `company_content`
  * (`home_hero`) y el eyebrow del slogan de `site_settings`, ambos editables
@@ -116,30 +91,6 @@ export function HomeHero({
           />
         </div>
       </div>
-
-      {/* Banda editorial: tres preparaciones reales recortadas con
-          transparencia, apoyadas directamente sobre el crema en una línea de
-          base común (object-bottom) — sin tarjetas ni sombras (Flat-At-Rest).
-          El logo sigue siendo el único protagonista del viewport (One Hero
-          Rule; decisión de la clienta, 2026-08-19), por eso la banda va bajo
-          el grid y en carga diferida. */}
-      <ul
-        aria-label="Preparaciones elaboradas con productos CMC"
-        className="reveal mx-auto grid max-w-6xl grid-cols-3 gap-3 px-4 pb-10 sm:gap-4 lg:pb-14"
-      >
-        {HERO_PHOTOS.map((photo) => (
-          <li key={photo.src}>
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              width={photo.width}
-              height={photo.height}
-              loading="lazy"
-              className="h-20 w-full object-contain object-bottom sm:h-40 lg:h-56"
-            />
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }
