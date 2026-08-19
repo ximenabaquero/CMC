@@ -341,6 +341,46 @@ h6 {
   }
 }
 
+/* Visor de la galería de producto (dialog nativo de ProductGallery).
+   La animación va sobre [open] (no @starting-style) por compatibilidad con
+   dialog en Safari; el cierre nativo es instantáneo (Flat-At-Rest). */
+.product-lightbox {
+  margin: auto;
+  max-width: min(64rem, 92vw);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  overscroll-behavior: contain;
+}
+
+.product-lightbox::backdrop {
+  /* petrol-deep translúcido */
+  background: rgb(11 45 56 / 0.92);
+}
+
+.product-lightbox[open] {
+  animation: rise-in var(--dur-base) var(--ease-out);
+}
+
+.product-lightbox[open]::backdrop {
+  animation: fade-in var(--dur-base) ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Suavizar, no congelar: fade corto en lugar de elevación. */
+  .product-lightbox[open] {
+    animation: fade-in var(--dur-fast) ease-out;
+  }
+  .product-lightbox[open]::backdrop {
+    animation: none;
+  }
+}
+
+/* Con el visor abierto, el documento no scrollea detrás. */
+body:has(.product-lightbox[open]) {
+  overflow: hidden;
+}
+
 /* Crossfade entre páginas (view transitions cross-document; Chromium.
    El resto de navegadores navega como siempre). */
 @view-transition {

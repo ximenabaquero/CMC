@@ -79,6 +79,18 @@ export default async function HomePage() {
               >
                 {intro.title ?? "¿Quiénes somos?"}
               </h2>
+              {/* Surtido real de amasijos (foto aprobada 2026-08-19):
+                  equilibra la columna corta del grid sin competir con el texto. */}
+              <figure className="reveal mt-8 overflow-hidden rounded-lg border border-border bg-white p-4">
+                <Image
+                  src="/images/photos/composicion-surtido-amasijos-01.webp"
+                  alt="Surtido de panes y amasijos colombianos en plato de secciones"
+                  width={1200}
+                  height={1200}
+                  loading="lazy"
+                  className="aspect-square w-full object-contain"
+                />
+              </figure>
             </div>
             <div>
               {introParagraphs.map((paragraph, index) =>

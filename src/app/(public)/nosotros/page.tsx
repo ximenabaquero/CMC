@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { extractPillars, getPublishedSections } from "@/lib/content";
 import { DataUnavailable } from "@/components/public/shared";
 import { HomePillars } from "@/components/public/HomePillars";
@@ -55,6 +56,20 @@ export default async function AboutPage() {
           ))}
         </header>
 
+        {/* Escena real de panadería (foto aprobada 2026-08-19). Recorte
+            panorámico con object-cover: la regla de no recortar aplica a
+            los empaques, no a las escenas. */}
+        <figure className="reveal mt-10 overflow-hidden rounded-lg border border-border">
+          <Image
+            src="/images/photos/hero-mesa-panaderia-01.webp"
+            alt="Mesa de panadería con surtido de panes, hojaldres y amasijos frente a una ventana luminosa"
+            width={1200}
+            height={1200}
+            loading="lazy"
+            className="aspect-[16/7] w-full object-cover object-bottom sm:aspect-[21/9]"
+          />
+        </figure>
+
         {/* Bloques institucionales en lenguaje editorial: divisores y
             jerarquía tipográfica, sin tarjetas idénticas. */}
         {blocks.length > 0 ? (
@@ -79,6 +94,20 @@ export default async function AboutPage() {
             ))}
           </div>
         ) : null}
+
+        {/* Composición con producto DAP real y hojaldres elaborados:
+            cierra la sección institucional conectando materia prima y
+            resultado (foto aprobada 2026-08-19). */}
+        <figure className="reveal mt-14 overflow-hidden rounded-lg border border-border bg-white">
+          <Image
+            src="/images/photos/composicion-hojaldres-dap-hero-01.webp"
+            alt="Surtido de hojaldres elaborados con margarina DAP junto a bol de margarina cremada"
+            width={1200}
+            height={1200}
+            loading="lazy"
+            className="aspect-[16/6] w-full object-cover object-center"
+          />
+        </figure>
       </div>
 
       {/* Mismo lenguaje editorial de pilares que la home: un solo patrón

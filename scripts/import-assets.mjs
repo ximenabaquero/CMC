@@ -6,11 +6,14 @@
  *   npm run import-assets -- --source="RUTA_DEL_MATERIAL" [--force] [--dry-run]
  *
  * `--source` debe apuntar a la carpeta "Página web CMC" entregada por el
- * cliente (contiene "Identidad de marca" y "Productos"). El script:
+ * cliente (contiene "Identidad de marca" y "Productos"; opcionalmente
+ * "fotos-adicionales/aprobadas" con las fotos editoriales ya aprobadas y
+ * renombradas en kebab-case). El script:
  *   - valida que la carpeta exista,
  *   - lista lo que va a importar antes de escribir,
  *   - no sobrescribe archivos existentes salvo con --force,
- *   - pre-dimensiona imágenes de producto (máx. 1200 px) y las convierte a WebP,
+ *   - pre-dimensiona imágenes de producto y fotos editoriales (máx. 1200 px)
+ *     y las convierte a WebP,
  *   - copia los logos sin recomprimir (PNG con transparencia),
  *   - copia las fichas técnicas PDF (archivos "ficha-tecnica-*.pdf" por
  *     carpeta de producto) como ficha-tecnica-<slug>.pdf, sin transformar,
@@ -18,8 +21,10 @@
  *     previo (no descarta entradas de corridas anteriores),
  *   - imprime un resumen final.
  *
- * Los archivos importados quedan versionados en public/brand y
- * public/images/products (proveedor STATIC en media_assets).
+ * Los archivos importados quedan versionados en public/brand,
+ * public/images/products (proveedor STATIC en media_assets) y
+ * public/images/photos (fotos editoriales referenciadas por ruta en JSX,
+ * sin fila en media_assets).
  */
 import { existsSync } from "node:fs";
 import { mkdir, readdir, stat, copyFile, writeFile, readFile } from "node:fs/promises";
@@ -86,9 +91,12 @@ async function main() {
 
   const brandSource = path.join(source, "Identidad de marca");
   const productsSource = path.join(source, "Productos");
-  if (!existsSync(brandSource) && !existsSync(productsSource)) {
+  // Fotos editoriales (panes, preparaciones) aprobadas: copias renombradas de
+  // los originales de content-source/fotos-adicionales/, que no se tocan.
+  const photosSource = path.join(source, "fotos-adicionales", "aprobadas");
+  if (!existsSync(brandSource) && !existsSync(productsSource) && !existsSync(photosSource)) {
     console.error(
-      'La carpeta de origen no contiene "Identidad de marca" ni "Productos". Verifica que --source apunte a la carpeta "Página web CMC".'
+      'La carpeta de origen no contiene "Identidad de marca", "Productos" ni "fotos-adicionales/aprobadas". Verifica que --source apunte a la carpeta "Página web CMC".'
     );
     process.exit(1);
   }
@@ -96,8 +104,9 @@ async function main() {
   const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const brandDest = path.join(repoRoot, "public", "brand");
   const productsDest = path.join(repoRoot, "public", "images", "products");
+  const photosDest = path.join(repoRoot, "public", "images", "photos");
 
-  /** @type {{action: string, from: string, to: string, kind: "brand"|"product", productSlug?: string}[]} */
+  /** @type {{action: string, from: string, to: string, kind: "brand"|"product"|"document"|"photo", productSlug?: string}[]} */
   const jobs = [];
 
   if (existsSync(brandSource)) {
@@ -136,6 +145,18 @@ async function main() {
           productSlug,
         });
       }
+    }
+  }
+
+  if (existsSync(photosSource)) {
+    for (const file of await collectImages(photosSource)) {
+      const base = slugify(path.basename(file, path.extname(file)));
+      jobs.push({
+        action: "redimensionar→webp",
+        from: file,
+        to: path.join(photosDest, `${base}.webp`),
+        kind: "photo",
+      });
     }
   }
 
@@ -178,7 +199,7 @@ async function main() {
     }
     await mkdir(path.dirname(job.to), { recursive: true });
 
-    if (job.kind === "product") {
+    if (job.kind === "product" || job.kind === "photo") {
       await sharp(job.from)
         .resize({ width: MAX_WIDTH, withoutEnlargement: true })
         .webp({ quality: 82 })

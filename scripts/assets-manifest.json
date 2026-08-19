@@ -32,6 +32,54 @@
     "sizeBytes": 96696
   },
   {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/amasijo-bunuelo-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 28312
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/canasta-panes-surtidos-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 77114
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/composicion-hojaldres-dap-hero-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 53054
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/composicion-surtido-amasijos-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 65410
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/hero-mesa-panaderia-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 48392
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
+    "path": "/images/photos/palmerita-hojaldre-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 60900
+  },
+  {
     "kind": "product",
     "productSlug": "dap-aceite-solido",
     "path": "/images/products/dap-aceite-solido/dap-aceite-solido-aplicacion-01.webp",
@@ -114,10 +162,34 @@
   {
     "kind": "product",
     "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-caja-bloques-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 50070
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
     "path": "/images/products/dap-hojaldre/dap-hojaldre-caja.webp",
     "width": 1200,
     "height": 1200,
     "sizeBytes": 67876
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-margarina-preparacion-01.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 47576
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-margarina-preparacion-02.webp",
+    "width": 1200,
+    "height": 1200,
+    "sizeBytes": 39712
   },
   {
     "kind": "document",

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { mediaUrl } from "@/lib/media";
 import { Markdown } from "@/lib/markdown";
+import { ProductGallery } from "@/components/public/ProductGallery";
 import type { ProductDetailData } from "@/lib/content";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -24,6 +24,11 @@ export function ProductDetail({
       )}`
     : null;
 
+  // Defensivo: un borrador puede tener imagen principal sin filas en
+  // product_media todavía (la vista previa del admin usa este componente).
+  const gallery =
+    product.gallery.length > 0 ? product.gallery : product.image ? [product.image] : [];
+
   return (
     <article className="mx-auto max-w-6xl px-4 py-10">
       <nav aria-label="Ruta de navegación" className="mb-6 text-sm text-muted-foreground">
@@ -35,18 +40,10 @@ export function ProductDetail({
 
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
-          {/* Lienzo blanco: el empaque completo, sin recortes. */}
-          {product.image ? (
-            <div className="aspect-square w-full overflow-hidden rounded-lg border border-border bg-white p-6">
-              <Image
-                src={mediaUrl(product.image)}
-                alt={product.image.alt_text}
-                width={product.image.width ?? 800}
-                height={product.image.height ?? 800}
-                priority
-                className="h-full w-full object-contain object-center"
-              />
-            </div>
+          {/* Galería interactiva (client component aislado): lienzo blanco,
+              el empaque completo sin recortes, miniaturas como botones. */}
+          {gallery.length > 0 ? (
+            <ProductGallery gallery={gallery} productName={product.name} />
           ) : (
             <div
               aria-hidden="true"
@@ -55,30 +52,6 @@ export function ProductDetail({
               Imagen en preparación
             </div>
           )}
-
-          {product.gallery.length > 1 ? (
-            <ul className="mt-4 grid grid-cols-4 gap-3">
-              {product.gallery.map((asset) => (
-                <li key={asset.id}>
-                  {/* Enlace a la imagen completa: ampliación honesta sin JS. */}
-                  <a
-                    href={mediaUrl(asset)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block overflow-hidden rounded-md border border-border bg-white p-1.5 transition hover:border-petrol/30"
-                  >
-                    <Image
-                      src={mediaUrl(asset)}
-                      alt={asset.alt_text}
-                      width={160}
-                      height={160}
-                      className="aspect-square w-full object-contain"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
         </div>
 
         <div>
