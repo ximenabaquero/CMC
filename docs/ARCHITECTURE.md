@@ -80,9 +80,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   - Excepción: `public/gifsanimados/` contiene GIFs animados de marca
     (logo de entrada, margarina mezclándose) versionados a mano, fuera del
     flujo `import-assets`/`media_assets`. Tras la auditoría de diseño
-    (2026-08-10) se usan solo en **dos** momentos: el logo del header y la
-    mantequilla del CTA final de la home ("dieta de GIFs": un mismo activo
-    animado repetido devaluaba el gesto y competía con el producto).
+    (2026-08-10) se usaban solo en **dos** momentos: el logo del header y la
+    mantequilla del CTA final de la home ("dieta de GIFs"); desde el
+    2026-08-19, por pedido de la clienta, el hero de la home añade un
+    **tercer** momento (logo CMC animado en lugar del packshot).
     `scripts/patch-gif-loop.mjs` genera la variante sin loop
     (`cmc-logo-entrada-una-vez.gif`) que reproduce la animación una sola vez.
   - `R2`: archivos subidos desde el CMS a través del adaptador
@@ -160,9 +161,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   generados con las skills de diseño instaladas en `.agents/skills/`
   (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
-  `hero`, `settings` y el primer producto publicado con imagen para la
-  composición derecha — protagonista único; sin productos degrada a formas
-  geométricas), `HomeStats` (indicadores calculados del catálogo; oculta
+  `hero` y `settings`; la composición derecha muestra el logo CMC animado
+  sobre el círculo ámbar — decisión de la clienta 2026-08-19, antes iba el
+  packshot del primer producto publicado), `HomeStats` (indicadores calculados del catálogo; oculta
   cifras < 3 y desaparece sin datos), `HomePillars` (numeración editorial;
   también lo reutiliza `/nosotros`), `HomeProductCard` y `HomePostsSection`
   (destacado + secundarios; también encabeza el índice de `/blog`) y

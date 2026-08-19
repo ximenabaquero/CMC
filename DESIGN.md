@@ -259,7 +259,8 @@ lleva `shadow-md` para separarse del contenido.
 - **Do** alternar fondos (blanco/crema/crema profunda/petróleo) para estructurar la página.
 - **Do** envolver todo motion en `motion-safe:`/media queries y dar fallback en
   `motion-reduce:` (los GIFs tienen variante estática PNG). Los GIFs de marca viven en
-  exactamente dos momentos: logo del header y mantequilla del CTA.
+  exactamente tres momentos: logo del header, logo del hero (pedido de la clienta,
+  2026-08-19) y mantequilla del CTA.
 - **Do** mantener el camino a WhatsApp/teléfono visible a un paso en cada página.
 
 ### Don't:

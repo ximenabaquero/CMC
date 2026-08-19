@@ -98,6 +98,20 @@ afectadas en `content-source/backups/2026-08-17-pre-normalizacion/`:
 | Estado en BD tras el script | 3 placeholders en DRAFT; 9 DAP en PUBLISHED; caja = `main_image_id` = `sort_order 0` en los 9; 9 fichas asociadas (`e0…0N90`); galerías de 2–3 fotos 0-based |
 | Preview (workerd, caché de build limpia — nota: `next build` reutiliza `.next/cache` y sirvió datos obsoletos hasta borrarla) | `/productos` lista exactamente los 9 DAP; placeholders → 404; home y detalles con la caja nueva; botón «Descargar ficha técnica (PDF)» presente; 28/28 rutas de assets en 200; sin URLs internas de R2 |
 | Funciones 0004 en BD | Existen las 3; EXECUTE: `authenticated` sí, `anon` no; `/admin` redirige a login sin sesión |
+
+## 2026-08-19 — Logo animado en el hero de la home (pedido de la clienta)
+
+Cambio: la composición derecha del hero pasa del packshot del primer
+producto publicado al **logo CMC animado** (`cmc-logo-entrada-una-vez.gif`,
+se reproduce una vez; estático `logo-cmc-png.png` bajo
+`prefers-reduced-motion`; `mix-blend-multiply` sobre el círculo ámbar).
+Tercer momento de GIF de marca — documentado en DESIGN.md, ARCHITECTURE.md
+y `sitio-publico.md`.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run typecheck` / `npm run lint` | OK (0 errores) |
+| `npm run preview` — home | El hero muestra el GIF del logo (y su fallback estático); sin packshot en el hero; GIF y PNG sirven 200 con content-type correcto |
 | Pendiente manual (usuaria) | Ciclo CMS completo con sesión admin (subir imagen → principal → reordenar → alt → ciclo ficha → publicar/despublicar) y revisión visual del catálogo en navegador |
 
 ## 2026-08-17 — Fase 2 del panel admin: toasts, estados de carga, errores por campo y consistencia visual

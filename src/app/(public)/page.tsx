@@ -54,14 +54,12 @@ export default async function HomePage() {
   const valueProposition = sections?.value_proposition;
   const pillars = extractPillars(pillarsSection);
   const featuredFaqs = (faqs ?? []).filter((f) => f.featured).slice(0, 3);
-  // Composición del hero: el primer producto publicado que tenga imagen.
-  const heroProducts = (products ?? []).filter((p) => p.image).slice(0, 1);
   const introParagraphs = intro?.body ? intro.body.split(/\n\n+/) : [];
 
   return (
     <>
-      {/* Hero corporativo con productos reales */}
-      <HomeHero hero={hero} settings={settings} products={heroProducts} />
+      {/* Hero corporativo con el logo animado de CMC */}
+      <HomeHero hero={hero} settings={settings} />
 
       {/* Indicadores calculados del catálogo */}
       <HomeStats products={products} />
