@@ -162,8 +162,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
   `hero` y `settings`; la composición derecha muestra el logo CMC animado
-  sobre el círculo ámbar — decisión de la clienta 2026-08-19, antes iba el
-  packshot del primer producto publicado), `HomeStats` (indicadores calculados del catálogo; oculta
+  sobre un círculo blanco, sin anillo naranja — decisión de la clienta
+  2026-08-19; antes iba el packshot del primer producto publicado sobre el
+  círculo ámbar), `HomeStats` (indicadores calculados del catálogo; oculta
   cifras < 3 y desaparece sin datos), `HomePillars` (numeración editorial;
   también lo reutiliza `/nosotros`), `HomeProductCard` y `HomePostsSection`
   (destacado + secundarios; también encabeza el índice de `/blog`) y

@@ -189,7 +189,8 @@ exclusivamente una respuesta al hover.
 Esquinas suavemente redondeadas en tres pasos: sm 0.375rem (chips, foco), md 0.625rem
 (botones), lg 1rem (tarjetas y lienzos de producto). Bordes finos de 1px en arena
 (#e4e0d8); los botones outline usan 2px en petróleo. El círculo perfecto es la forma
-decorativa de la marca (círculo ámbar del hero y del CTA, recortado por `overflow-hidden`).
+decorativa de la marca (círculo del hero — blanco desde el 2026-08-19 por pedido de la
+clienta — y círculo ámbar del CTA, recortados por `overflow-hidden`).
 Las imágenes de producto van sobre lienzo blanco uniforme con `object-contain` y una
 rotación sutil (-2°) con `mix-blend-multiply` en composiciones hero.
 

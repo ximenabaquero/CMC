@@ -11,13 +11,13 @@ const FALLBACK_BODY =
  * Hero de la home. El texto (título y párrafo) viene de `company_content`
  * (`home_hero`) y el eyebrow del slogan de `site_settings`, ambos editables
  * desde el admin. La composición derecha muestra el logo animado de CMC
- * sobre el círculo ámbar (decisión de la clienta, 2026-08-19: reemplaza el
- * packshot del primer producto publicado); con prefers-reduced-motion se
- * usa la versión estática del logotipo.
+ * sobre un círculo blanco (decisión de la clienta, 2026-08-19: reemplaza el
+ * packshot del primer producto publicado; el círculo pasó de ámbar a blanco
+ * y se retiró el anillo naranja); con prefers-reduced-motion se usa la
+ * versión estática del logotipo.
  *
- * Nota: `mix-blend-multiply` integra el fondo blanco del GIF/PNG al crema
- * y al ámbar; requiere `isolate` en la sección para no mezclarse con capas
- * externas.
+ * Nota: `mix-blend-multiply` integra el fondo blanco del GIF/PNG al crema;
+ * requiere `isolate` en la sección para no mezclarse con capas externas.
  */
 export function HomeHero({
   hero,
@@ -60,17 +60,13 @@ export function HomeHero({
           </div>
         </div>
 
-        {/* Columna derecha: logo CMC animado sobre el círculo ámbar */}
+        {/* Columna derecha: logo CMC animado sobre el círculo blanco */}
         <div className="enter-visual relative mx-auto w-full max-w-md lg:max-w-none">
-          {/* Círculo ámbar protagonista (decorativo) */}
+          {/* Círculo blanco protagonista (decorativo; antes ámbar — pedido
+              de la clienta, 2026-08-19, junto con retirar el anillo naranja) */}
           <div
             aria-hidden="true"
-            className="absolute -top-4 right-2 h-56 w-56 rounded-full bg-amber sm:-top-8 sm:right-0 sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem] lg:-top-10 lg:-right-6"
-          />
-          {/* Anillo naranja fino (decorativo) */}
-          <div
-            aria-hidden="true"
-            className="absolute -bottom-8 -left-6 h-36 w-36 rounded-full border-2 border-orange/40 lg:h-48 lg:w-48"
+            className="absolute -top-4 right-2 h-56 w-56 rounded-full bg-white sm:-top-8 sm:right-0 sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem] lg:-top-10 lg:-right-6"
           />
           {/* Logo animado: entra una sola vez y queda fijo; estático con
               prefers-reduced-motion (mismo patrón que el header). */}
