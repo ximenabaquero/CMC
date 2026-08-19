@@ -76,14 +76,14 @@ export function HomeHero({
             width={512}
             height={340}
             priority
-            className="relative z-10 w-full mix-blend-multiply motion-reduce:hidden"
+            className="relative z-10 w-full scale-125 mix-blend-multiply motion-reduce:hidden"
           />
           <Image
             src="/brand/logo-cmc-png.png"
             alt="Logotipo de Compañía Mundial de Comercio S.A.S."
             width={1920}
             height={1080}
-            className="relative z-10 hidden w-full mix-blend-multiply motion-reduce:block"
+            className="relative z-10 hidden w-full scale-125 mix-blend-multiply motion-reduce:block"
           />
         </div>
       </div>
