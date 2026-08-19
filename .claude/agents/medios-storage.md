@@ -12,8 +12,8 @@ Eres el agente de **medios y almacenamiento** de cmc-website.
 - Validación de subidas de imágenes: `src/lib/media-upload.ts`
 - Validación de subidas de documentos PDF (fichas técnicas): `src/lib/document-upload.ts` (MIME + extensión + firma `%PDF-`, límite `MAX_DOCUMENT_UPLOAD_MB` default 10 MB, clave UUID, nombre visible en `file_name`)
 - Servido de archivos: `src/app/api/media/[...key]/route.ts` (siempre `nosniff`; PDF con `Content-Disposition: attachment` y nombre desde `media_assets.file_name`)
-- Importación de assets estáticos: `scripts/import-assets.mjs` + `scripts/assets-manifest.json` (kinds `brand`/`product`/`document`; fusiona con el manifest previo y poda entradas sin archivo)
-- Material fuente del cliente: `content-source/` (gitignored; `Productos/<slug>/` con nombres kebab-case + `fotos-adicionales/` — inventario en `docs/FOTOS_ADICIONALES.md`)
+- Importación de assets estáticos: `scripts/import-assets.mjs` + `scripts/assets-manifest.json` (kinds `brand`/`product`/`document`/`photo`; fusiona con el manifest previo y poda entradas sin archivo)
+- Material fuente del cliente: `content-source/` (gitignored; `Productos/<slug>/` con nombres kebab-case + `fotos-adicionales/` — inventario en `docs/FOTOS_ADICIONALES.md`; las aprobadas se copian renombradas a `fotos-adicionales/aprobadas/` y el importador las lleva a `public/images/photos/`)
 - Assets versionados: `public/brand/`, `public/images/products/<slug>/` (`<slug>-caja.webp`, `<slug>-aplicacion-NN.webp`, `ficha-tecnica-<slug>.pdf`)
 - Tabla `media_assets` (columna `storage_provider`) en `supabase/migrations/0001_schema.sql`
 - Componentes de subida: `src/components/admin/UploadImageForm.tsx`, `src/components/admin/UploadDocumentForm.tsx`, edición de alt en `src/components/admin/AltTextForm.tsx`
@@ -21,7 +21,7 @@ Eres el agente de **medios y almacenamiento** de cmc-website.
 ## Reglas de arquitectura (no negociables)
 
 - Dos proveedores explícitos en `media_assets.storage_provider`:
-  - `STATIC` — assets versionados en `public/`, importados con `scripts/import-assets.mjs` desde `content-source/` (valida directorio origen, no sobrescribe sin `--force`, pre-redimensiona a WebP ≤1200px, copia fichas `ficha-tecnica-*.pdf` sin transformar, escribe el manifest).
+  - `STATIC` — assets versionados en `public/`, importados con `scripts/import-assets.mjs` desde `content-source/` (valida directorio origen, no sobrescribe sin `--force`, pre-redimensiona a WebP ≤1200px, copia fichas `ficha-tecnica-*.pdf` sin transformar, escribe el manifest). Las **fotos editoriales** (kind `photo`, `public/images/photos/`, 2026-08-19) se referencian por ruta literal en JSX **sin fila en `media_assets`** (como los GIFs de marca); solo las que entran a una galería de producto pasan por `media_assets`/`product_media` vía script SQL manual (precedente: `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`, pendiente de ejecutar).
   - `R2` — subidas del CMS a través del adapter (`r2.ts` en producción, `local.ts` en desarrollo).
 - URL estable `/api/media/<key>` en ambos entornos, servida por la ruta API; no enlazar URLs internas del bucket.
 - Subidas de imágenes validadas en `media-upload.ts`: solo JPEG/PNG/WebP/AVIF, límite `MAX_UPLOAD_MB`, nombres UUID, `alt_text` obligatorio, limpieza de huérfanos si falla la escritura en BD.

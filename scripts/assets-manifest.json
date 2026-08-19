@@ -42,6 +42,14 @@
   {
     "kind": "photo",
     "productSlug": null,
+    "path": "/images/photos/canasta-panes-surtidos-01-recorte.webp",
+    "width": 800,
+    "height": 745,
+    "sizeBytes": 99814
+  },
+  {
+    "kind": "photo",
+    "productSlug": null,
     "path": "/images/photos/canasta-panes-surtidos-01.webp",
     "width": 1200,
     "height": 1200,

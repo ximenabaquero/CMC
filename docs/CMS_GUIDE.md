@@ -82,7 +82,10 @@ si dejas un campo vacío, ese canal se oculta sin dañar el diseño.
   el sitio público muestra el botón «Descargar ficha técnica (PDF)» en la
   página del producto; si no, el botón no aparece.
 - **Vista previa**: muestra el producto tal como se verá publicado, aunque
-  esté en borrador (incluido el botón de la ficha técnica).
+  esté en borrador (incluido el botón de la ficha técnica). Desde el
+  2026-08-19 la vista previa incluye la galería interactiva del sitio
+  público: las miniaturas cambian la imagen grande y al pulsarla se abre un
+  visor ampliado (se cierra con Escape o con la ✕).
 - Mientras no haya productos publicados, el sitio muestra
   «Catálogo en preparación».
 

@@ -48,10 +48,23 @@ reunión 1, punto 2). Última actualización: 2026-08-17.
   Hojaldrados traen recomendación de atemperado; el resto de productos no
   publica ese dato (no se inventa).
 - **Fotografías adicionales (38 archivos)**: inventariadas en
-  `docs/FOTOS_ADICIONALES.md`; todas en estado PENDIENTE de aprobación.
+  `docs/FOTOS_ADICIONALES.md`. Fase visual 2026-08-19: **9 aprobadas e
+  importadas** (banda del hero, «¿Quiénes somos?», Nosotros y galería de
+  DAP Hojaldre); el resto sigue PENDIENTE de identificación/aprobación.
   ⚠️ Las 6 fotos de bodega/transporte presentan indicios claros de haber
   sido **generadas con IA** (texto corrupto en las cajas, marca de agua de
-  generador): no se publican como evidencia real sin confirmación de Ana.
+  generador): quedaron **DESCARTADAS de publicación**; solo se
+  reconsiderarían si Ana confirma su origen real.
+- **SQL pendiente de ejecutar** (2026-08-19):
+  `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql` añade las 3 fotos
+  aprobadas a la galería de DAP Hojaldre (los WebP ya están en `public/`).
+  Hasta ejecutarlo en el SQL Editor, la ficha sigue mostrando caja +
+  aplicación.
+- **Covers del blog** (2026-08-19): propuesta foto→artículo en
+  `docs/FOTOS_ADICIONALES.md` (sección «Propuesta de covers»); pendiente de
+  aprobación de Ana y asignación desde el admin. El artículo de
+  almacenamiento queda sin candidata (sus únicas opciones eran las fotos de
+  bodega descartadas).
 
 ## 2. Material pendiente por recibir de Ana
 
