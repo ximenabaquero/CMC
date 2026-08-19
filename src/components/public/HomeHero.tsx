@@ -88,10 +88,14 @@ export function HomeHero({
         {/* Columna derecha: logo CMC animado sobre el círculo blanco */}
         <div className="enter-visual relative mx-auto w-full max-w-md lg:max-w-none">
           {/* Círculo blanco protagonista (decorativo; antes ámbar — pedido
-              de la clienta, 2026-08-19, junto con retirar el anillo naranja) */}
+              de la clienta, 2026-08-19). Centrado con el emblema del logo
+              (medido sobre el frame final del GIF, con el scale-125 el centro
+              visual cae en ≈49/49 % del contenedor → centrar basta); en el
+              PNG estático de reduced-motion el emblema queda más arriba
+              (≈40 %), de ahí el override motion-reduce. */}
           <div
             aria-hidden="true"
-            className="absolute -top-4 right-2 h-56 w-56 rounded-full bg-white sm:-top-8 sm:right-0 sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem] lg:-top-10 lg:-right-6"
+            className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem] motion-reduce:top-[40%]"
           />
           {/* Logo animado: entra una sola vez y queda fijo; estático con
               prefers-reduced-motion (mismo patrón que el header). */}

@@ -249,3 +249,24 @@ DESIGN.md que antes decía "solo en el lado izquierdo" (pedido de la clienta).
 | 375 px | Ambos `display: none` (solo ≥ lg) |
 | Consola | Sin errores |
 | **Pendiente manual (usuaria)** | Revisión de la captura de escritorio antes del commit |
+
+## 2026-08-19 — Ajustes del hero y de «¿Quiénes somos?» (pedido de la clienta)
+
+Cambios: (1) el círculo blanco del hero pasa de offsets fijos por breakpoint a
+centrado con el emblema del logo — medido el frame final del GIF: con
+`scale-125` el centro visual del emblema cae en ≈49/49 % del contenedor, así
+que `left-1/2 top-1/2 -translate-x/y-1/2` basta; el PNG estático de
+reduced-motion tiene el emblema más arriba → `motion-reduce:top-[40%]`.
+(2) «¿Quiénes somos?» (home) muestra la canasta recortada
+(`canasta-panes-surtidos-01-recorte.webp`, 800×745) en lugar del surtido de
+amasijos, elegida por la clienta; el recorte del surtido queda disponible sin
+uso.
+
+| Verificación | Resultado |
+|---|---|
+| Medición del emblema | GIF frame final (512×340): centro 48.9/49.1 % → visual 48.6/48.9 % con scale-125; PNG (1920×1080): 52.0/42.3 % → visual 52.5/40.4 % |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Home 1440×900 | Emblema centrado en la bola blanca; wordmark cruza el borde inferior de forma simétrica |
+| «¿Quiénes somos?» 1440 | Canasta flotando en la columna corta, sin tarjeta |
+| Consola | Sin errores |
+| **Pendiente manual (usuaria)** | Revisión de capturas antes del commit; verificar visualmente la variante reduced-motion si se desea precisión en ese modo |

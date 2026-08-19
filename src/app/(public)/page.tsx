@@ -79,16 +79,16 @@ export default async function HomePage() {
               >
                 {intro.title ?? "¿Quiénes somos?"}
               </h2>
-              {/* Surtido real de amasijos (foto aprobada 2026-08-19),
-                  recortado con transparencia: flota directo sobre el hueso,
-                  sin tarjeta, y equilibra la columna corta del grid sin
-                  competir con el texto. */}
+              {/* Canasta de panes (foto aprobada 2026-08-19; elegida por la
+                  clienta para esta sección), recortada con transparencia:
+                  flota directo sobre el hueso, sin tarjeta, y equilibra la
+                  columna corta del grid sin competir con el texto. */}
               <figure className="reveal mt-8">
                 <Image
-                  src="/images/photos/composicion-surtido-amasijos-01-recorte.webp"
-                  alt="Surtido de panes y amasijos colombianos en plato de secciones"
+                  src="/images/photos/canasta-panes-surtidos-01-recorte.webp"
+                  alt="Canasta de mimbre con surtido de panes artesanales recién horneados"
                   width={800}
-                  height={865}
+                  height={745}
                   loading="lazy"
                   className="w-full"
                 />
