@@ -95,7 +95,7 @@ en mayúsculas, titulares Fraunces con mucho aire, y el producto real (la caja D
 La densidad es baja y el ritmo pausado: secciones generosas (`py-16/20`) que alternan
 fondos blanco → crema → crema profunda → petróleo. El color estructura la página; la
 decoración se limita a círculos ámbar recortados, GIFs de marca usados con moderación y
-el ornamento botánico dibujado a mano del margen izquierdo (desktop, 2026-08-19).
+los ornamentos botánicos dibujados a mano de los márgenes laterales (desktop, 2026-08-19).
 
 **Key Characteristics:**
 - Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo).
@@ -196,11 +196,13 @@ Las imágenes de producto van sobre lienzo blanco uniforme con `object-contain` 
 rotación sutil (-2°) con `mix-blend-multiply` en composiciones hero.
 
 **Ornamento de obrador (2026-08-19).** Un dibujo botánico a mano (vid, espigas, gotas de
-aceite — `BakerySideOrnament`) vive fijo en el margen izquierdo en desktop, centrado en el
+aceite — `BakerySideOrnament`) vive fijo en **ambos márgenes** en desktop (el derecho es el
+mismo dibujo en espejo, añadido el 2026-08-19 por pedido de la clienta), centrado en el
 viewport, a opacidad 0.7. Es tinta sobre el margen, nunca protagonista: sin fondo, sombra,
-filtro ni animación; solo en el lado izquierdo, sin repetirse como patrón. Su geometría
-(`.bakery-side-ornament` en globals.css) mantiene el trazo en el margen y lo desliza fuera
-del lienzo en viewports angostos para no invadir jamás la columna de lectura.
+filtro ni animación; solo los dos laterales, sin repetirse como patrón. Su geometría
+(`.bakery-side-ornament` y la variante `--derecha` en globals.css) mantiene el trazo en el
+margen y lo desliza fuera del lienzo en viewports angostos para no invadir jamás la
+columna de lectura.
 
 **Recorte editorial flotante (2026-08-19).** Las fotos editoriales aprobadas de packshot
 (fondo blanco puro) se publican como recortes con canal alfa (`-recorte.webp`, generados

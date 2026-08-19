@@ -227,3 +227,25 @@ fuera del lienzo en viewports angostos para que la tinta no invada el texto.
 | Consola | Sin errores en ninguna resolución |
 | Accesibilidad/interacción | `alt=""` + `aria-hidden`, `pointer-events: none`, `user-select: none`, `draggable={false}` — por código |
 | **Pendiente manual (usuaria)** | Revisión de las capturas de escritorio antes del commit |
+
+## 2026-08-19 — Ornamento de obrador en el margen derecho
+
+Cambios: `BakerySideOrnament` generalizado con prop `side` ("izquierdo" |
+"derecho"); PNG nuevo entregado por la clienta renombrado a kebab-case
+(`public/images/decorative/borde-ornamental-cmc-derecha.png`, espejo exacto
+del izquierdo: mismo lienzo 887×1774 RGBA, tinta medida a 31.8 % desde el
+borde derecho → misma constante 0.158); variante `.bakery-side-ornament--derecha`
+en globals.css (`left: auto` + `right` con el mismo clamp en espejo); montaje
+del segundo ornamento en `(public)/layout.tsx`. Se actualizó la regla de
+DESIGN.md que antes decía "solo en el lado izquierdo" (pedido de la clienta).
+
+| Verificación | Resultado |
+|---|---|
+| Medición de tinta del PNG derecho | X:[605,787] de 887 — espejo de [99,281]; constante 0.159 ≈ 0.158 del izquierdo (compartida) |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Home 1440×900 (CDP headless) | Ambos ornamentos enmarcan la página simétricamente sin tocar la columna de contenido |
+| Home 1100×800 | Ambos deslizados fuera del lienzo con solo las puntas visibles (clamp simétrico) |
+| Overflow horizontal | `scrollWidth ≤ innerWidth` en 1440 y 1100 |
+| 375 px | Ambos `display: none` (solo ≥ lg) |
+| Consola | Sin errores |
+| **Pendiente manual (usuaria)** | Revisión de la captura de escritorio antes del commit |

@@ -235,13 +235,15 @@ h6 {
 
 /* ------------------------------------------------------------
    Ornamento lateral de obrador (BakerySideOrnament): dibujo a mano
-   fijo en el margen izquierdo, centrado en el viewport, solo ≥ lg.
-   La tinta del PNG ocupa la franja izquierda del lienzo (el borde
-   derecho del trazo llega al 31.7% del ancho; ancho = alto / 2, así
-   que en píxeles es alto × 0.158). `left` se calcula para que las
-   curvas apenas rocen la columna de contenido (--container-max) y,
-   en viewports angostos (1024–1400px), el dibujo se deslice fuera
-   del lienzo en vez de invadir el texto: siempre queda al menos una
+   fijo en los márgenes, centrado en el viewport, solo ≥ lg.
+   La tinta del PNG ocupa la franja del lienzo pegada a su margen
+   (el trazo llega al 31.7% del ancho; ancho = alto / 2, así que en
+   píxeles es alto × 0.158 — la variante derecha es el mismo dibujo
+   en espejo con geometría idéntica, medida 2026-08-19, y comparte
+   la constante). `left`/`right` se calculan para que las curvas
+   apenas rocen la columna de contenido (--container-max) y, en
+   viewports angostos (1024–1400px), el dibujo se deslice fuera del
+   lienzo en vez de invadir el texto: siempre queda al menos una
    punta de curva visible (mínimo del clamp). Al ser fixed nunca
    genera scroll horizontal ni afecta el layout.
    ------------------------------------------------------------ */
@@ -271,6 +273,16 @@ h6 {
     opacity: 0.7;
     pointer-events: none;
     user-select: none;
+  }
+
+  /* Variante derecha: espejo exacto anclado al margen opuesto. */
+  .bakery-side-ornament--derecha {
+    left: auto;
+    right: clamp(
+      calc(32px - var(--ornament-h) * 0.158),
+      calc((100vw - var(--container-max)) / 2 + 56px - var(--ornament-h) * 0.158),
+      0px
+    );
   }
 }
 

@@ -198,15 +198,18 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   derivados `-recorte.webp` en el manifest; los `.webp` de lienzo completo
   conviven en `public/` porque el importador los regeneraría). La única
   escena real (`hero-mesa-panaderia-01`, banner de /nosotros) no se recorta.
-- **Ornamento lateral de obrador** (`BakerySideOrnament`, 2026-08-19): dibujo
-  botánico a mano (`public/images/decorative/borde-ornamental-cmc.png`, ruta
-  literal sin `media_assets`) montado en `(public)/layout.tsx`. Decorativo
-  puro (`alt=""`, `aria-hidden`, `pointer-events: none`), `position: fixed`
-  en el margen izquierdo, centrado verticalmente, opacidad 0.7, solo ≥ lg.
-  Toda la geometría vive en `.bakery-side-ornament` (globals.css): altura
-  `clamp(700px, 95vh, 1100px)`, `z-index: 1` (sobre fondos de sección, bajo
-  header/overlays) y un `left` calculado para que la tinta quede en el margen
-  y se deslice fuera del lienzo en viewports angostos sin tocar el texto.
+- **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19):
+  dibujo botánico a mano en **ambos márgenes** (`public/images/decorative/
+  borde-ornamental-cmc.png` y `borde-ornamental-cmc-derecha.png` — espejo
+  exacto, mismo lienzo 887×1774 y misma constante de geometría; rutas
+  literales sin `media_assets`), montados en `(public)/layout.tsx` vía la
+  prop `side`. Decorativos puros (`alt=""`, `aria-hidden`,
+  `pointer-events: none`), `position: fixed`, centrados verticalmente,
+  opacidad 0.7, solo ≥ lg. Toda la geometría vive en `.bakery-side-ornament`
+  y la variante `--derecha` (globals.css): altura `clamp(700px, 95vh,
+  1100px)`, `z-index: 1` (sobre fondos de sección, bajo header/overlays) y
+  `left`/`right` calculados para que la tinta quede en el margen y se
+  deslice fuera del lienzo en viewports angostos sin tocar el texto.
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue
