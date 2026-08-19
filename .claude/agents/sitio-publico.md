@@ -32,7 +32,7 @@ Eres el agente del **sitio público** de cmc-website (Next.js 15 App Router, SSG
 - Fraunces (display) solo aplica dentro de `.public-site` (clase del layout público) sobre `h1–h3` y vía la utilidad `font-display`; el admin conserva Geist. No añadir reglas tipográficas globales.
 - `mix-blend-multiply` del hero requiere packshots con fondo blanco y `isolate` en la sección.
 - **Motion CSS-first** (vocabulario al final de `globals.css`): tokens `--ease-out`/`--ease-drawer`/`--dur-*`; entrada del hero `.enter`/`.enter-2..4`/`.enter-lcp`/`.enter-visual` (los candidatos LCP animan solo transform, nunca opacity); reveal scroll-driven `.reveal` (`animation-timeline: view()` bajo `@supports`, solo en la home y solo tarjetas/ítems, nunca prosa); acordeón FAQ vía `::details-content` + `interpolate-size` (scoped a `.public-site`); drawer móvil `.nav-drawer` con `@starting-style`; view transitions cross-document con `site-header` estable. Prohibido: librerías de animación JS, IntersectionObserver, convertir componentes públicos a client components por motion. Todo motion nuevo respeta `prefers-reduced-motion` (patrón CTA: `active:scale-[0.98] motion-reduce:active:scale-100`, sin matar las transiciones de color).
-- **GIFs de marca**: tres momentos (logo del header, logo del hero — pedido de la clienta 2026-08-19 —, mantequilla del CTA). No añadir más sin decisión explícita del cliente; footer y demás secciones siguen sin GIFs.
+- **GIFs de marca**: cuatro momentos (logo del header, logo del hero, logo DAP junto al encabezado del catálogo de la home — estos dos, pedido de la clienta 2026-08-19 —, mantequilla del CTA). No añadir más sin decisión explícita del cliente; footer y demás secciones siguen sin GIFs.
 
 ## Convenciones
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   extractPillars,
@@ -120,14 +121,36 @@ export default async function HomePage() {
 
       {/* Vista previa del catálogo */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
-        <SectionHeading
-          id="catalogo"
-          size="lg"
-          tone="warm"
-          eyebrow="Catálogo"
-          title="Nuestros productos"
-          description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
-        />
+        <div className="flex items-center justify-between gap-10">
+          <SectionHeading
+            id="catalogo"
+            size="lg"
+            tone="warm"
+            eyebrow="Catálogo"
+            title="Nuestros productos"
+            description="Margarinas, mantequillas y aceites para panadería, repostería e industria."
+          />
+          {/* Logo DAP animado junto al encabezado (pedido de la clienta,
+              2026-08-19). Entra una sola vez y queda fijo; estático con
+              prefers-reduced-motion y oculto en móvil, mismo patrón que el
+              hero. `mix-blend-multiply` integra el fondo del GIF/PNG al crema. */}
+          <div className="mb-8 hidden shrink-0 lg:block">
+            <Image
+              src="/gifsanimados/dap-margarinas-entrada-una-vez.gif"
+              alt="Logotipo animado de DAP Margarinas"
+              width={512}
+              height={512}
+              className="w-64 mix-blend-multiply motion-reduce:hidden"
+            />
+            <Image
+              src="/brand/dap-margarinas-azul.png"
+              alt="Logotipo de DAP Margarinas"
+              width={1536}
+              height={1024}
+              className="hidden w-64 mix-blend-multiply motion-reduce:block"
+            />
+          </div>
+        </div>
         {products === null ? (
           <DataUnavailable resource="el catálogo" />
         ) : products.length === 0 ? (
