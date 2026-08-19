@@ -230,8 +230,17 @@ Solo existen en el admin (fuera de este sistema); el sitio público no tiene for
 - Footer sobre crema profunda, 3 columnas.
 
 ### Acordeón FAQ (signature)
-`details/summary` nativo con indicador `+` que rota 45° al abrir (`group-open:rotate-45`).
-Sin JavaScript.
+`details/summary` nativo, sin JavaScript, en dos variantes:
+
+- **Home (`FaqList`, shared.tsx)**: compacto sobre blanco, indicador `+` que rota 45° al
+  abrir (`group-open:rotate-45`).
+- **Página FAQ (`FaqAccordion`, 2026-08-19)**: editorial — numeración `01…` naranja,
+  chevron en círculo mostaza (ámbar al abrir), encabezado abierto en petróleo con texto
+  blanco, respuesta sobre crema (16 px / 1.75), una sola pregunta abierta vía
+  `<details name>` nativo (degrada a múltiples abiertas sin soporte). La acompaña un
+  panel `petrol-deep` con eyebrow **ámbar** (adaptación documentada de la Eyebrow Rule
+  sobre fondo oscuro: el naranja queda ≈2.6:1), círculo mostaza y el recorte con
+  transparencia de la canasta de panes superpuesto al círculo.
 
 ### Marquee de marcas (signature)
 Doble track CSS (`translateX(-50%)`, 35s linear), pausa en hover y en `:focus-within`,

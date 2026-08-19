@@ -23,9 +23,11 @@ export default async function FaqsPage() {
     <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-start lg:gap-12">
         {/* Panel editorial: en móvil abre la página, en escritorio acompaña
-            fijo al acordeón. La foto va en flujo (tras el CTA) para que nunca
-            tape el título ni el enlace en ningún ancho. */}
-        <header className="relative isolate flex flex-col overflow-hidden rounded-lg bg-petrol-deep p-6 sm:p-8 lg:sticky lg:top-24 lg:self-start lg:p-10">
+            fijo al acordeón — solo en viewports con altura suficiente para el
+            panel completo (~705px + offset); en portátiles bajos fluye normal
+            en vez de quedar cortado. La foto va en flujo (tras el CTA) para
+            que nunca tape el título ni el enlace en ningún ancho. */}
+        <header className="relative isolate flex flex-col overflow-hidden rounded-lg bg-petrol-deep p-6 sm:p-8 lg:self-start lg:p-10 lg:[@media(min-height:53rem)]:sticky lg:[@media(min-height:53rem)]:top-24">
           <div
             aria-hidden="true"
             className="absolute -bottom-16 -right-16 -z-10 h-44 w-44 rounded-full bg-amber sm:h-56 sm:w-56 lg:h-64 lg:w-64"

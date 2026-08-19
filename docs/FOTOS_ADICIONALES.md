@@ -23,6 +23,17 @@ publica (montaje digital o indicios de IA).
 > Las 6 fotos de bodega/transporte y los 2 montajes espejo quedan
 > **descartados de publicación** por decisión de esta fase.
 
+> **Actualización 2026-08-19 — recorte para la página FAQ.** De la aprobada
+> `canasta-panes-surtidos-01` se generó el derivado con canal alfa
+> `public/images/photos/canasta-panes-surtidos-01-recorte.webp` (script
+> `scripts/recortar-foto-panes.mjs`: recorta el fondo blanco puro por
+> flood-fill, gradúa el alfa en bordes/sombras y vacía el hueco del asa;
+> entrada registrada en `scripts/assets-manifest.json`) para el panel
+> editorial de `/preguntas-frecuentes`. Es la única foto presente en dos
+> lugares (banda del hero y FAQ): se aceptó porque el recorte cambia por
+> completo la presentación. Si el manifest se regenerara desde cero, volver
+> a ejecutar el script.
+
 > ⚠️ **Alerta — posibles imágenes generadas con IA.** Los 6 JPEG de
 > bodega/transporte presentan texto ilegible o corrupto en las cajas
 > («HOJALORE», «Margarina Dep Nagalos», una caja que solo dice «AP») y un
@@ -65,7 +76,7 @@ publica (montaje digital o indicios de IA).
 | 13.png | Hojaldre redondo azucarado abierto con crema pastelera | PASTELERIA | hojaldre-crema-pastelera-01 | Hojaldre relleno de crema pastelera partido a la mitad | galería producto / blog | PENDIENTE |
 | 14.png | Dos rollos de canela hojaldrados (duplicación espejo digital) | PASTELERIA | rollo-canela-01 | — | no publicar | DESCARTADA (2026-08-19, montaje digital) |
 | 15.png | Palitos de hojaldre con ajonjolí | PASTELERIA | palito-hojaldre-ajonjoli-01 | Palitos de hojaldre dorados con semillas de ajonjolí | galería producto / decoración | PENDIENTE |
-| 16.png | Canasta de mimbre con panes surtidos (mogolla integral, pan de maíz, panes suaves) | COMPOSICION | canasta-panes-surtidos-01 | Canasta de mimbre con surtido de panes artesanales recién horneados | banda hero (home) | APROBADA (2026-08-19) |
+| 16.png | Canasta de mimbre con panes surtidos (mogolla integral, pan de maíz, panes suaves) | COMPOSICION | canasta-panes-surtidos-01 | Canasta de mimbre con surtido de panes artesanales recién horneados | banda hero (home); recorte con alfa en FAQ | APROBADA (2026-08-19) |
 | 17.png | Cuatro bollos ovalados dorados (¿pan aliñado/pan de leche?) | PENDIENTE | pan-bollo-ovalado-01 | Cuatro panes ovalados de corteza dorada sobre fondo blanco | galería producto | PENDIENTE |
 | 18.png | Pan de molde integral con ajonjolí y linaza | PAN | pan-molde-integral-01 | Pan de molde integral con semillas de ajonjolí sobre fondo blanco | galería producto / blog | PENDIENTE |
 | 19.png | Barra con cortes diagonales y espolvoreo de harina | PENDIENTE | pan-barra-cortes-01 | Barra de pan dorada con cortes diagonales y harina sobre fondo blanco | galería producto | PENDIENTE |

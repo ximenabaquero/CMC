@@ -202,6 +202,18 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `globals.css`). Sustituyó a las miniaturas-enlace que abrían el `.webp`
   crudo en pestaña nueva. La vista previa del admin reutiliza el mismo
   componente.
+- **Página de preguntas frecuentes** (2026-08-19): rediseño editorial en dos
+  columnas (`max-w-6xl`, 40/60). Panel `bg-petrol-deep` con eyebrow ámbar
+  (el naranja no contrasta sobre petróleo oscuro), círculo mostaza y el
+  recorte con transparencia `canasta-panes-surtidos-01-recorte.webp`
+  (generado por `scripts/recortar-foto-panes.mjs` desde el original
+  aprobado; entrada propia en `scripts/assets-manifest.json`). Acordeón
+  propio `FaqAccordion` (server component): numeración naranja, chevron en
+  círculo mostaza, encabezado abierto en petróleo con texto blanco,
+  respuesta sobre crema y **una sola pregunta abierta** vía `<details name>`
+  nativo, sin JavaScript. `FaqList` de `shared.tsx` queda solo para la home.
+  El sticky del panel aplica únicamente con viewport de altura ≥ 53rem
+  (en portátiles bajos fluye normal para no quedar cortado).
 - **Motion**: vocabulario CSS-first al final de `globals.css` (tokens
   `--ease-out`/`--dur-*`, entrada del hero `.enter*`, reveal scroll-driven
   `.reveal` con `animation-timeline: view()` bajo `@supports`, acordeón FAQ

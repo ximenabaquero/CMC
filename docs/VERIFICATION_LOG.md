@@ -128,3 +128,54 @@ Cambios: `src/lib/action-state.ts` (contrato v2 con `status`/`message`/`fieldErr
 | Hydration warning en dev | Causado por el estilo `caret-color` que Chrome/Edge inyectan en inputs (artefacto del navegador, no de la app); solo visible en desarrollo |
 | `npm run preview` (workerd real) | 5/5: home y `/productos` 200; `/admin` redirige a login; login renderiza con los campos nuevos; sin errores de consola relevantes |
 | **Pendiente manual (requiere credenciales de admin)** | Una operación exitosa y una fallida por módulo dentro del panel (empresa, contacto, productos, imágenes+ficha, marcas, blog, FAQs), toasts tras redirect, teclado/lector de pantalla sobre los toasts, `prefers-reduced-motion`, sesión expirada |
+
+## 2026-08-19 — Galería interactiva de producto + fotos editoriales
+
+Cambios: `ProductGallery` (client component: miniaturas-botón con
+`aria-pressed`, visor `<dialog>` nativo, estilos `.product-lightbox`),
+`ProductDetail` integra la galería (fin de las miniaturas-enlace que abrían
+el `.webp` crudo), banda editorial de 3 fotos en `HomeHero`, figura en
+«¿Quiénes somos?» (home), banner + figura en `/nosotros`, rama `photo` en
+`import-assets.mjs` (9 fotos importadas a `public/images/photos/` y
+`public/images/products/dap-hojaldre/`), SQL preparado sin ejecutar
+(`supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| `npm run build` (26 páginas; 9 fichas + 4 posts SSG) | OK |
+| Galería dap-hojaldre (CDP headless) | Miniatura 2 → `aria-pressed` alterna, alt visible se actualiza, URL intacta, sin pestañas nuevas, sin errores de consola |
+| Visor `<dialog>` | Abre con foco en «Cerrar visor», siguiente/anterior ciclan con wrap, cierra sin cambiar URL; controles petrol-deep visibles sobre lienzo blanco (corregido: antes blanco/10 invisible en móvil) |
+| Teclado (galería de 3, dap-preparado-graso) | ArrowRight y End mueven foco + selección; Home/End con wrap |
+| Las 9 fichas (`curl` en dev) | HTTP 200, miniaturas SSR presentes (2 o 3), botón «Descargar ficha técnica» intacto |
+| Fotos nuevas (6 editoriales + 3 producto) | HTTP 200; WebP 1200×1200, 28–77 KB |
+| Responsive | 375 px (home, ficha, visor, nosotros), 768 px (sin overflow horizontal), 1440 px — screenshots revisados |
+| Catálogo y tarjetas de la home | Siguen mostrando solo la caja (main_image_id, sin cambios) |
+| `npm run preview` (workerd real) | 10/10 rutas y assets 200 (home, catálogo, 2 fichas, nosotros, blog, 3 WebP nuevos, PDF de ficha); galería SSR presente |
+| `prefers-reduced-motion` | Por código: cross-fade → cambio directo (`motion-reduce:transition-none`), visor con fade corto, `.reveal` no aplica; sin verificación manual con el ajuste del SO |
+| **Pendiente manual** | Ejecutar el SQL de dap-hojaldre y re-verificar la galería de 5; vista previa del admin con credenciales; Escape físico del visor (el cierre nativo de `<dialog>` no se puede simular por CDP con fidelidad) |
+
+## 2026-08-19 — Rediseño editorial de /preguntas-frecuentes
+
+Cambios: página FAQ en dos columnas `max-w-6xl` 40/60 — panel `petrol-deep`
+(eyebrow ámbar, círculo mostaza, recorte con transparencia de la canasta de
+panes en flujo tras el CTA) + acordeón nuevo `FaqAccordion` (numeración
+naranja, chevron en círculo mostaza, encabezado abierto en petróleo con
+texto blanco, respuesta sobre crema, exclusivo vía `<details name>` nativo).
+Script `scripts/recortar-foto-panes.mjs` (flood-fill del fondo blanco puro,
+alfa graduado en bordes/sombras, huecos encerrados; derivado 800×745 de
+~100 KB registrado en el manifest). `FaqList`, la home y el resto del sitio
+intactos.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Recorte sobre petrol-deep (preview compuesta con sharp) | Sin halo blanco; el hueco del asa quedó transparente tras 1 ajuste (regiones encerradas mayoritariamente blancas → fondo) |
+| 1280×800 (CDP headless) | Grid 40/60; foto superpuesta al círculo sin tapar título ni CTA; abierta: encabezado petróleo + texto blanco, número y chevron en ámbar, respuesta sobre crema |
+| Exclusividad (`<details name>`) | Tras abrir la 2ª pregunta queda exactamente 1 `details[open]` (la 2ª), sin JavaScript |
+| Sticky condicional del panel | `position: sticky` a 1280×900 y `relative` a 1280×700 (variante `lg:[@media(min-height:53rem)]:sticky`; el panel mide 705 px y con offset 96 px no cabe en portátiles) |
+| 375×812 (página completa) | Panel primero, foto reducida (`w-44`) sin tapar título ni CTA; tarjetas del acordeón ≥56 px de alto (táctil ≥44 px) |
+| Foco por teclado | `summary` nativo enfocable (`document.activeElement` verificado); anillo interior por utilidades (azul en tarjeta cerrada / blanco sobre petróleo) — confirmar visualmente con Tab físico |
+| Home | Intacta: 3 `details` con indicador `+` (`FaqList` sin cambios) |
+| `prefers-reduced-motion` | Por código: apertura vía la regla global existente de `::details-content` (encerrada en `no-preference`), chevron `motion-reduce:transition-none`, CTA `motion-reduce:active:scale-100`; sin verificación manual con el ajuste del SO |
+| **Pendiente manual (usuaria)** | Revisión de las capturas 1280/375 antes del commit; cierre animado del acordeón exclusivo en Chromium (según versión puede cerrar en seco — aceptado) |
