@@ -48,7 +48,8 @@ lo aprueba la clienta (Ana) antes de publicarse desde el panel.
 - Afirmaciones en revisión NO publicables: certificación ISO 22000, datos de contacto
   del pie de fichas técnicas, claim OMS sobre el pan (ver docs/CONTENT_PENDING.md).
   Nunca inventar cifras, certificaciones ni testimonios.
-- Despliegue a producción bloqueado hasta aprobación del cliente.
+- Producción publicada en workers.dev (deploy automático por push a `master`); la conexión del
+  dominio del cliente y la migración a sus cuentas siguen bloqueadas hasta su aprobación.
 
 ## Brand Commitments
 

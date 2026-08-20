@@ -5,6 +5,11 @@ cliente** (correo corporativo). No se usan tarjetas, credenciales ni
 cuentas personales de la desarrolladora. Si en el futuro se superan los
 límites gratuitos, el cliente asume directamente los costos.
 
+> **Estado actual (2026-08-20):** producción corre temporalmente en la
+> cuenta personal de la desarrolladora (ver «Estado actual» en
+> docs/DEPLOYMENT.md); la regla anterior aplica a la entrega final, cuando
+> se migre a las cuentas del cliente.
+
 ## Qué servicio cumple cada función
 
 | Servicio | Función | Plan inicial |
@@ -15,6 +20,12 @@ límites gratuitos, el cliente asume directamente los costos.
 | Cloudflare R2 (bucket `cmc-website-cache`) | Caché incremental de páginas generadas | R2 Free |
 | Cloudflare D1 (`cmc-website-tags`) | Tag cache para revalidación bajo demanda | D1 Free |
 | Dominio del cliente | DNS gestionado en Cloudflare (a futuro) | Ya lo paga el cliente |
+
+Nota técnica: la revalidación bajo demanda (tag cache en D1) funciona sin
+cola y sin el binding `WORKER_SELF_REFERENCE` de OpenNext — ese binding solo
+lo exige la revalidación por tiempo (ISR con queue), que este sitio no usa
+por diseño. Verificado en producción el 2026-08-20 (VERIFICATION_LOG.md).
+La tabla `revalidations` de D1 la crea `populateCache` en cada deploy.
 
 ## Qué incluye el plan gratuito (valores vigentes a agosto de 2026 — verificar antes de desplegar)
 

@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { siteSettingsSchema } from "@/lib/validation";
 import {
   DB_ERROR_MESSAGE,
+  NO_ROWS_MESSAGE,
   actionError,
   actionSuccess,
   zodActionError,
@@ -40,12 +41,14 @@ export async function updateSiteSettings(
     return zodActionError(parsed.error);
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("site_settings")
     .update({ ...parsed.data, updated_by: userId })
-    .eq("id", 1);
+    .eq("id", 1)
+    .select("id");
 
   if (error) return actionError(DB_ERROR_MESSAGE);
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.settings);
   return actionSuccess(

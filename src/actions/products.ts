@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { altTextSchema, productSchema, slugSchema } from "@/lib/validation";
 import {
   DB_ERROR_MESSAGE,
+  NO_ROWS_MESSAGE,
   actionError,
   actionSuccess,
   zodActionError,
@@ -116,10 +117,11 @@ export async function updateProduct(
     return zodActionError(parsed.error);
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("products")
     .update({ ...parsed.data, updated_by: userId })
-    .eq("id", productId);
+    .eq("id", productId)
+    .select("id");
 
   if (error) {
     if (error.code === "23505") {
@@ -129,6 +131,7 @@ export async function updateProduct(
     }
     return actionError(DB_ERROR_MESSAGE);
   }
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.products);
   revalidatePath(`/admin/productos/${productId}`);
@@ -200,7 +203,16 @@ export async function uploadProductImage(
     .eq("id", productId)
     .maybeSingle();
   if (product && !product.main_image_id) {
-    await supabase.from("products").update({ main_image_id: result.mediaId }).eq("id", productId);
+    const { data: asMain, error: mainError } = await supabase
+      .from("products")
+      .update({ main_image_id: result.mediaId })
+      .eq("id", productId)
+      .select("id");
+    if (mainError || !asMain?.length) {
+      return actionError(
+        "La imagen se agregó a la galería, pero no se pudo marcar como principal. Usa «Usar como principal» para asignarla."
+      );
+    }
   }
 
   revalidatePublicContent(CACHE_TAGS.products);
@@ -278,11 +290,13 @@ export async function updateMediaAltText(
     return actionError(message, { alt_text: [message] });
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("media_assets")
     .update({ alt_text: alt.data, updated_by: userId })
-    .eq("id", mediaId);
+    .eq("id", mediaId)
+    .select("id");
   if (error) return actionError(DB_ERROR_MESSAGE);
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.products);
   revalidatePath(`/admin/productos/${productId}`);
@@ -353,13 +367,14 @@ export async function uploadTechnicalSheet(
     return actionError(result.error ?? "No se pudo subir la ficha técnica.");
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("products")
     .update({ technical_sheet_media_id: result.mediaId, updated_by: userId })
-    .eq("id", productId);
-  if (error) {
+    .eq("id", productId)
+    .select("id");
+  if (error || !updated?.length) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return actionError(DB_ERROR_MESSAGE);
+    return actionError(error ? DB_ERROR_MESSAGE : NO_ROWS_MESSAGE);
   }
 
   // Limpiar la ficha anterior si quedó huérfana (los STATIC solo se desvinculan).
@@ -395,11 +410,13 @@ export async function removeTechnicalSheet(
   if (!product?.technical_sheet_media_id) return actionSuccess(null);
 
   const previousId = product.technical_sheet_media_id;
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("products")
     .update({ technical_sheet_media_id: null, updated_by: userId })
-    .eq("id", productId);
+    .eq("id", productId)
+    .select("id");
   if (error) return actionError("No se pudo quitar la ficha técnica.");
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   await deleteAssetIfOrphan(supabase, previousId);
 

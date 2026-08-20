@@ -1,4 +1,34 @@
-# Despliegue (procedimiento FUTURO — no ejecutado en esta fase)
+# Despliegue
+
+## Estado actual (actualizado 2026-08-20)
+
+El sitio **ya está desplegado en producción** en Cloudflare Workers desde el
+2026-08-05, temporalmente en la cuenta personal de la desarrolladora
+(la migración a cuentas del cliente queda para la entrega final):
+
+- URL: `https://cmc-website-production.saraximenagilbaquero.workers.dev`
+- Recursos productivos: R2 `cmc-website-media` y `cmc-website-cache`, D1
+  `cmc-website-tags` (ids reales en `wrangler.jsonc` → `env.production`).
+- **Despliegue automático** (desde 2026-08-10) vía Workers Builds conectado
+  al repo de GitHub: cada push a `master` ejecuta build + deploy. Los
+  comandos viven en el dashboard (Worker `cmc-website-production` →
+  Settings → Build): build `npx opennextjs-cloudflare build`, deploy
+  `npx opennextjs-cloudflare deploy -- --env production`, versión
+  `npx wrangler versions upload --env production`. Las variables de BUILD
+  `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY` están en el
+  dashboard (sin ellas el build SSG sale vacío: los fetchers fallan en
+  silencio).
+- `opennextjs-cloudflare deploy` ejecuta internamente `populateCache`:
+  sube las páginas pre-generadas a R2 y crea/actualiza la tabla
+  `revalidations` del tag cache en D1. La revalidación bajo demanda quedó
+  verificada en producción el 2026-08-20 (ver VERIFICATION_LOG.md).
+- `npm run deploy` (manual, solo excepciones) apunta a `--env production`;
+  el flujo normal es commit + push a `master`.
+
+El **dominio del cliente sigue sin conectarse**: las reglas de DNS/correo de
+la sección 5 permanecen vigentes.
+
+## Entrega final: migración a cuentas del cliente (pendiente)
 
 Condiciones previas (acuerdo de la reunión 1, puntos 10-11):
 
@@ -6,8 +36,8 @@ Condiciones previas (acuerdo de la reunión 1, puntos 10-11):
 2. Se recibió el pago del saldo final.
 3. Ana coordinó con el propietario de la empresa el acceso al dominio.
 
-**En esta fase NO se despliega, NO se conecta el dominio y NO se cambian
-registros DNS.**
+Las secciones 1-4 siguientes son el runbook para recrear el despliegue en
+las cuentas del cliente cuando se cumplan esas condiciones.
 
 ## 1. Preparar cuentas (a nombre del cliente)
 

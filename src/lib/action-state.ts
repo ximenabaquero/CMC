@@ -19,6 +19,14 @@ export const DB_ERROR_MESSAGE =
   "No se pudo guardar: la base de datos no respondió. Puede estar pausada (plan gratuito) o sin conexión. Intenta de nuevo en unos minutos.";
 
 /**
+ * Mensaje cuando un update no afectó ninguna fila. RLS filtra en
+ * silencio (0 filas con error null), así que sin esta comprobación el
+ * panel mostraría un éxito en falso.
+ */
+export const NO_ROWS_MESSAGE =
+  "No se guardó ningún cambio: el registro no existe o tu usuario ya no tiene permisos de administrador. Recarga la página e inicia sesión de nuevo.";
+
+/**
  * Éxito con mensaje (dispara toast). Con `message = null` el éxito es
  * silencioso: sin `ts`, el cliente no muestra nada (reordenar galería).
  */

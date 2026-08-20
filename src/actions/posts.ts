@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { blogPostSchema, slugSchema } from "@/lib/validation";
 import {
   DB_ERROR_MESSAGE,
+  NO_ROWS_MESSAGE,
   actionError,
   actionSuccess,
   zodActionError,
@@ -87,10 +88,11 @@ export async function updatePost(
       ? new Date().toISOString()
       : current?.published_at ?? null;
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("blog_posts")
     .update({ ...parsed.data, published_at, updated_by: userId })
-    .eq("id", postId);
+    .eq("id", postId)
+    .select("id");
 
   if (error) {
     if (error.code === "23505") {
@@ -100,6 +102,7 @@ export async function updatePost(
     }
     return actionError(DB_ERROR_MESSAGE);
   }
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.posts);
   revalidatePath(`/admin/blog/${postId}`);
@@ -157,14 +160,15 @@ export async function uploadPostCover(
     .eq("id", postId)
     .maybeSingle();
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("blog_posts")
     .update({ cover_image_id: result.mediaId, updated_by: userId })
-    .eq("id", postId);
+    .eq("id", postId)
+    .select("id");
 
-  if (error) {
+  if (error || !updated?.length) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return actionError(DB_ERROR_MESSAGE);
+    return actionError(error ? DB_ERROR_MESSAGE : NO_ROWS_MESSAGE);
   }
 
   if (post?.cover_image_id) {
@@ -191,11 +195,13 @@ export async function removePostCover(
     .maybeSingle();
   if (!post?.cover_image_id) return actionSuccess(null);
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("blog_posts")
     .update({ cover_image_id: null, updated_by: userId })
-    .eq("id", postId);
+    .eq("id", postId)
+    .select("id");
   if (error) return actionError("No se pudo quitar la portada.");
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   await deleteManagedAsset(supabase, post.cover_image_id);
 

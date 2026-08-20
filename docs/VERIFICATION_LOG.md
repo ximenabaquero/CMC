@@ -354,6 +354,20 @@ soporte quedan cubiertos por la regla existente (aparecen estáticos).
 | Percepción del movimiento | Validarla la usuaria en su navegador (Chromium ≥ 115); con `prefers-reduced-motion` no anima, por construcción |
 | **Pendiente manual (usuaria)** | Revisión en el navegador antes del commit |
 
+### Iteración (mismo día): variante `.reveal-strong`
+
+La usuaria no percibía el `.reveal` estándar (10px, entry 10→40%) — deliberadamente
+sutil. Se añadió la variante `.reveal-strong` en globals.css (misma voz: subida +
+fundido al ritmo del scroll; 36px de recorrido, rango entry 0%→65%, mismo `@supports` +
+`prefers-reduced-motion`) y los 4 bloques pasaron a usarla. El `.reveal` estándar no se
+tocó.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Medición CDP en 4 posiciones de scroll | Al asomar: opacity 0.10 + translateY 32px; completa la subida en ~175px de scroll; estado final estable (opacity 1, transform 0); sin errores de consola |
+| Si la usuaria sigue sin ver movimiento | Revisar en su Windows: Configuración → Accesibilidad → Efectos visuales → «Efectos de animación» (apagado ⇒ el navegador reporta reduced-motion y el sitio no anima, por diseño). Chequeo en consola: `matchMedia('(prefers-reduced-motion: reduce)').matches` |
+
 ## 2026-08-19 — Ajustes del hero y de «¿Quiénes somos?» (pedido de la clienta)
 
 Cambios: (1) el círculo blanco del hero pasa de offsets fijos por breakpoint a
@@ -374,3 +388,46 @@ uso.
 | «¿Quiénes somos?» 1440 | Canasta flotando en la columna corta, sin tarjeta |
 | Consola | Sin errores |
 | **Pendiente manual (usuaria)** | Revisión de capturas antes del commit; verificar visualmente la variante reduced-motion si se desea precisión en ese modo |
+
+## 2026-08-20 — Diagnóstico «edité en el admin y no se refleja» + revalidación verificada en producción
+
+Investigación de solo lectura sobre producción (D1 remota, REST anónimo de
+Supabase, HTML servido, lista de deploys) a raíz del reporte de la usuaria
+tras crear su cuenta admin (`iamanitabea@gmail.com`):
+
+| Verificación | Resultado |
+|---|---|
+| Tabla `revalidations` en D1 `cmc-website-tags` (remota) | Existe; recibe escrituras con el build id vigente en cada edición del admin |
+| Ediciones de empresa (`home_intro` 19-08 00:08 UTC, `about_ally` 19-08 15:01 UTC) | En la BD (`updated_by` = usuaria) **y presentes en el HTML servido** por workers.dev — la cadena admin → BD → revalidación → sitio público funciona |
+| Prueba «IIIIII» de la usuaria | Se publicó y su corrección la eliminó: no está ni en la BD ni en el HTML vivo. Lo que la usuaria seguía viendo era caché/pestaña vieja de su navegador |
+| Ediciones de blog | Nunca llegaron a la BD (posts sin cambios desde 05-08) y no existe ninguna escritura del tag `posts` en D1 → `updatePost` no llegó a ejecutarse; pendiente reproducir con la usuaria |
+| Cabeceras del sitio | `x-opennext: 1`, `x-nextjs-cache: HIT` — páginas servidas por el worker desde la caché incremental R2, no como assets inmutables |
+| Deploys | Workers Builds activo (varios deploys el 19-08; último 20-08 02:43 UTC) |
+| Binding `WORKER_SELF_REFERENCE` | No configurado y no necesario: solo lo exige ISR por tiempo con queue, que el sitio no usa |
+
+Cambios derivados (mismo turno):
+
+| Verificación | Resultado |
+|---|---|
+| Todo update comprueba filas afectadas (`.select("id")` + `NO_ROWS_MESSAGE` en `action-state.ts`) | settings, content, faqs, posts (artículo/portada), brands (marca/logo), products (producto/alt/ficha/imagen principal) — un update de 0 filas (p. ej. filtrado por RLS) ya no muestra éxito en falso |
+| `npm run deploy` | Ahora con `-- --env production` (antes apuntaba al entorno dev, con D1 placeholder, y habría creado un worker paralelo) |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| **Pendiente manual (usuaria)** | Ver el sitio en incógnito o con Ctrl+F5 (debe mostrar sus textos); repetir la edición del blog fijándose en el aviso al guardar — si vuelve a no reflejarse, depurar `PostForm`/`updatePost` |
+
+## 2026-08-20 — Fondo fotográfico rotativo del hero (home)
+
+Cambio: capa de fondo en `HomeHero` con 7 fotos del cliente en crossfade CSS
+puro + zoom Ken Burns sutil (`.hero-slides`/`.hero-slide` en `globals.css`,
+ciclo 42s, opacidad textura `--hero-slides-opacity` 0.15, `-z-10` bajo todo
+el contenido). Pedido de la clienta: nada de lo existente se tocó (texto,
+logo, círculo blanco, botones intactos).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio (`fetchPriority` aceptada por `next/image`) |
+| Capa montada (driver CDP, dev server) | 7 `.hero-slide`, contenedor a opacity `0.15`, animación `hero-slide-cycle / 42s` activa |
+| Home 1440×900 en t≈0 y t≈8s (screenshots) | Dos slides distintas (mesa de panadería → aplicación DAP Hojaldre): fundido operando, textura discreta, texto legible, círculo blanco y logo intactos (sin artefactos del `mix-blend-multiply` en la zona que sobresale del círculo) |
+| Home 500px (viewport móvil) | Sin scroll horizontal, layout intacto, textura presente sin competir con el texto |
+| Consola del navegador | Sin errores |
+| Reduced motion | Por construcción CSS (`.hero-slide:first-child { opacity: 1 }` bajo `prefers-reduced-motion: reduce`); no emulado en esta sesión |
+| **Pendiente manual (usuaria)** | Ver la home y calibrar la intensidad: si la textura se ve fuerte o débil, ajustar solo `--hero-slides-opacity` (rango 0.12–0.18); si el ritmo se siente rápido, subir el ciclo a 49s (delays de 7s) |

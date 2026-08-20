@@ -10,13 +10,14 @@ Eres el agente de **infraestructura y despliegue** de cmc-website (Next.js sobre
 - `wrangler.jsonc` — bindings `NEXT_INC_CACHE_R2_BUCKET`, `MEDIA_BUCKET` (R2), `NEXT_TAG_CACHE_D1` (D1), `ASSETS`; `nodejs_compat`; bloques dev y `production`
 - `open-next.config.ts` — `r2IncrementalCache` + `d1NextTagCache`, sin cola
 - `next.config.ts`
-- Docs: `docs/INFRASTRUCTURE.md` (servicios, límites free-tier, costos, backups), `docs/DEPLOYMENT.md` (runbook futuro), `docs/VERIFICATION_LOG.md` (registro de verificaciones)
-- Scripts npm: `preview` (OpenNext + workerd), `deploy`, `cf-typegen`
+- Docs: `docs/INFRASTRUCTURE.md` (servicios, límites free-tier, costos, backups), `docs/DEPLOYMENT.md` (estado actual del despliegue + runbook de migración al cliente), `docs/VERIFICATION_LOG.md` (registro de verificaciones)
+- Scripts npm: `preview` (OpenNext + workerd), `deploy` (manual, apunta a `--env production`; el flujo normal es push a `master`), `cf-typegen`
 
 ## Reglas de arquitectura (no negociables)
 
-- Los `database_id` en `0000…` y el dominio `https://REEMPLAZAR-POR-DOMINIO-DEL-CLIENTE` son **placeholders a propósito**: los recursos reales se crean en la cuenta Cloudflare del cliente al momento de desplegar. No "corregirlos" ni crear recursos en otra cuenta.
-- **El despliegue está bloqueado** hasta aprobación del cliente, pago final y coordinación con el dueño del dominio (ver `docs/DEPLOYMENT.md`). Este agente prepara y verifica; no ejecuta `npm run deploy` ni toca DNS/email.
+- **Producción está desplegada desde 2026-08-05** en `https://cmc-website-production.saraximenagilbaquero.workers.dev` (cuenta personal de la desarrolladora, temporal). `env.production` de `wrangler.jsonc` tiene los ids reales de R2/D1; el bloque top-level (dev) conserva a propósito el `database_id` placeholder `0000…`. La migración a cuentas del cliente y la conexión del dominio siguen pendientes de aprobación/pago (ver `docs/DEPLOYMENT.md`); no tocar DNS/email.
+- **El deploy es automático**: Workers Builds conectado a GitHub despliega cada push a `master` (comandos y variables de BUILD en el dashboard del Worker, no en el repo). `opennextjs-cloudflare deploy` corre `populateCache` (páginas a R2 + tabla `revalidations` en D1). `npm run deploy` manual solo para excepciones y siempre con `--env production` (sin el flag crearía un worker paralelo contra los recursos dev).
+- La revalidación bajo demanda quedó **verificada en producción el 2026-08-20**; funciona sin queue y sin binding `WORKER_SELF_REFERENCE` (solo lo exige ISR por tiempo).
 - Secretos solo vía `wrangler secret put` (producción) y `.dev.vars` (local); nunca en `wrangler.jsonc` ni en el repo.
 - Caché incremental en R2 + tag cache en D1, **sin cola**: la revalidación es solo bajo demanda desde el admin, por diseño (resiliencia ante el auto-pause de Supabase free-tier).
 - Todas las cuentas de producción (Cloudflare, Supabase) pertenecen al cliente.

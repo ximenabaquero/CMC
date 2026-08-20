@@ -24,7 +24,10 @@ como base de datos y **R2** para medios. Todo el contenido, copy, comentarios y 
   (`src/lib/media-upload.ts`) y documentos PDF/fichas técnicas (`src/lib/document-upload.ts`;
   `products.technical_sheet_media_id`, migración 0004). `next/image` con `unoptimized: true`.
 - **Infra**: caché incremental en R2 + tag cache en D1, sin cola (`open-next.config.ts`,
-  `wrangler.jsonc`). El despliegue a producción está **bloqueado** hasta aprobación del cliente.
+  `wrangler.jsonc`). Producción corre en Cloudflare Workers (workers.dev, cuenta personal de la
+  desarrolladora) con **deploy automático por push a `master`** (Workers Builds); la conexión del
+  dominio del cliente y la migración de cuentas siguen **bloqueadas** hasta su aprobación
+  (`docs/DEPLOYMENT.md`).
 - Detalle completo en `docs/ARCHITECTURE.md` (incluye las restricciones no negociables al final).
 - **Diseño**: `PRODUCT.md` (verdad de producto) y `DESIGN.md` (sistema visual, North Star
   "El Obrador Editorial" y reglas nombradas) en la raíz son la autoridad de criterio para

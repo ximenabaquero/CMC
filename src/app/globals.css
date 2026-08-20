@@ -350,9 +350,92 @@ h6 {
   }
 }
 
-/* Reveal ligado al scroll para tarjetas y bloques bajo el fold (solo home).
+/* ------------------------------------------------------------
+   Fondo fotográfico rotativo del hero (solo la home, 2026-08-20):
+   7 fotos del cliente en crossfade + zoom Ken Burns sutil, como
+   textura a baja opacidad DETRÁS de todo el contenido (capa
+   aria-hidden con -z-10 dentro de la sección `isolate`).
+   Ciclo de 42s = 7 turnos de 6s; cada foto funde en 1.5s solapada
+   con la siguiente y hace zoom 1 → 1.06 mientras está visible
+   (~7.5s en pantalla). Solo opacity/transform (compositor); sin
+   will-change: 7 capas promocionadas de forma permanente gastarían
+   memoria GPU sin beneficio. La transparencia global se ajusta en
+   un solo sitio: --hero-slides-opacity (rango revisado 0.12–0.18).
+   ------------------------------------------------------------ */
+.hero-slides {
+  --hero-slides-opacity: 0.15;
+  opacity: var(--hero-slides-opacity);
+}
+
+/* Ocultas hasta su turno: sin fill-mode, el delay deja la base. */
+.hero-slide {
+  opacity: 0;
+}
+
+@keyframes hero-slide-cycle {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  /* 1.5s: fundido de entrada, solapado con la salida de la anterior. */
+  3.57% {
+    opacity: 1;
+  }
+  /* 6s: empieza a entrar la siguiente; esta sale hasta los 7.5s. */
+  14.29% {
+    opacity: 1;
+  }
+  17.86% {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  /* Resto del ciclo invisible; el transform vuelve a 1 sin verse. */
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-slide {
+    animation: hero-slide-cycle 42s linear infinite;
+  }
+  /* Escalonado por turno de 6s. nth-child y no clases: hermanas
+     homogéneas de una capa dedicada (como la copia del marquee). */
+  .hero-slide:nth-child(2) {
+    animation-delay: 6s;
+  }
+  .hero-slide:nth-child(3) {
+    animation-delay: 12s;
+  }
+  .hero-slide:nth-child(4) {
+    animation-delay: 18s;
+  }
+  .hero-slide:nth-child(5) {
+    animation-delay: 24s;
+  }
+  .hero-slide:nth-child(6) {
+    animation-delay: 30s;
+  }
+  .hero-slide:nth-child(7) {
+    animation-delay: 36s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Suavizar, no congelar: sin rotación, la primera foto queda
+     estática a la misma opacidad (textura, no carrusel). */
+  .hero-slide:first-child {
+    opacity: 1;
+  }
+}
+
+/* Reveal ligado al scroll para tarjetas y bloques bajo el fold.
    El stagger emerge de la posición de cada elemento; sin delays artificiales.
-   Fallback: sin soporte de view(), el contenido queda visible tal cual. */
+   Fallback: sin soporte de view(), el contenido queda visible tal cual.
+   `.reveal-strong` (2026-08-19, bloques institucionales de /nosotros): misma
+   voz (subida + fundido al ritmo del scroll) pero con más recorrido (36px) y
+   un tramo de entrada más largo, para percibirse a velocidad de scroll
+   normal — el `.reveal` estándar es deliberadamente sutil. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .reveal {
@@ -360,6 +443,18 @@ h6 {
       animation-timeline: view();
       animation-range: entry 10% entry 40%;
     }
+    .reveal-strong {
+      animation: rise-in-strong linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+    }
+  }
+}
+
+@keyframes rise-in-strong {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
   }
 }
 

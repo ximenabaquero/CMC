@@ -7,6 +7,26 @@ const FALLBACK_TITLE = "Productos confiables para cada preparación";
 const FALLBACK_BODY =
   "Margarinas, mantequillas y aceites para panaderías, pastelerías e industrias que necesitan calidad, consistencia y respaldo en cada proceso.";
 
+/* Fondo rotativo del hero (pedido de la clienta, 2026-08-20): 2 escenas
+   editoriales sin uso previo + 5 fotos de aplicación de producto variadas
+   (hojaldre, repostería, aliñado, ponqué y multipropósito), todas WebP
+   1200×1200 sobre fondo blanco. Las de aplicación ya viven en las fichas
+   de producto y aquí reaparecen solo como TEXTURA a baja opacidad —
+   excepción documentada a «ninguna foto se repite» en
+   docs/FOTOS_ADICIONALES.md. La rotación es CSS pura:
+   `.hero-slides`/`.hero-slide` en globals.css. El orden alterna
+   escena ↔ aplicación; la primera es la que queda estática con
+   prefers-reduced-motion. */
+const HERO_SLIDES = [
+  "/images/photos/hero-mesa-panaderia-01.webp",
+  "/images/products/dap-hojaldre/dap-hojaldre-aplicacion-01.webp",
+  "/images/photos/composicion-surtido-amasijos-01.webp",
+  "/images/products/dap-reposteria/dap-reposteria-aplicacion-01.webp",
+  "/images/products/dap-alinado/dap-alinado-aplicacion-01.webp",
+  "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-aplicacion-01.webp",
+  "/images/products/dap-multiproposito/dap-multiproposito-aplicacion-01.webp",
+];
+
 /**
  * Hero de la home. El texto (título y párrafo) viene de `company_content`
  * (`home_hero`) y el eyebrow del slogan de `site_settings`, ambos editables
@@ -18,6 +38,11 @@ const FALLBACK_BODY =
  *
  * Nota: `mix-blend-multiply` integra el fondo blanco del GIF/PNG al crema;
  * requiere `isolate` en la sección para no mezclarse con capas externas.
+ *
+ * Fondo (2026-08-20): capa rotativa de 7 fotos del cliente a baja opacidad
+ * (`.hero-slides` en globals.css), `-z-10` bajo todo el contenido. El
+ * mix-blend-multiply de los logos multiplica por blanco (identidad) en la
+ * zona que sobresale del círculo: el fondo se ve igual a través del GIF.
  */
 export function HomeHero({
   hero,
@@ -32,6 +57,29 @@ export function HomeHero({
 
   return (
     <section className="relative isolate overflow-hidden border-b border-border bg-hero-cream">
+      {/* Fondo fotográfico rotativo (2026-08-20): textura a baja opacidad
+          DETRÁS de todo el contenido. `-z-10` dentro de la sección `isolate`
+          pinta sobre el crema y bajo el grid: círculo blanco, logos y texto
+          quedan intactos encima. Decorativo puro (aria-hidden, alt="");
+          con prefers-reduced-motion solo se ve la primera foto, estática.
+          El `overflow-hidden` de la sección acota el zoom Ken Burns. */}
+      <div
+        aria-hidden="true"
+        className="hero-slides pointer-events-none absolute inset-0 -z-10 select-none"
+      >
+        {HERO_SLIDES.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt=""
+            width={1200}
+            height={1200}
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchPriority="low"
+            className="hero-slide absolute inset-0 h-full w-full object-cover"
+          />
+        ))}
+      </div>
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 lg:min-h-[min(88vh,44rem)] lg:grid-cols-[52fr_48fr] lg:gap-14 lg:py-12">
         {/* Columna izquierda: mensaje y acciones */}
         <div>

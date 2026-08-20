@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { companyContentSchema } from "@/lib/validation";
 import {
   DB_ERROR_MESSAGE,
+  NO_ROWS_MESSAGE,
   actionError,
   actionSuccess,
   zodActionError,
@@ -58,12 +59,14 @@ export async function updateCompanySection(
     update.data = { items: parsed.data.pillars };
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("company_content")
     .update(update)
-    .eq("section_key", sectionKey);
+    .eq("section_key", sectionKey)
+    .select("id");
 
   if (error) return actionError(DB_ERROR_MESSAGE);
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.content);
   revalidatePath(`/admin/empresa/${sectionKey}`);

@@ -278,10 +278,16 @@ CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-ou
 (pulsación/hover), `--dur-base` 250ms (acordeón, drawer), `--dur-enter` 400ms (entrada del
 hero, solo la home). Piezas: entrada escalonada del hero (stagger 70ms; los candidatos LCP
 animan solo transform), reveal scroll-driven `.reveal` en tarjetas/ítems de la home
-y en figuras y bloques institucionales de /nosotros
+y figuras de /nosotros, con la variante marcada `.reveal-strong` (36px de subida, rango
+entry 0→65%) en los bloques institucionales de /nosotros — la estándar resultaba
+imperceptible ahí
 (`animation-timeline: view()`, el stagger emerge de la posición), acordeón FAQ animado vía
 `::details-content`, drawer móvil con `@starting-style`, crossfade de 200ms entre páginas
-(view transitions, header con nombre propio para percibirse estable). Todo con fallback
+(view transitions, header con nombre propio para percibirse estable), y el fondo rotativo
+del hero (`.hero-slides`/`.hero-slide`, 2026-08-20: 7 fotos del cliente en crossfade de
+42s con Ken Burns 1→1.06, capa aria-hidden a opacidad textura `--hero-slides-opacity`
+0.15 detrás de todo el contenido; con reduced-motion queda la primera foto estática).
+Todo con fallback
 íntegro sin soporte y `prefers-reduced-motion` tratado pieza a pieza (suavizar, no
 congelar el contenido). Excepción documentada a Flat-At-Rest: el drawer móvil (overlay)
 lleva `shadow-md` para separarse del contenido.
@@ -306,4 +312,6 @@ lleva `shadow-md` para separarse del contenido.
   revisión listado en docs/CONTENT_PENDING.md).
 - **Don't** introducir librerías de animación JS ni convertir componentes públicos a client
   components sin necesidad real: el motion es CSS-first (restricción SSG).
-- **Don't** poner más de un protagonista de color/imagen por viewport (The One Hero Rule).
+- **Don't** poner más de un protagonista de color/imagen por viewport (The One Hero Rule;
+  la textura fotográfica del fondo del hero, a opacidad ≤0.18, no cuenta como
+  protagonista — 2026-08-20).

@@ -42,6 +42,16 @@ publica (montaje digital o indicios de IA).
 > 5 pasaron el QA sin exclusiones (plato de secciones y bol metálico
 > íntegros).
 
+> **Actualización 2026-08-20 — fondo rotativo del hero.** El hero de la home
+> incorporó una capa de fondo con 7 fotos en crossfade a opacidad textura
+> (`--hero-slides-opacity` 0.15, ver `HomeHero.tsx` y `.hero-slides` en
+> `globals.css`): las 2 aprobadas sin uso (`hero-mesa-panaderia-01` y
+> `composicion-surtido-amasijos-01`, lienzo completo) + 5 fotos de aplicación
+> de producto (hojaldre, repostería, aliñado, ponqué y multipropósito).
+> **Excepción documentada a «Ninguna foto se repite»:** las 5 de aplicación
+> ya viven en las fichas de producto y aquí reaparecen únicamente como
+> textura decorativa semi-transparente, no como contenido editorial.
+
 > ⚠️ **Alerta — posibles imágenes generadas con IA.** Los 6 JPEG de
 > bodega/transporte presentan texto ilegible o corrupto en las cajas
 > («HOJALORE», «Margarina Dep Nagalos», una caja que solo dice «AP») y un
@@ -91,12 +101,12 @@ publica (montaje digital o indicios de IA).
 | 20.png | Cuatro roscas amarillas (¿pandebono/rosquilla?) | PENDIENTE | amasijo-rosca-01 | Cuatro roscas de amasijo doradas sobre fondo blanco | galería producto | PENDIENTE |
 | 21.png | Cuatro buñuelos colombianos apilados (inequívocos) | AMASIJO | amasijo-bunuelo-01 | Buñuelos colombianos apilados | home «¿Quiénes somos?», recorte con alfa; candidata cover blog amasijos | APROBADA (2026-08-19) |
 | 22.png | Dos piezas en herradura (¿pandeyuca?) | PENDIENTE | amasijo-herradura-01 | Dos amasijos en forma de herradura sobre fondo blanco | galería producto | PENDIENTE |
-| 23.png | Plato de secciones con surtido de panes y amasijos | COMPOSICION | composicion-surtido-amasijos-01 | Surtido de panes y amasijos colombianos en plato de secciones | recorte con alfa disponible, sin uso actual | APROBADA (2026-08-19) |
+| 23.png | Plato de secciones con surtido de panes y amasijos | COMPOSICION | composicion-surtido-amasijos-01 | Surtido de panes y amasijos colombianos en plato de secciones | textura del fondo rotativo del hero (lienzo completo, 2026-08-20); recorte con alfa disponible sin uso | APROBADA (2026-08-19) |
 | 24.png | Torta marmolada tipo bundt, cupcakes y postre con fruta | PASTELERIA | pasteleria-surtido-tortas-cupcakes-01 | Surtido de pastelería: torta marmolada, cupcakes y postre con frutas | galería producto / blog | PENDIENTE |
 | 25.png | Rejilla dorada con surtido de galletería y pastelería | PASTELERIA | pasteleria-galleteria-rejilla-01 | Surtido de galletas y pastelería sobre rejilla dorada | galería producto / blog / decoración | PENDIENTE |
 | 26.png | Torta marmolada con almendras laminadas e hilos de chocolate | PASTELERIA | pasteleria-torta-marmolada-01 | Torta marmolada con almendras laminadas e hilos de chocolate | galería producto / blog | PENDIENTE |
 | 27.png | Bandeja redonda de secciones con galletería surtida | PASTELERIA | pasteleria-galleteria-bandeja-01 | Bandeja con surtido de galletería y bocados de chocolate | galería producto / blog | PENDIENTE |
-| panes 1.png | Mesa de panadería sobre madera con ventana luminosa; ~50 % de aire claro arriba | HERO | hero-mesa-panaderia-01 | Mesa de panadería con surtido de panes, hojaldres y amasijos frente a una ventana luminosa | disponible sin uso actual (el banner de /nosotros pasó a la ilustración dibujada a mano `decorative/quienes-somos-panes.webp`, 2026-08-19) | APROBADA (2026-08-19) |
+| panes 1.png | Mesa de panadería sobre madera con ventana luminosa; ~50 % de aire claro arriba | HERO | hero-mesa-panaderia-01 | Mesa de panadería con surtido de panes, hojaldres y amasijos frente a una ventana luminosa | textura del fondo rotativo del hero — primera slide, la estática bajo reduced-motion (2026-08-20; el banner de /nosotros pasó a la ilustración dibujada a mano `decorative/quienes-somos-panes.webp`, 2026-08-19) | APROBADA (2026-08-19) |
 | Panes 2.png | Misma serie; ~60 % superior de aire claro, ideal para superponer texto | HERO | hero-mesa-panaderia-02 | Mesa de panadería con panes, pastelería y amasijos sobre fondo claro | hero / nosotros | PENDIENTE |
 | 6ccfc9c4-…c3.jpeg | Pasillo de bodega con estibas de cajas DAP y montacargas | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
 | 6ccfc9c4-…c3 (1).jpeg | **Duplicado exacto (visual) del anterior** | BODEGA | — | — | no publicar | DESCARTADA (duplicado + indicios de IA) |

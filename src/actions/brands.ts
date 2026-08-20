@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { brandSchema } from "@/lib/validation";
 import {
   DB_ERROR_MESSAGE,
+  NO_ROWS_MESSAGE,
   actionError,
   actionSuccess,
   zodActionError,
@@ -83,11 +84,13 @@ export async function updateBrand(
     }
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("brands")
     .update({ ...parsed.data, updated_by: userId })
-    .eq("id", brandId);
+    .eq("id", brandId)
+    .select("id");
   if (error) return actionError(DB_ERROR_MESSAGE);
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   revalidatePublicContent(CACHE_TAGS.brands);
   revalidatePath(`/admin/marcas/${brandId}`);
@@ -144,13 +147,14 @@ export async function uploadBrandLogo(
     return actionError(result.error ?? "No se pudo subir el logo.");
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("brands")
     .update({ logo_media_id: result.mediaId, updated_by: userId })
-    .eq("id", brandId);
-  if (error) {
+    .eq("id", brandId)
+    .select("id");
+  if (error || !updated?.length) {
     await deleteManagedAsset(supabase, result.mediaId);
-    return actionError(DB_ERROR_MESSAGE);
+    return actionError(error ? DB_ERROR_MESSAGE : NO_ROWS_MESSAGE);
   }
 
   await cleanupOrphanLogo(supabase, brand.logo_media_id);
@@ -179,11 +183,13 @@ export async function removeBrandLogo(
     .maybeSingle();
   if (!brand?.logo_media_id) return actionSuccess(null);
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("brands")
     .update({ logo_media_id: null, status: "DRAFT", updated_by: userId })
-    .eq("id", brandId);
+    .eq("id", brandId)
+    .select("id");
   if (error) return actionError("No se pudo quitar el logo.");
+  if (!updated?.length) return actionError(NO_ROWS_MESSAGE);
 
   await cleanupOrphanLogo(supabase, brand.logo_media_id);
 

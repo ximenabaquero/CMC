@@ -74,7 +74,7 @@ El script valida la carpeta, lista lo que importará, no sobrescribe sin
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript sin emitir |
 | `npm run preview` | Build de OpenNext + preview en el runtime real de Workers |
-| `npm run deploy` | Despliegue a Cloudflare (NO usar hasta aprobar la publicación) |
+| `npm run deploy` | Despliegue manual a producción (`--env production`); solo excepciones — el flujo normal es push a `master` (Workers Builds) |
 | `npm run cf-typegen` | Regenera los tipos de los bindings de Cloudflare |
 | `npm run import-assets` | Importa los activos oficiales del cliente |
 
