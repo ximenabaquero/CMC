@@ -68,7 +68,12 @@ export default async function HomePage() {
       {/* Presentación editorial: ¿quiénes somos? */}
       {intro ? (
         <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="quienes-somos">
-          <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:gap-14">
+          {/* `lg:items-center`: el texto se centra verticalmente contra la
+              columna de la foto (pedido de la clienta, 2026-08-20) — al ser
+              la columna alta, la lectura queda a media altura de la bodega en
+              vez de colgar del borde superior. En móvil (una columna) no
+              aplica. */}
+          <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-center lg:gap-14">
             <div>
               <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
                 Nuestra empresa

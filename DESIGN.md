@@ -213,7 +213,15 @@ por `scripts/recortar-fotos-editoriales.mjs`) que **flotan directamente** sobre 
 hueso o petróleo — sin tarjeta, sin borde, sin sombra (Flat-At-Rest) — y, cuando van en
 serie, apoyados en una línea de base común (`object-bottom`). El lienzo blanco +
 `object-contain` queda reservado a los packshots de producto (empaques); las escenas
-reales no se recortan y conservan su marco cuando se publiquen.
+reales no se recortan y conservan su marco.
+
+**Escena real enmarcada (2026-08-20).** Primera aplicación de esa regla: la bodega con
+estibas de DAP (`bodega-dap-01.webp`) en «¿Quiénes somos?» de la home, elegida por la
+clienta en reemplazo del recorte de buñuelos. Receta del marco: `figure` con
+`overflow-hidden rounded-lg` (esquina lg del sistema de tarjetas) + `border border-border`
+(1px arena) y **sin sombra** (Flat-At-Rest); la foto ocupa el ancho completo de su columna
+(`w-full`), sin `object-cover` ni altura fija — la proporción nativa manda. El texto de la
+sección se centra verticalmente contra esa columna (`lg:items-center` en el grid).
 
 ## Components
 

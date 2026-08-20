@@ -60,6 +60,20 @@ publica (montaje digital o indicios de IA).
 > reales de planta/bodega** salvo que la clienta confirme su origen o
 > apruebe usarlas explícitamente como ilustración.
 
+> **Actualización 2026-08-20 — una foto de bodega entra a la home.** La
+> clienta eligió explícitamente `98f713d0-…d9.jpeg` (pasillo alto de bodega
+> con cajas DAP) para «¿Quiénes somos?» de la home, en reemplazo del recorte
+> de buñuelos, y la entregó ella misma copiada en
+> `public/images/photos/quienessomosprincipal.jpeg` (byte-idéntica al
+> original descartado). Se publica como `bodega-dap-01.webp` (1200×845,
+> derivado con la misma receta del importador: máx. 1200 px, WebP q82) — se
+> activa así la salvedad de la alerta anterior: **aprobación explícita de la
+> clienta**. Las otras 5 de bodega/transporte siguen descartadas. Queda
+> pendiente que la clienta confirme el origen de la foto; si resulta
+> generada con IA, revisar contra `PRODUCT.md` («no fabricar evidencia»),
+> porque aquí sí opera como escena real de la operación. El recorte de
+> buñuelos (`amasijo-bunuelo-01-recorte.webp`) queda disponible sin uso.
+
 ## Características generales
 
 - `2.png` … `27.png`, `panes 1.png`, `Panes 2.png`: PNG cuadrados
@@ -99,7 +113,7 @@ publica (montaje digital o indicios de IA).
 | 18.png | Pan de molde integral con ajonjolí y linaza | PAN | pan-molde-integral-01 | Pan de molde integral con semillas de ajonjolí sobre fondo blanco | galería producto / blog | PENDIENTE |
 | 19.png | Barra con cortes diagonales y espolvoreo de harina | PENDIENTE | pan-barra-cortes-01 | Barra de pan dorada con cortes diagonales y harina sobre fondo blanco | galería producto | PENDIENTE |
 | 20.png | Cuatro roscas amarillas (¿pandebono/rosquilla?) | PENDIENTE | amasijo-rosca-01 | Cuatro roscas de amasijo doradas sobre fondo blanco | galería producto | PENDIENTE |
-| 21.png | Cuatro buñuelos colombianos apilados (inequívocos) | AMASIJO | amasijo-bunuelo-01 | Buñuelos colombianos apilados | home «¿Quiénes somos?», recorte con alfa; candidata cover blog amasijos | APROBADA (2026-08-19) |
+| 21.png | Cuatro buñuelos colombianos apilados (inequívocos) | AMASIJO | amasijo-bunuelo-01 | Buñuelos colombianos apilados | recorte con alfa **disponible sin uso** desde el 2026-08-20 (salió de la home «¿Quiénes somos?», reemplazado por la bodega); candidata cover blog amasijos | APROBADA (2026-08-19) |
 | 22.png | Dos piezas en herradura (¿pandeyuca?) | PENDIENTE | amasijo-herradura-01 | Dos amasijos en forma de herradura sobre fondo blanco | galería producto | PENDIENTE |
 | 23.png | Plato de secciones con surtido de panes y amasijos | COMPOSICION | composicion-surtido-amasijos-01 | Surtido de panes y amasijos colombianos en plato de secciones | textura del fondo rotativo del hero (lienzo completo, 2026-08-20); recorte con alfa disponible sin uso | APROBADA (2026-08-19) |
 | 24.png | Torta marmolada tipo bundt, cupcakes y postre con fruta | PASTELERIA | pasteleria-surtido-tortas-cupcakes-01 | Surtido de pastelería: torta marmolada, cupcakes y postre con frutas | galería producto / blog | PENDIENTE |
@@ -112,7 +126,7 @@ publica (montaje digital o indicios de IA).
 | 6ccfc9c4-…c3 (1).jpeg | **Duplicado exacto (visual) del anterior** | BODEGA | — | — | no publicar | DESCARTADA (duplicado + indicios de IA) |
 | 705b4e2f-…06.jpeg | Cargue de cajas DAP en furgón refrigerado, operario al fondo | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
 | 85d8df74-…51.jpeg | Furgón lleno de cajas DAP Alta Repostería Ponqué | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
-| 98f713d0-…d9.jpeg | Pasillo alto de bodega con cajas DAP y operario | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
+| 98f713d0-…d9.jpeg | Pasillo alto de bodega con cajas DAP y operario | BODEGA | bodega-dap-01 | Bodega de la compañía con estibas de cajas de margarina DAP apiladas hasta el techo | home «¿Quiénes somos?», escena real con marco (no se recorta) | **PUBLICADA (2026-08-20, elección explícita de la clienta)** — revierte el descarte del 2026-08-19; origen sin confirmar |
 | cf095cbb-…bc.jpeg | Contenedor con estibas de cajas DAP Repostería en muelle | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
 
 ## Propuesta de covers para el blog (2026-08-19, sin aplicar)

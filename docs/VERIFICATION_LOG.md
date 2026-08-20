@@ -454,3 +454,23 @@ destacados en una fila (`products.slice(0, 2)`) + «Ver catálogo».
 | Overflow horizontal | `scrollWidth ≤ innerWidth` en home, /nosotros y /contacto a 1440 (el `overflow-x-clip` de cada host recorta lo que el clamp empuja fuera) |
 | Consola | Sin errores en ninguna página |
 | **Pendiente manual (usuaria)** | Revisión de capturas antes del commit |
+
+## 2026-08-20 — Datos de contacto oficiales, mapa y público objetivo
+
+Cambios: (1) los datos de contacto entregados por la clienta se cargan en
+`site_settings` (script `supabase/scripts/2026-08-20-datos-contacto.sql` +
+`seed.sql`); (2) `ContactMap` embebe Google Maps derivando la consulta de la
+dirección del CMS, sin API key ni campo nuevo; (3) `AudienceSectors` cierra
+`/contacto` con los 12 sectores atendidos.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Geocodificación de la dirección (iframe aislado, CDP) | Con la dirección COMPLETA el pin caía sobre el edificio correcto pero rotulado **«Office To Go S.A.S»** (empresa vecina de la misma torre). Quitando los segmentos de detalle interior (`Torre Ofiespacios`, `Of. 325-326`) resuelve a **«Centro Comercial Metrópolis +, Av. 68 #75a – 50»** — de ahí la regla `INTERIOR_SEGMENT` de `buildMapQuery` |
+| `ContactMap` dentro del layout real (ruta temporal, ya borrada) | Mapa cargado con el pin en el C.C. Metrópolis; `src` del iframe y `href` de «Cómo llegar» apuntan a la misma consulta recortada; el `figcaption` sí muestra la dirección **completa** (con torre y oficinas) |
+| `/contacto` 1440×900 | Sección de sectores en 3 columnas × 4 filas, divisores y punto ámbar alineado a la primera línea (verificado en el ítem de dos líneas, «Distribuidores de insumos…»); 2 ornamentos solo en la zona de canales, sin invadir la banda crema |
+| `/contacto` 390×844 (móvil) | Una columna, jerarquía intacta, sin scroll horizontal |
+| Overflow horizontal | `scrollWidth ≤ innerWidth` a 1440 y a 390 |
+| Consola del navegador | Sin errores |
+| **Bloqueado hasta ejecutar el SQL** | Teléfono, WhatsApp, dirección y **el mapa dentro de `/contacto`** no se renderizan todavía: `site_settings` sigue en NULL en la BD de desarrollo (el `.env.local` no tiene `SUPABASE_SERVICE_ROLE_KEY`, así que no se pudo cargar desde aquí). La página muestra «Canales de contacto en preparación». Ejecutar el script en el SQL Editor de dev y de producción, y guardar en `/admin/contacto` para revalidar |
+| **Pendiente manual (usuaria)** | Tras cargar los datos: comprobar que el botón de WhatsApp abre `wa.me/573103963790` y el de llamada `tel:+573112555296` |
