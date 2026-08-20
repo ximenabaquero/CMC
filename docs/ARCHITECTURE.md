@@ -228,6 +228,20 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   viewports angostos sin tocar el texto. La carpeta `decorative/` guarda
   también la ilustración de panes del h1 de /nosotros
   (`quienes-somos-panes.webp`), fuera del manifest como los ornamentos.
+- **Mapa y sectores de `/contacto`** (`ContactMap`, `AudienceSectors`,
+  2026-08-20): la página incorpora el **único recurso de terceros del sitio**,
+  un `<iframe>` de Google Maps (`https://www.google.com/maps?q=…&output=embed`)
+  con `loading="lazy"` y `referrerPolicy="no-referrer-when-downgrade"`. No usa
+  API key ni campo nuevo en la BD: la consulta se **deriva** de
+  `site_settings.address` + `.city`, de modo que la dirección sigue teniendo
+  una sola fuente de verdad editable desde el admin. `buildMapQuery` descarta
+  antes los segmentos de detalle interior (`Of.`, `Torre`, `Piso`, `Local`…)
+  porque Google no los geocodifica y termina rotulando el pin con la ficha de
+  una empresa vecina; la dirección completa se muestra igual como texto. No
+  hay CSP que ajustar (`middleware.ts` solo cubre `/admin/:path*` y
+  `next.config.ts` no define `headers()`). `AudienceSectors` cierra la página
+  con los 12 sectores atendidos; su copy es **fijo en el componente**, sin
+  sección de `company_content` todavía (ver `docs/CONTENT_PENDING.md`).
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue

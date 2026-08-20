@@ -276,6 +276,26 @@ logos en escala de grises que recuperan color al hover; degradado lateral de má
 `prefers-reduced-motion` se convierte en scroll horizontal manual y la copia decorativa
 se oculta.
 
+### Lienzo de mapa y lista de sectores de `/contacto` (2026-08-20)
+Dos piezas que estrenó la página de contacto al llegar los datos oficiales de la clienta.
+
+**`ContactMap`** — el mapa embebido es el único recurso de terceros del sitio, y se trata
+como un lienzo más: `rounded-lg`, borde arena, **sin sombra en reposo** (Flat-At-Rest) y
+un `figcaption` sobre `surface-muted` con la dirección completa y el enlace «Cómo llegar».
+El iframe mide 320px (380 desde `sm`) y va `loading="lazy"`. La consulta se deriva de la
+dirección del CMS descartando el detalle interior del edificio (`Of.`, `Torre`, `Piso`…):
+Google no lo geocodifica y termina rotulando el pin con la ficha de una empresa vecina.
+
+**`AudienceSectors`** — banda de cierre `bg-cream` con los 12 sectores atendidos. Aplica la
+Eyebrow Rule («A quién servimos» → «Para quién producimos») y hereda la lista editorial de
+divisores de `HomePillars`, pero **sin numeración**: los `01…` de los pilares comunican
+orden, y aquí no hay jerarquía entre sectores. El marcador es un punto ámbar de 6px —
+forma decorativa, no texto, así que no viola la Amber Guardrail — alineado a la primera
+línea para que los ítems de dos líneas no descoloquen la columna. Tres columnas en `lg`,
+dos en `sm`, `reveal` por ítem. Vive fuera del wrapper de ornamentos, como sección
+hermana full-bleed, para no romper la alternancia de fondos ni dejar que el dibujo
+botánico invada la lista.
+
 ### Motion (vocabulario del sitio)
 CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-out`
 (cubic-bezier(0.23, 1, 0.32, 1)), `--ease-drawer` (0.32, 0.72, 0, 1), `--dur-fast` 150ms

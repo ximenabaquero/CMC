@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/content";
 import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
-import { ContactMap } from "@/components/public/ContactMap";
+import { ContactMap, mapsSearchHref } from "@/components/public/ContactMap";
 import { AudienceSectors } from "@/components/public/AudienceSectors";
 import { DataUnavailable } from "@/components/public/shared";
 import type { SiteSettings } from "@/lib/supabase/types";
@@ -27,9 +27,9 @@ export default async function ContactPage() {
     : null;
   const phoneHref = settings?.phone ? `tel:${settings.phone.replace(/[^+\d]/g, "")}` : null;
 
-  // La dirección enlaza a Google Maps (búsqueda por texto, sin API key) y el
-  // mapa embebido de abajo se deriva de la misma cadena.
-  const addressQuery = settings?.address
+  // La dirección enlaza a Google Maps con la misma consulta que alimenta el
+  // mapa embebido de abajo (ver ContactMap).
+  const fullAddress = settings?.address
     ? [settings.address, settings.city].filter(Boolean).join(", ")
     : null;
 
@@ -39,11 +39,11 @@ export default async function ContactPage() {
     settings?.email
       ? { label: "Correo electrónico", value: settings.email, href: `mailto:${settings.email}` }
       : null,
-    addressQuery
+    settings?.address && fullAddress
       ? {
           label: "Dirección",
-          value: addressQuery,
-          href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}`,
+          value: fullAddress,
+          href: mapsSearchHref(settings.address, settings.city),
           external: true,
         }
       : null,

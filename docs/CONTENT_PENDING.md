@@ -5,7 +5,7 @@ través de Ana y (b) las afirmaciones que quedaron **en revisión** y no se
 publican hasta ser verificadas.
 
 Responsable de recopilar y aprobar el contenido: **Ana** (según acuerdo de la
-reunión 1, punto 2). Última actualización: 2026-08-17.
+reunión 1, punto 2). Última actualización: 2026-08-20.
 
 ## 1. Afirmaciones en revisión (NO publicadas)
 
@@ -14,7 +14,7 @@ reunión 1, punto 2). Última actualización: 2026-08-17.
 | Certificación ISO 22000 («Contamos con la certificación internacional ISO 22000…») | Sección `iso_certification` en el CMS (borrador) | Evidencia del certificado: número, entidad certificadora y alcance |
 | «La margarina y la mantequilla son productos lácteos» | FAQ n.º 2 (borrador) | Validar/reformular la redacción: la margarina es de origen vegetal; clasificarla como producto lácteo es cuestionable |
 | «Según la OMS, el consumo de 250 g de pan al día es beneficioso» | Artículo «Los beneficios de comer pan» (borrador, nota interna) | Fuente verificable de la OMS o reformulación sin la atribución |
-| Datos de contacto que aparecen en el pie de las fichas técnicas (NIT 901.320.225-1; Av. 68 # 75a-50, Torre Ofiespacios, Of. 325-326, C.C. Metrópolis, Bogotá D.C.; tel. 301 466 2902 / 323 439 6358) | Solo en este documento — NO cargados al CMS | Confirmación de Ana de que son los canales oficiales y vigentes para el sitio web |
+| NIT 901.320.225-1 (pie de las fichas técnicas) | Solo en este documento — NO cargado al CMS | Confirmar si debe publicarse en el sitio (hoy no aparece en ninguna página) |
 
 > Los cuatro artículos del blog nacieron en estado **borrador**. Nota
 > (2026-08-17): se detectó que los 12 productos figuran **PUBLICADOS** en la
@@ -90,8 +90,17 @@ reunión 1, punto 2). Última actualización: 2026-08-17.
       que parece de otro producto (masas hojaldradas); confirmar.
 - [ ] **Categorías de productos**: se propusieron «Margarinas industriales»,
       «Preparados grasos» y «Aceites» a partir de las fichas; confirmar.
-- [ ] **Información de contacto oficial**: teléfono(s), WhatsApp, correo,
-      dirección y ciudad (ver candidatos en la sección 1).
+- [x] **Información de contacto oficial** — recibida el 2026-08-20:
+      llamadas +57 311 255 5296, WhatsApp +57 310 396 3790, Av. Carrera 68
+      # 75A-50, C.C. Metrópolis, Torre Ofiespacios, Of. 325-326, Bogotá D.C.
+      **Reemplaza** a los candidatos del pie de las fichas técnicas (los
+      teléfonos 301 466 2902 / 323 439 6358 quedan obsoletos). Cargados en
+      `supabase/seed.sql` y en el script
+      `supabase/scripts/2026-08-20-datos-contacto.sql`, que debe ejecutarse
+      en el SQL Editor de **desarrollo y producción** (y después guardar en
+      `/admin/contacto` para revalidar la caché).
+- [ ] **Correo electrónico oficial**: sigue sin confirmar, queda en NULL y el
+      sitio oculta el canal.
 - [ ] **Horarios de atención.**
 - [ ] **Redes sociales oficiales** (URLs).
 - [ ] **Logos de las marcas cliente**: la carpeta «Logos de marcas que son
@@ -107,6 +116,19 @@ reunión 1, punto 2). Última actualización: 2026-08-17.
       pagada; ver docs/DEPLOYMENT.md).
 - [ ] **Definición del correo receptor** si en el futuro se desea un
       formulario de contacto (fuera del alcance actual).
+
+## 2b. Copy publicado que aún no es editable desde el CMS
+
+- **Público objetivo de `/contacto`** (recibido el 2026-08-20): los 12
+  sectores viven como constante `AUDIENCE_SECTORS` en
+  `src/components/public/AudienceSectors.tsx`, no en `company_content`. Si la
+  clienta va a editarlos con frecuencia, hay que crear una sección nueva
+  (clave `target_audience`) con el mismo patrón `data.items` de `pillars`;
+  mientras tanto, cualquier cambio pasa por código. Dos observaciones
+  editoriales pendientes de su decisión: «Industrias panificadoras»,
+  «Empresas panificadoras» y «Cadenas de panificación» se solapan entre sí, y
+  «Tiendas hard discount» es un anglicismo que podría redactarse en español.
+  La lista se publicó verbatim (solo con tildes corregidas).
 
 ## 3. Decisiones pendientes de aprobación
 
