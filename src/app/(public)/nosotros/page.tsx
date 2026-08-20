@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { extractPillars, getPublishedSections } from "@/lib/content";
+import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { DataUnavailable } from "@/components/public/shared";
 import { HomePillars } from "@/components/public/HomePillars";
 
@@ -36,7 +37,14 @@ export default async function AboutPage() {
 
   return (
     <>
-      <div className="mx-auto max-w-6xl px-4 py-14">
+      {/* Zona alta (título + ilustración) con los ornamentos de obrador
+          anclados a ella — decoración por sección, no fija al viewport
+          (pedido de la clienta, 2026-08-20). El wrapper full-bleed es
+          relative + overflow-x-clip, requisito del ornamento absoluto. */}
+      <div className="relative overflow-x-clip">
+        <BakerySideOrnament />
+        <BakerySideOrnament side="derecho" />
+        <div className="mx-auto max-w-6xl px-4 pt-14">
         <header className="max-w-3xl">
           <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-orange">Nosotros</p>
           <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">
@@ -72,7 +80,10 @@ export default async function AboutPage() {
             className="w-full"
           />
         </figure>
+        </div>
+      </div>
 
+      <div className="mx-auto max-w-6xl px-4 pb-14">
         {/* Bloques institucionales en lenguaje editorial: divisores y
             jerarquía tipográfica, sin tarjetas idénticas. `reveal-strong` por
             bloque (2026-08-19, pedido de la clienta): entrada escalonada al

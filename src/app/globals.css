@@ -235,7 +235,14 @@ h6 {
 
 /* ------------------------------------------------------------
    Ornamento lateral de obrador (BakerySideOrnament): dibujo a mano
-   fijo en los márgenes, centrado en el viewport, solo ≥ lg.
+   ABSOLUTO dentro de una sección anfitriona, centrado en ella,
+   solo ≥ lg. Desde el 2026-08-20 (pedido de la clienta) ya no es
+   fixed al viewport: se monta solo en tres anclas — pilares de la
+   home, zona alta de /nosotros y contacto — y scrollea con su
+   sección. Requisitos del host: full-bleed (ancho del viewport,
+   el clamp usa 100vw), `relative` y `overflow-x-clip` (al no ser
+   fixed, el recorte es lo que evita el scroll horizontal cuando
+   el clamp empuja el dibujo fuera del lienzo).
    La tinta del PNG ocupa la franja del lienzo pegada a su margen
    (el trazo llega al 31.7% del ancho; ancho = alto / 2, así que en
    píxeles es alto × 0.158 — la variante derecha es el mismo dibujo
@@ -243,9 +250,9 @@ h6 {
    la constante). `left`/`right` se calculan para que las curvas
    apenas rocen la columna de contenido (--container-max) y, en
    viewports angostos (1024–1400px), el dibujo se deslice fuera del
-   lienzo en vez de invadir el texto: siempre queda al menos una
-   punta de curva visible (mínimo del clamp). Al ser fixed nunca
-   genera scroll horizontal ni afecta el layout.
+   lienzo en vez de invadir el texto. La altura es relativa al host
+   (min(86%, 900px)): en secciones bajas el dibujo se encoge y
+   nunca desborda en vertical.
    ------------------------------------------------------------ */
 .bakery-side-ornament {
   display: none;
@@ -253,19 +260,18 @@ h6 {
 
 @media (min-width: 64rem) {
   .bakery-side-ornament {
-    --ornament-h: clamp(700px, 95vh, 1100px);
+    --ornament-h: min(86%, 900px);
     display: block;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: clamp(
       calc(32px - var(--ornament-h) * 0.158),
       calc((100vw - var(--container-max)) / 2 + 56px - var(--ornament-h) * 0.158),
       0px
     );
-    /* Sobre los fondos de sección (algunos son positioned, p. ej. el
-       hero `relative isolate`); muy por debajo del header (z-40),
-       drawer y overlays. La legibilidad la garantiza la geometría de
-       `left`, no esta capa. */
+    /* Sobre el fondo de la sección anfitriona; muy por debajo del
+       header (z-40), drawer y overlays. La legibilidad la garantiza
+       la geometría de `left`, no esta capa. */
     z-index: 1;
     height: var(--ornament-h);
     width: auto;

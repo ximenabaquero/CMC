@@ -132,8 +132,9 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      {/* Pilares en presentación editorial */}
-      <HomePillars section={pillarsSection} pillars={pillars} />
+      {/* Pilares en presentación editorial, con los ornamentos de obrador
+          anclados a la sección (única ancla de la home, 2026-08-20). */}
+      <HomePillars section={pillarsSection} pillars={pillars} withOrnaments />
 
       {/* Vista previa del catálogo */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
@@ -173,8 +174,10 @@ export default async function HomePage() {
           <CatalogInPreparation />
         ) : (
           <>
+            {/* Solo 2 destacados en una fila (pedido de la clienta,
+                2026-08-20); el catálogo completo vive en /productos. */}
             <ul className="grid gap-6 sm:grid-cols-2">
-              {products.slice(0, 4).map((product) => (
+              {products.slice(0, 2).map((product) => (
                 <li key={product.id} className="reveal">
                   <HomeProductCard product={product} />
                 </li>

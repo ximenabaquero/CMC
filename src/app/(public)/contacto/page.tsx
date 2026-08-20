@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/content";
+import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { DataUnavailable } from "@/components/public/shared";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -48,7 +49,13 @@ export default async function ContactPage() {
   ].filter((s): s is { label: string; href: string } => Boolean(s));
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-14">
+    // Ornamentos de obrador anclados a la página (decoración por sección,
+    // pedido de la clienta 2026-08-20): wrapper full-bleed relative +
+    // overflow-x-clip, requisito del ornamento absoluto.
+    <div className="relative overflow-x-clip">
+      <BakerySideOrnament />
+      <BakerySideOrnament side="derecho" />
+      <div className="mx-auto max-w-3xl px-4 py-14">
       <header className="mb-10">
         <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-orange">Contacto</p>
         <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">Hablemos</h1>
@@ -136,6 +143,7 @@ export default async function ContactPage() {
           ) : null}
         </>
       )}
+      </div>
     </div>
   );
 }

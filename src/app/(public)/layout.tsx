@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteSettings } from "@/lib/content";
 import { DesktopNav, MobileNav } from "@/components/public/MobileNav";
-import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { NAV_ITEMS } from "@/lib/nav";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -47,11 +46,9 @@ export default async function PublicLayout({ children }: { children: React.React
         Saltar al contenido
       </a>
 
-      {/* Ornamentos de obrador dibujados a mano, fijos en ambos márgenes
-          (solo desktop). Decorativos puros: no afectan layout ni interacción. */}
-      <BakerySideOrnament />
-      <BakerySideOrnament side="derecho" />
-
+      {/* Los ornamentos de obrador ya no viven aquí: desde el 2026-08-20 son
+          decoración por sección (pilares de la home, zona alta de /nosotros y
+          contacto) — ver BakerySideOrnament. */}
       <header className="sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>

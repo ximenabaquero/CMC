@@ -1,3 +1,4 @@
+import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { SectionHeading } from "@/components/public/shared";
 import type { CompanyContent, PillarItem } from "@/lib/supabase/types";
 
@@ -5,20 +6,36 @@ import type { CompanyContent, PillarItem } from "@/lib/supabase/types";
  * Pilares de la empresa con presentación editorial: numeración, líneas
  * divisorias y jerarquía tipográfica en lugar de tarjetas idénticas.
  * Los textos vienen íntegros del CMS (`company_content.pillars`).
+ * `withOrnaments` (solo la home, 2026-08-20): monta los ornamentos de
+ * obrador anclados a esta sección — /nosotros reutiliza el componente y
+ * no los lleva porque los tiene en su zona alta.
  */
 export function HomePillars({
   section,
   pillars,
+  withOrnaments = false,
 }: {
   section?: CompanyContent;
   pillars: PillarItem[];
+  withOrnaments?: boolean;
 }) {
   if (pillars.length === 0) return null;
 
   const isOdd = pillars.length % 2 === 1;
 
   return (
-    <section className="border-y border-border bg-cream" aria-labelledby="pilares">
+    <section
+      className={`border-y border-border bg-cream ${
+        withOrnaments ? "relative overflow-x-clip" : ""
+      }`}
+      aria-labelledby="pilares"
+    >
+      {withOrnaments ? (
+        <>
+          <BakerySideOrnament />
+          <BakerySideOrnament side="derecho" />
+        </>
+      ) : null}
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <SectionHeading
           id="pilares"
