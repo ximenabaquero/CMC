@@ -95,7 +95,8 @@ en mayúsculas, titulares Fraunces con mucho aire, y el producto real (la caja D
 La densidad es baja y el ritmo pausado: secciones generosas (`py-16/20`) que alternan
 fondos blanco → crema → crema profunda → petróleo. El color estructura la página; la
 decoración se limita a círculos ámbar recortados, GIFs de marca usados con moderación y
-los ornamentos botánicos dibujados a mano de los márgenes laterales (desktop, 2026-08-19).
+los ornamentos botánicos dibujados a mano que enmarcan secciones puntuales (desktop,
+2026-08-20).
 
 **Key Characteristics:**
 - Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo).
@@ -195,13 +196,15 @@ clienta — y círculo ámbar del CTA, recortados por `overflow-hidden`).
 Las imágenes de producto van sobre lienzo blanco uniforme con `object-contain` y una
 rotación sutil (-2°) con `mix-blend-multiply` en composiciones hero.
 
-**Ornamento de obrador (2026-08-19).** Un dibujo botánico a mano (vid, espigas, gotas de
-aceite — `BakerySideOrnament`) vive fijo en **ambos márgenes** en desktop (el derecho es el
-mismo dibujo en espejo, añadido el 2026-08-19 por pedido de la clienta), centrado en el
-viewport, a opacidad 0.7. Es tinta sobre el margen, nunca protagonista: sin fondo, sombra,
-filtro ni animación; solo los dos laterales, sin repetirse como patrón. Su geometría
-(`.bakery-side-ornament` y la variante `--derecha` en globals.css) mantiene el trazo en el
-margen y lo desliza fuera del lienzo en viewports angostos para no invadir jamás la
+**Ornamento de obrador (2026-08-19; por sección desde 2026-08-20).** Un dibujo botánico a
+mano (vid, espigas, gotas de aceite — `BakerySideOrnament`) en ambos márgenes (el derecho
+es el mismo dibujo en espejo), a opacidad 0.7. Desde el 2026-08-20, por pedido de la
+clienta, **no acompaña el scroll**: es decoración estática anclada a **tres secciones** —
+pilares de la home, zona alta de /nosotros y contacto — y scrollea con ellas; el resto del
+sitio va limpio. Es tinta sobre el margen, nunca protagonista: sin fondo, sombra, filtro
+ni animación; sin repetirse como patrón. Su geometría (`.bakery-side-ornament` y la
+variante `--derecha` en globals.css) escala con la sección anfitriona (`min(86%, 900px)`)
+y desliza el trazo fuera del lienzo en viewports angostos para no invadir jamás la
 columna de lectura.
 
 **Recorte editorial flotante (2026-08-19).** Las fotos editoriales aprobadas de packshot
@@ -236,7 +239,8 @@ reales no se recortan y conservan su marco cuando se publiquen.
 - **Border:** 1px arena.
 - **Internal Padding:** p-5 a p-6.
 - **Producto (home):** lienzo blanco de altura fija (h-72 → h-[360px]) con `object-contain`;
-  el empaque nunca se recorta.
+  el empaque nunca se recorta. Solo **2 destacados en una fila** + «Ver catálogo»
+  (2026-08-20); el catálogo completo vive en /productos.
 
 ### Inputs / Fields
 Solo existen en el admin (fuera de este sistema); el sitio público no tiene formularios.

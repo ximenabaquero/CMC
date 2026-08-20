@@ -187,7 +187,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   solo con el logo), `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
   datos), `HomePillars` (numeración editorial; también lo reutiliza
-  `/nosotros`), `HomeProductCard` y `HomePostsSection` (destacado +
+  `/nosotros`; en la home lleva `withOrnaments` — ver ornamentos),
+  `HomeProductCard` (la home muestra solo **2 destacados en una fila** +
+  «Ver catálogo» desde el 2026-08-20, `products.slice(0, 2)`) y
+  `HomePostsSection` (destacado +
   secundarios; también encabeza el índice de `/blog`) y `HomeCta` (canales
   de `site_settings`; con WhatsApp configurado el botón principal abre el
   chat directo). Los compartidos de `shared.tsx` (`ProductCard`, `PostCard`,
@@ -205,21 +208,26 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   escena real (`hero-mesa-panaderia-01`) no se recorta; desde el 2026-08-19
   quedó **sin uso**: su lugar como banner de /nosotros lo ocupa la
   ilustración dibujada a mano `decorative/quienes-somos-panes.webp`.
-- **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19):
-  dibujo botánico a mano en **ambos márgenes** (`public/images/decorative/
-  borde-ornamental-cmc.png` y `borde-ornamental-cmc-derecha.png` — espejo
-  exacto, mismo lienzo 887×1774 y misma constante de geometría; rutas
-  literales sin `media_assets`), montados en `(public)/layout.tsx` vía la
-  prop `side`. Decorativos puros (`alt=""`, `aria-hidden`,
-  `pointer-events: none`), `position: fixed`, centrados verticalmente,
-  opacidad 0.7, solo ≥ lg. Toda la geometría vive en `.bakery-side-ornament`
-  y la variante `--derecha` (globals.css): altura `clamp(700px, 95vh,
-  1100px)`, `z-index: 1` (sobre fondos de sección, bajo header/overlays) y
-  `left`/`right` calculados para que la tinta quede en el margen y se
-  deslice fuera del lienzo en viewports angostos sin tocar el texto. La
-  carpeta `decorative/` guarda también la ilustración de panes del h1 de
-  /nosotros (`quienes-somos-panes.webp`), fuera del manifest como los
-  ornamentos.
+- **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19;
+  reubicados el 2026-08-20): dibujo botánico a mano en ambos márgenes
+  (`public/images/decorative/borde-ornamental-cmc.png` y
+  `borde-ornamental-cmc-derecha.png` — espejo exacto, mismo lienzo 887×1774
+  y misma constante de geometría; rutas literales sin `media_assets`).
+  Desde el 2026-08-20 (pedido de la clienta) **ya no son fixed al viewport
+  ni globales**: son `position: absolute` dentro de una sección anfitriona
+  y se montan solo en **tres anclas** — la sección de pilares de la home
+  (prop `withOrnaments` de `HomePillars`; /nosotros reutiliza el componente
+  sin ornamentos), la zona alta de /nosotros (título + ilustración) y la
+  página de contacto. Cada host debe ser full-bleed, `relative` y
+  `overflow-x-clip` (al no ser fixed, el recorte evita el scroll
+  horizontal). Decorativos puros (`alt=""`, `aria-hidden`,
+  `pointer-events: none`), centrados en su sección, opacidad 0.7, solo
+  ≥ lg. Geometría en `.bakery-side-ornament` + variante `--derecha`
+  (globals.css): altura `min(86%, 900px)` relativa al host, `z-index: 1`,
+  `left`/`right` con el clamp que desliza el dibujo fuera del lienzo en
+  viewports angostos sin tocar el texto. La carpeta `decorative/` guarda
+  también la ilustración de panes del h1 de /nosotros
+  (`quienes-somos-panes.webp`), fuera del manifest como los ornamentos.
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue

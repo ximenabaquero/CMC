@@ -431,3 +431,26 @@ logo, círculo blanco, botones intactos).
 | Consola del navegador | Sin errores |
 | Reduced motion | Por construcción CSS (`.hero-slide:first-child { opacity: 1 }` bajo `prefers-reduced-motion: reduce`); no emulado en esta sesión |
 | **Pendiente manual (usuaria)** | Ver la home y calibrar la intensidad: si la textura se ve fuerte o débil, ajustar solo `--hero-slides-opacity` (rango 0.12–0.18); si el ritmo se siente rápido, subir el ciclo a 49s (delays de 7s) |
+
+## 2026-08-20 — Ornamentos por sección (no fijos) y home con 2 productos
+
+Cambios (pedidos de la clienta): (1) los ornamentos de obrador dejan de ser
+`position: fixed` globales — pasan a `position: absolute` dentro de una
+sección anfitriona (full-bleed, `relative overflow-x-clip`; altura
+`min(86%, 900px)` relativa al host) y se montan SOLO en tres anclas:
+pilares de la home (prop `withOrnaments` de `HomePillars`; /nosotros
+reutiliza el componente sin ornamentos), zona alta de /nosotros (título +
+ilustración, contenedor dividido en dos) y la página de contacto; se
+desmontaron de `(public)/layout.tsx`. (2) La home muestra solo 2 productos
+destacados en una fila (`products.slice(0, 2)`) + «Ver catálogo».
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Home 1440 (CDP headless) | 2 `.bakery-side-ornament` en el DOM (solo en pilares, anclados a la sección — scrollean con ella); grid del catálogo con exactamente 2 productos + botón «Ver catálogo» |
+| /nosotros 1440 | 2 ornamentos solo en la zona alta (título + ilustración); pilares y resto de la página limpios |
+| /contacto 1440 | 2 ornamentos flanqueando el contenido, escalados a la altura de la página |
+| /preguntas-frecuentes | 0 ornamentos (antes los tenía por ser globales) |
+| Overflow horizontal | `scrollWidth ≤ innerWidth` en home, /nosotros y /contacto a 1440 (el `overflow-x-clip` de cada host recorta lo que el clamp empuja fuera) |
+| Consola | Sin errores en ninguna página |
+| **Pendiente manual (usuaria)** | Revisión de capturas antes del commit |

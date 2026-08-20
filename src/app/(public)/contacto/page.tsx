@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/content";
 import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
+import { ContactMap } from "@/components/public/ContactMap";
+import { AudienceSectors } from "@/components/public/AudienceSectors";
 import { DataUnavailable } from "@/components/public/shared";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -25,19 +27,29 @@ export default async function ContactPage() {
     : null;
   const phoneHref = settings?.phone ? `tel:${settings.phone.replace(/[^+\d]/g, "")}` : null;
 
-  const secondaryChannels = [
+  // La dirección enlaza a Google Maps (búsqueda por texto, sin API key) y el
+  // mapa embebido de abajo se deriva de la misma cadena.
+  const addressQuery = settings?.address
+    ? [settings.address, settings.city].filter(Boolean).join(", ")
+    : null;
+
+  type Channel = { label: string; value: string; href: string | null; external?: boolean };
+
+  const channels: (Channel | null)[] = [
     settings?.email
       ? { label: "Correo electrónico", value: settings.email, href: `mailto:${settings.email}` }
       : null,
-    settings?.address
+    addressQuery
       ? {
           label: "Dirección",
-          value: [settings.address, settings.city].filter(Boolean).join(", "),
-          href: null,
+          value: addressQuery,
+          href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}`,
+          external: true,
         }
       : null,
     settings?.schedule ? { label: "Horario de atención", value: settings.schedule, href: null } : null,
-  ].filter((c): c is { label: string; value: string; href: string | null } => Boolean(c));
+  ];
+  const secondaryChannels = channels.filter((c): c is Channel => Boolean(c));
 
   const hasChannels = Boolean(whatsappHref || phoneHref) || secondaryChannels.length > 0;
 
@@ -49,9 +61,11 @@ export default async function ContactPage() {
   ].filter((s): s is { label: string; href: string } => Boolean(s));
 
   return (
-    // Ornamentos de obrador anclados a la página (decoración por sección,
-    // pedido de la clienta 2026-08-20): wrapper full-bleed relative +
-    // overflow-x-clip, requisito del ornamento absoluto.
+    <>
+    {/* Ornamentos de obrador anclados a la zona de canales (decoración por
+        sección, pedido de la clienta 2026-08-20): wrapper full-bleed relative
+        + overflow-x-clip, requisito del ornamento absoluto. La sección de
+        sectores queda fuera para que los ornamentos no la invadan. */}
     <div className="relative overflow-x-clip">
       <BakerySideOrnament />
       <BakerySideOrnament side="derecho" />
@@ -109,6 +123,8 @@ export default async function ContactPage() {
                   {channel.href ? (
                     <a
                       href={channel.href}
+                      target={channel.external ? "_blank" : undefined}
+                      rel={channel.external ? "noopener noreferrer" : undefined}
                       className="mt-1 block text-foreground underline-offset-4 hover:underline"
                     >
                       {channel.value}
@@ -120,6 +136,13 @@ export default async function ContactPage() {
               ))}
             </ul>
           ) : null}
+
+          <ContactMap
+            address={settings?.address ?? null}
+            city={settings?.city ?? null}
+            companyName={settings?.company_name ?? "Compañía Mundial de Comercio S.A.S."}
+          />
+
           {socialLinks.length > 0 ? (
             <section aria-labelledby="redes" className="mt-8">
               <h2 id="redes" className="mb-3 text-sm font-semibold">
@@ -145,5 +168,7 @@ export default async function ContactPage() {
       )}
       </div>
     </div>
+    <AudienceSectors />
+    </>
   );
 }
