@@ -121,9 +121,13 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   poda entradas cuyo archivo ya no existe. El puente manifest → BD sigue
   siendo manual (seed).
 - **Fotos editoriales** (`public/images/photos/`, 2026-08-19): panes y
-  preparaciones aprobadas, referenciadas por **ruta literal en JSX** (banda
-  del hero en `HomeHero`, «¿Quiénes somos?» en la home, banner y figura de
+  preparaciones aprobadas, referenciadas por **ruta literal en JSX**
+  («Propuesta de valor» y «¿Quiénes somos?» en la home, figura de cierre de
   Nosotros) — **sin fila en `media_assets`**, igual que los GIFs de marca.
+  Bajo el h1 de /nosotros va una **ilustración dibujada a mano**
+  (`public/images/decorative/quienes-somos-panes.webp`, entregada por la
+  clienta el 2026-08-19 y optimizada a WebP con alfa; decorativa, `alt=""`),
+  que reemplazó a la escena `hero-mesa-panaderia-01`.
   Solo las fotos que entran a una galería de producto pasan por
   `media_assets`/`product_media` (vía script SQL manual, p. ej.
   `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`, pendiente de
@@ -198,7 +202,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   alfa flotando sin tarjeta** (`scripts/recortar-fotos-editoriales.mjs`,
   derivados `-recorte.webp` en el manifest; los `.webp` de lienzo completo
   conviven en `public/` porque el importador los regeneraría). La única
-  escena real (`hero-mesa-panaderia-01`, banner de /nosotros) no se recorta.
+  escena real (`hero-mesa-panaderia-01`) no se recorta; desde el 2026-08-19
+  quedó **sin uso**: su lugar como banner de /nosotros lo ocupa la
+  ilustración dibujada a mano `decorative/quienes-somos-panes.webp`.
 - **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19):
   dibujo botánico a mano en **ambos márgenes** (`public/images/decorative/
   borde-ornamental-cmc.png` y `borde-ornamental-cmc-derecha.png` — espejo
@@ -210,7 +216,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   y la variante `--derecha` (globals.css): altura `clamp(700px, 95vh,
   1100px)`, `z-index: 1` (sobre fondos de sección, bajo header/overlays) y
   `left`/`right` calculados para que la tinta quede en el margen y se
-  deslice fuera del lienzo en viewports angostos sin tocar el texto.
+  deslice fuera del lienzo en viewports angostos sin tocar el texto. La
+  carpeta `decorative/` guarda también la ilustración de panes del h1 de
+  /nosotros (`quienes-somos-panes.webp`), fuera del manifest como los
+  ornamentos.
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue

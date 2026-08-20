@@ -74,14 +74,17 @@ export default async function AboutPage() {
         </figure>
 
         {/* Bloques institucionales en lenguaje editorial: divisores y
-            jerarquía tipográfica, sin tarjetas idénticas. */}
+            jerarquía tipográfica, sin tarjetas idénticas. `reveal` por bloque
+            (2026-08-19, pedido de la clienta): cada uno entra escalonado al
+            aparecer en el viewport — el stagger emerge de la posición, como
+            en las tarjetas de la home. */}
         {blocks.length > 0 ? (
           <div className="mt-14 grid gap-x-14 gap-y-8 lg:grid-cols-2">
             {blocks.map((block) => (
               <section
                 key={block.section_key}
                 aria-labelledby={`sec-${block.section_key}`}
-                className="border-t border-border pt-6"
+                className="reveal border-t border-border pt-6"
               >
                 <h2 id={`sec-${block.section_key}`} className="text-xl font-semibold text-petrol">
                   {block.title}

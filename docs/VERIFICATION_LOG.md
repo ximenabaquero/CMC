@@ -318,6 +318,42 @@ sigue sin repetirse ninguna foto en el sitio.
 | Ajuste de tamaño (mismo día, pedido de la clienta, dos pasadas) | Buñuelos contenidos finalmente a 200px (`max-w-[12.5rem]`, `mx-auto`); ancho renderizado verificado = 200px exactos. Nota: reducir los props `width`/`height` del `<Image>` no cambia el tamaño visible (los gobierna `max-w`); se restauraron a las dimensiones reales 800×954 para la reserva de espacio |
 | **Pendiente manual (usuaria)** | Revisión de la captura antes del commit |
 
+## 2026-08-19 — Ilustración dibujada a mano bajo el h1 de /nosotros
+
+Cambio: la clienta entregó `quiénes-somos.png` (ilustración de panes a mano,
+1908×824 RGBA con transparencia, 542 KB, misma familia visual que los
+ornamentos laterales) para colocarla bajo el «¿Quiénes somos?» de
+**/nosotros**. Se optimizó a `public/images/decorative/quienes-somos-panes.webp`
+(1200×518, 195 KB, alfa intacto; kebab-case sin tilde — las tildes se
+percent-encodean en URLs) y reemplazó a la escena `hero-mesa-panaderia-01`
+(queda disponible sin uso). Decorativa pura: `alt=""` + `aria-hidden`, sin
+tarjeta, proporción natural. Nota del proceso: un primer intento la colocó
+por error en el «¿Quiénes somos?» de la home — revertido de inmediato (los
+buñuelos de la home quedaron intactos).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| /nosotros 1440 (CDP headless) | Ilustración flotando sobre el hueso bajo el título, trazo olivo/ámbar en armonía con los ornamentos laterales; sin errores de consola |
+| Home «¿Quiénes somos?» 1440 | Revertida y verificada: buñuelos a 200px como estaban |
+| **Pendiente manual (usuaria)** | Revisión de las capturas antes del commit |
+
+## 2026-08-19 — Bloques institucionales de /nosotros con entrada al scroll
+
+Cambio: los 4 bloques («Nuestra promesa», «Experiencia…», «Confianza…»,
+«Un aliado…») reciben la clase `reveal` existente — entrada escalonada
+scroll-driven (CSS puro, `animation-timeline: view()`; el stagger emerge de
+la posición, como en las tarjetas de la home). Sin hover (los bloques no son
+interactivos). Sin CSS nuevo; `prefers-reduced-motion` y navegadores sin
+soporte quedan cubiertos por la regla existente (aparecen estáticos).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| /nosotros 1440 (CDP headless) | 4 `section.reveal` en el DOM; tras el scroll los bloques quedan visibles y completos (estado final estable); sin errores de consola |
+| Percepción del movimiento | Validarla la usuaria en su navegador (Chromium ≥ 115); con `prefers-reduced-motion` no anima, por construcción |
+| **Pendiente manual (usuaria)** | Revisión en el navegador antes del commit |
+
 ## 2026-08-19 — Ajustes del hero y de «¿Quiénes somos?» (pedido de la clienta)
 
 Cambios: (1) el círculo blanco del hero pasa de offsets fijos por breakpoint a

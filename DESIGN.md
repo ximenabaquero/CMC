@@ -210,7 +210,7 @@ por `scripts/recortar-fotos-editoriales.mjs`) que **flotan directamente** sobre 
 hueso o petróleo — sin tarjeta, sin borde, sin sombra (Flat-At-Rest) — y, cuando van en
 serie, apoyados en una línea de base común (`object-bottom`). El lienzo blanco +
 `object-contain` queda reservado a los packshots de producto (empaques); las escenas
-reales (p. ej. la mesa de panadería de /nosotros) no se recortan y conservan su marco.
+reales no se recortan y conservan su marco cuando se publiquen.
 
 ## Components
 
@@ -278,6 +278,7 @@ CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-ou
 (pulsación/hover), `--dur-base` 250ms (acordeón, drawer), `--dur-enter` 400ms (entrada del
 hero, solo la home). Piezas: entrada escalonada del hero (stagger 70ms; los candidatos LCP
 animan solo transform), reveal scroll-driven `.reveal` en tarjetas/ítems de la home
+y en figuras y bloques institucionales de /nosotros
 (`animation-timeline: view()`, el stagger emerge de la posición), acordeón FAQ animado vía
 `::details-content`, drawer móvil con `@starting-style`, crossfade de 200ms entre páginas
 (view transitions, header con nombre propio para percibirse estable). Todo con fallback
