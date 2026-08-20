@@ -1,9 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { mediaUrl } from "@/lib/media";
-import { Markdown } from "@/lib/markdown";
 import type { ProductWithImage, PostWithCover } from "@/lib/content";
-import type { Faq } from "@/lib/supabase/types";
 
 /**
  * Encabezado de sección con jerarquía consistente.
@@ -192,30 +190,3 @@ export function PostCard({ post, index = 0 }: { post: PostWithCover; index?: num
   );
 }
 
-/** Acordeón accesible de preguntas frecuentes (details/summary nativo). */
-export function FaqList({ faqs }: { faqs: Faq[] }) {
-  return (
-    <ul className="space-y-3">
-      {faqs.map((faq) => (
-        <li key={faq.id}>
-          <details className="group rounded-lg border border-border bg-surface">
-            <summary className="cursor-pointer list-none px-5 py-4 font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-              <span className="flex items-center justify-between gap-3">
-                <span className="pr-2">{faq.question}</span>
-                <span
-                  aria-hidden="true"
-                  className="text-lg leading-none text-primary transition-transform duration-[250ms] [transition-timing-function:var(--ease-out)] group-open:rotate-45 motion-reduce:transition-none"
-                >
-                  +
-                </span>
-              </span>
-            </summary>
-            <div className="border-t border-border px-5 py-4 text-sm">
-              <Markdown>{faq.answer}</Markdown>
-            </div>
-          </details>
-        </li>
-      ))}
-    </ul>
-  );
-}

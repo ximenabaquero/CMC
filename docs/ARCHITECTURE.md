@@ -175,11 +175,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `hero` y `settings`; la composición derecha muestra el logo CMC animado
   sobre un círculo blanco, sin anillo naranja — decisión de la clienta
   2026-08-19; antes iba el packshot del primer producto publicado sobre el
-  círculo ámbar. Desde el 2026-08-19 cierra con una **banda editorial** de
-  tres preparaciones reales como recortes con transparencia (`-recorte.webp`)
-  apoyados en una línea de base común sobre el crema, sin tarjetas ni
-  sombras, `loading="lazy"` — el logo sigue siendo el único protagonista),
-  `HomeStats`
+  círculo ámbar, hoy centrado con el emblema del logo. La banda editorial
+  de preparaciones que cerraba el hero desapareció el mismo 2026-08-19: tras
+  iteraciones de la clienta, «Propuesta de valor» quedó con una única figura
+  (las palmeritas, recorte con transparencia `max-w-md` en la columna
+  derecha del grid `lg:grid-cols-[3fr_2fr]`, `loading="lazy"`) y el hero
+  solo con el logo), `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
   datos), `HomePillars` (numeración editorial; también lo reutiliza
   `/nosotros`), `HomeProductCard` y `HomePostsSection` (destacado +
@@ -230,7 +231,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   propio `FaqAccordion` (server component): numeración naranja, chevron en
   círculo mostaza, encabezado abierto en petróleo con texto blanco,
   respuesta sobre crema y **una sola pregunta abierta** vía `<details name>`
-  nativo, sin JavaScript. `FaqList` de `shared.tsx` queda solo para la home.
+  nativo, sin JavaScript. Es el único patrón de FAQ del sitio: la sección de
+  destacadas de la home reutiliza `FaqAccordion` (el `FaqList` compacto de
+  `shared.tsx` se eliminó el 2026-08-19 al unificar ambos acordeones).
   El sticky del panel aplica únicamente con viewport de altura ≥ 53rem
   (en portátiles bajos fluye normal para no quedar cortado).
 - **Motion**: vocabulario CSS-first al final de `globals.css` (tokens

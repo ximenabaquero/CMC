@@ -250,6 +250,74 @@ DESIGN.md que antes decía "solo en el lado izquierdo" (pedido de la clienta).
 | Consola | Sin errores |
 | **Pendiente manual (usuaria)** | Revisión de la captura de escritorio antes del commit |
 
+## 2026-08-19 — Reubicación de fotos editoriales de la home y centrado del círculo del hero
+
+Cambios (pedidos de la clienta sobre capturas): (1) círculo blanco del hero
+centrado con el emblema del logo — medido el frame final del GIF (centro
+visual ≈49/49 % del contenedor con `scale-125`) → `left-1/2 top-1/2` +
+`-translate-*-1/2`, con `motion-reduce:top-[40%]` porque el PNG estático
+tiene el emblema más arriba; (2) la banda de 3 recortes sale del hero y pasa
+a la columna derecha de «Propuesta de valor» (`PROMESA_PHOTOS` en `page.tsx`,
+grid `lg:grid-cols-[3fr_2fr]`, base común `object-bottom`, `h-24/32/36`);
+(3) «¿Quiénes somos?» vuelve al surtido de amasijos (la canasta quedó solo
+en «Propuesta de valor» y FAQ — ninguna foto se repite dentro de la home).
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Hero 1440×900 (CDP headless) | Emblema centrado en la bola blanca; wordmark cruza el borde inferior de forma simétrica; hero sin banda |
+| «Propuesta de valor» 1440 | Tres recortes en base común sobre crema profunda, columna derecha centrada respecto al texto |
+| «Propuesta de valor» 375 | Fotos bajo el texto en `grid-cols-3` (`h-24`), sin overflow horizontal (`scrollWidth ≤ innerWidth`) |
+| «¿Quiénes somos?» 1440 | Surtido de amasijos flotante (800×865), plato íntegro |
+| Consola | Sin errores en ninguna captura |
+| **Pendiente manual (usuaria)** | Revisión de capturas antes del commit; variante reduced-motion del círculo (`top-[40%]`) sin verificación con el ajuste del SO |
+
+## 2026-08-19 — Unificación del acordeón FAQ (home = página FAQ)
+
+Cambios: la sección de preguntas destacadas de la home pasa de `FaqList`
+(compacto, indicador `+`) a `FaqAccordion` (numeración, chevron mostaza,
+encabezado petróleo al abrir, exclusivo vía `<details name>`), señalado por
+la clienta al ver que ambos acordeones eran distintos. `FaqList` y sus
+imports (`Markdown`, tipo `Faq`) se eliminaron de `shared.tsx` — quedaba sin
+uso. Un solo patrón de FAQ en todo el sitio.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio (se retiró también el import huérfano de `Markdown`) |
+| Home #faqs 1440 (CDP headless) | Tarjetas numeradas 01–03 con chevron; abierta: encabezado petróleo + respuesta sobre crema, bien delimitada por el borde de la tarjeta aun sobre la sección `bg-cream` |
+| Exclusividad en la home | Tras abrir la 2ª pregunta queda exactamente 1 `details[open]` |
+| Consola | Sin errores |
+| `/preguntas-frecuentes` | Sin cambios (mismo componente) |
+| **Pendiente manual (usuaria)** | Revisión de la captura antes del commit |
+
+## 2026-08-19 — «Propuesta de valor» queda con una sola figura (palmeritas)
+
+Cambio: la clienta redujo la composición de tres recortes a solo las
+palmeritas — figura única `max-w-md` en la columna derecha del grid,
+centrada respecto al texto. Se eliminó `PROMESA_PHOTOS`. Con esto la canasta
+vive solo en la página FAQ y el recorte de buñuelos queda disponible sin
+uso: **ninguna foto se repite en el sitio**.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| «Propuesta de valor» 1440 (CDP headless) | Palmeritas solas, proporción natural, centradas verticalmente junto al texto sobre crema profunda; sin errores de consola |
+| **Pendiente manual (usuaria)** | Revisión de la captura antes del commit (y vista móvil si quiere afinar el `max-w-md`) |
+
+## 2026-08-19 — «¿Quiénes somos?» pasa del surtido a los buñuelos
+
+Cambio: la clienta reemplazó la figura de «¿Quiénes somos?» por el recorte
+de buñuelos (`amasijo-bunuelo-01-recorte.webp`, 800×954, proporción
+natural). El recorte del surtido de amasijos queda disponible sin uso;
+sigue sin repetirse ninguna foto en el sitio.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| «¿Quiénes somos?» 1440 (CDP headless) | Buñuelos flotando sobre el hueso en la columna corta del grid, sin tarjeta; sin errores de consola |
+| Ajuste de tamaño (mismo día, pedido de la clienta, dos pasadas) | Buñuelos contenidos finalmente a 200px (`max-w-[12.5rem]`, `mx-auto`); ancho renderizado verificado = 200px exactos. Nota: reducir los props `width`/`height` del `<Image>` no cambia el tamaño visible (los gobierna `max-w`); se restauraron a las dimensiones reales 800×954 para la reserva de espacio |
+| **Pendiente manual (usuaria)** | Revisión de la captura antes del commit |
+
 ## 2026-08-19 — Ajustes del hero y de «¿Quiénes somos?» (pedido de la clienta)
 
 Cambios: (1) el círculo blanco del hero pasa de offsets fijos por breakpoint a

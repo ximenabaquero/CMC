@@ -56,17 +56,20 @@ export default async function AboutPage() {
           ))}
         </header>
 
-        {/* Escena real de panadería (foto aprobada 2026-08-19). Recorte
-            panorámico con object-cover: la regla de no recortar aplica a
-            los empaques, no a las escenas. */}
-        <figure className="reveal mt-10 overflow-hidden rounded-lg border border-border">
+        {/* Ilustración de panes dibujada a mano (entregada por la clienta el
+            2026-08-19; misma familia que los ornamentos laterales), con
+            fondo transparente flotando sobre el hueso — sin tarjeta.
+            Decorativa pura: alt vacío. Reemplazó a la escena real
+            hero-mesa-panaderia-01 por decisión de la clienta. */}
+        <figure className="reveal mt-10">
           <Image
-            src="/images/photos/hero-mesa-panaderia-01.webp"
-            alt="Mesa de panadería con surtido de panes, hojaldres y amasijos frente a una ventana luminosa"
+            src="/images/decorative/quienes-somos-panes.webp"
+            alt=""
+            aria-hidden="true"
             width={1200}
-            height={1200}
+            height={518}
             loading="lazy"
-            className="aspect-[16/7] w-full object-cover object-bottom sm:aspect-[21/9]"
+            className="w-full"
           />
         </figure>
 

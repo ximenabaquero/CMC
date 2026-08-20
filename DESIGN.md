@@ -247,24 +247,24 @@ Solo existen en el admin (fuera de este sistema); el sitio público no tiene for
   con cierre por Escape y navegación.
 - Footer sobre crema profunda, 3 columnas.
 
-### Banda editorial del hero
-Tres preparaciones reales (recortes editoriales flotantes) bajo el grid del hero, en
-`grid-cols-3` con altura fija por breakpoint y base común — subordinadas al logo por la
-One Hero Rule, con `loading="lazy"` y `reveal` de entrada. Sin tarjetas: los recortes se
-apoyan sobre el crema.
+### Figura editorial de «Propuesta de valor»
+Una sola preparación real (las palmeritas, recorte editorial flotante `max-w-md`) en la
+columna derecha de la sección, con `loading="lazy"` y `reveal` de entrada. Sin tarjeta:
+el recorte flota sobre la crema profunda. La imagen nació como banda de tres al pie del
+hero; la clienta la movió aquí y la redujo a una el 2026-08-19 — un solo protagonista
+por sección (One Hero Rule) y el hero queda solo con el logo.
 
 ### Acordeón FAQ (signature)
-`details/summary` nativo, sin JavaScript, en dos variantes:
-
-- **Home (`FaqList`, shared.tsx)**: compacto sobre blanco, indicador `+` que rota 45° al
-  abrir (`group-open:rotate-45`).
-- **Página FAQ (`FaqAccordion`, 2026-08-19)**: editorial — numeración `01…` naranja,
-  chevron en círculo mostaza (ámbar al abrir), encabezado abierto en petróleo con texto
-  blanco, respuesta sobre crema (16 px / 1.75), una sola pregunta abierta vía
-  `<details name>` nativo (degrada a múltiples abiertas sin soporte). La acompaña un
-  panel `petrol-deep` con eyebrow **ámbar** (adaptación documentada de la Eyebrow Rule
-  sobre fondo oscuro: el naranja queda ≈2.6:1), círculo mostaza y el recorte con
-  transparencia de la canasta de panes superpuesto al círculo.
+`FaqAccordion`, único patrón de FAQ del sitio (2026-08-19; el `FaqList` compacto de la
+home se eliminó al unificar — los dos acordeones se veían distintos): `details/summary`
+nativo sin JavaScript, numeración `01…` naranja, chevron en círculo mostaza (ámbar al
+abrir), encabezado abierto en petróleo con texto blanco, respuesta sobre crema
+(16 px / 1.75), una sola pregunta abierta vía `<details name>` nativo (degrada a
+múltiples abiertas sin soporte). Lo usan `/preguntas-frecuentes` y las destacadas de la
+home. En la página FAQ lo acompaña un panel `petrol-deep` con eyebrow **ámbar**
+(adaptación documentada de la Eyebrow Rule sobre fondo oscuro: el naranja queda ≈2.6:1),
+círculo mostaza y el recorte con transparencia de la canasta de panes superpuesto al
+círculo.
 
 ### Marquee de marcas (signature)
 Doble track CSS (`translateX(-50%)`, 35s linear), pausa en hover y en `:focus-within`,

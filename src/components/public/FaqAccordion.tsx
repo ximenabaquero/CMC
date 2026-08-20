@@ -2,11 +2,12 @@ import { Markdown } from "@/lib/markdown";
 import type { Faq } from "@/lib/supabase/types";
 
 /**
- * Acordeón editorial de la página de preguntas frecuentes: numeración naranja,
- * chevron en círculo mostaza y encabezado petróleo al abrir. `details` con
- * `name` compartido = solo una pregunta abierta a la vez, sin JavaScript
- * (en navegadores sin soporte se degradan a múltiples abiertas). La home
- * conserva su propia variante compacta (`FaqList` en shared.tsx).
+ * Acordeón editorial de preguntas frecuentes: numeración naranja, chevron en
+ * círculo mostaza y encabezado petróleo al abrir. `details` con `name`
+ * compartido = solo una pregunta abierta a la vez, sin JavaScript (en
+ * navegadores sin soporte se degradan a múltiples abiertas). Único patrón de
+ * FAQ del sitio: lo usan la página /preguntas-frecuentes y la sección de
+ * destacadas de la home (2026-08-19; reemplazó al FaqList compacto).
  */
 export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   return (

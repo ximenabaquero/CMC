@@ -19,35 +19,9 @@ import { HomeCta } from "@/components/public/HomeCta";
 import {
   CatalogInPreparation,
   DataUnavailable,
-  FaqList,
   SectionHeading,
 } from "@/components/public/shared";
-
-// Preparaciones reales elaboradas con productos CMC (fotos aprobadas del
-// lote 2026-08-19; ver docs/FOTOS_ADICIONALES.md). Recortes con transparencia
-// generados por scripts/recortar-fotos-editoriales.mjs; width/height son las
-// dimensiones reales de cada derivado. Viven en «Propuesta de valor» desde el
-// 2026-08-19 (antes cerraban el hero como banda — pedido de la clienta).
-const PROMESA_PHOTOS = [
-  {
-    src: "/images/photos/palmerita-hojaldre-01-recorte.webp",
-    alt: "Palmeritas de hojaldre caramelizadas con azúcar",
-    width: 800,
-    height: 551,
-  },
-  {
-    src: "/images/photos/amasijo-bunuelo-01-recorte.webp",
-    alt: "Buñuelos colombianos apilados",
-    width: 800,
-    height: 954,
-  },
-  {
-    src: "/images/photos/canasta-panes-surtidos-01-recorte.webp",
-    alt: "Canasta de mimbre con surtido de panes artesanales recién horneados",
-    width: 800,
-    height: 745,
-  },
-] as const;
+import { FaqAccordion } from "@/components/public/FaqAccordion";
 
 export default async function HomePage() {
   const [
@@ -105,19 +79,20 @@ export default async function HomePage() {
               >
                 {intro.title ?? "¿Quiénes somos?"}
               </h2>
-              {/* Surtido de amasijos (foto aprobada 2026-08-19), recortado
-                  con transparencia: flota directo sobre el hueso, sin
-                  tarjeta, y equilibra la columna corta del grid sin competir
-                  con el texto. La canasta se movió con la composición de
-                  «Propuesta de valor» (pedido de la clienta, 2026-08-19). */}
+              {/* Buñuelos apilados (foto aprobada 2026-08-19; elegida por la
+                  clienta para esta sección), recortados con transparencia:
+                  flotan directo sobre el hueso, sin tarjeta, y equilibran la
+                  columna corta del grid sin competir con el texto. */}
               <figure className="reveal mt-8">
+                {/* width/height = dimensiones reales del derivado (reserva de
+                    espacio, sin CLS); el tamaño visible lo fija max-w. */}
                 <Image
-                  src="/images/photos/composicion-surtido-amasijos-01-recorte.webp"
-                  alt="Surtido de panes y amasijos colombianos en plato de secciones"
+                  src="/images/photos/amasijo-bunuelo-01-recorte.webp"
+                  alt="Buñuelos colombianos apilados"
                   width={800}
-                  height={865}
+                  height={954}
                   loading="lazy"
-                  className="w-full"
+                  className="mx-auto w-full max-w-[12.5rem]"
                 />
               </figure>
             </div>
@@ -250,26 +225,20 @@ export default async function HomePage() {
                 </div>
               ) : null}
             </div>
-            {/* Tres preparaciones reales recortadas con transparencia,
-                apoyadas en una línea de base común (object-bottom) sobre la
-                crema profunda — sin tarjetas ni sombras (Flat-At-Rest). */}
-            <ul
-              aria-label="Preparaciones elaboradas con productos CMC"
-              className="reveal grid grid-cols-3 gap-3 sm:gap-4"
-            >
-              {PROMESA_PHOTOS.map((photo) => (
-                <li key={photo.src}>
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    width={photo.width}
-                    height={photo.height}
-                    loading="lazy"
-                    className="h-24 w-full object-contain object-bottom sm:h-32 lg:h-36"
-                  />
-                </li>
-              ))}
-            </ul>
+            {/* Palmeritas de hojaldre (foto aprobada 2026-08-19; de la
+                composición de tres, la clienta dejó solo esta) recortadas
+                con transparencia, flotando sobre la crema profunda — sin
+                tarjeta ni sombra (Flat-At-Rest). */}
+            <figure className="reveal">
+              <Image
+                src="/images/photos/palmerita-hojaldre-01-recorte.webp"
+                alt="Palmeritas de hojaldre caramelizadas con azúcar"
+                width={800}
+                height={551}
+                loading="lazy"
+                className="mx-auto w-full max-w-md"
+              />
+            </figure>
           </div>
         </section>
       ) : null}
@@ -315,7 +284,10 @@ export default async function HomePage() {
               eyebrow="Preguntas frecuentes"
               title="Resolvemos tus dudas"
             />
-            <FaqList faqs={featuredFaqs} />
+            {/* Mismo acordeón editorial que /preguntas-frecuentes (numeración,
+                chevron, encabezado petróleo al abrir) — un solo patrón de FAQ
+                en todo el sitio. */}
+            <FaqAccordion faqs={featuredFaqs} />
             <div className="mt-6">
               <Link
                 href="/preguntas-frecuentes"
