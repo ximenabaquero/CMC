@@ -79,20 +79,22 @@ export default async function HomePage() {
               >
                 {intro.title ?? "¿Quiénes somos?"}
               </h2>
-              {/* Buñuelos apilados (foto aprobada 2026-08-19; elegida por la
-                  clienta para esta sección), recortados con transparencia:
-                  flotan directo sobre el hueso, sin tarjeta, y equilibran la
-                  columna corta del grid sin competir con el texto. */}
-              <figure className="reveal mt-8">
+              {/* Bodega propia con estibas de margarina DAP (foto entregada por
+                  la clienta el 2026-08-20; reemplaza el recorte de buñuelos).
+                  Es escena real, no packshot: no se recorta y conserva su
+                  marco — esquina lg, borde arena y Flat-At-Rest (DESIGN.md,
+                  «Recorte editorial flotante»). Ocupa el ancho de la columna
+                  corta y aporta la prueba de escala que el texto enuncia. */}
+              <figure className="reveal mt-8 overflow-hidden rounded-lg border border-border">
                 {/* width/height = dimensiones reales del derivado (reserva de
-                    espacio, sin CLS); el tamaño visible lo fija max-w. */}
+                    espacio, sin CLS); el tamaño visible lo fija la columna. */}
                 <Image
-                  src="/images/photos/amasijo-bunuelo-01-recorte.webp"
-                  alt="Buñuelos colombianos apilados"
-                  width={800}
-                  height={954}
+                  src="/images/photos/bodega-dap-01.webp"
+                  alt="Bodega de la compañía con estibas de cajas de margarina DAP apiladas hasta el techo"
+                  width={1200}
+                  height={845}
                   loading="lazy"
-                  className="mx-auto w-full max-w-[12.5rem]"
+                  className="w-full"
                 />
               </figure>
             </div>
