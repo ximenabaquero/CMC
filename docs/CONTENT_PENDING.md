@@ -73,7 +73,9 @@ reunión 1, punto 2). Última actualización: 2026-08-17.
       centralizadas en `src/app/globals.css`, derivado de los colores del
       logo entregado.)
 - [ ] **Logotipo en alta calidad / vectorial** (se recibieron 4 PNG; un SVG o
-      archivo fuente mejoraría nitidez y favicon).
+      archivo fuente mejoraría nitidez y favicon). El favicon actual
+      (`src/app/favicon.ico`, `icon.png`, `apple-icon.png`) se generó a partir
+      del emblema del PNG entregado; regenerar desde el vectorial cuando llegue.
 - [ ] **Fotografías corporativas autorizadas** (planta, equipo, procesos).
       No se usaron fotos de stock; los espacios sin imagen muestran
       marcadores claramente identificados.
