@@ -40,13 +40,13 @@ export function AudienceSectors() {
         />
         <ul className="grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
           {AUDIENCE_SECTORS.map((sector) => (
-            <li
-              key={sector}
-              className="reveal flex items-center gap-3 border-t border-border py-3.5"
-            >
+            <li key={sector} className="reveal flex gap-3 border-t border-border py-3.5">
+              {/* mt calculado para centrar el punto en la primera línea
+                  (line-height 1.5rem, punto de 0.375rem): los ítems que
+                  ocupan dos líneas mantienen el marcador arriba. */}
               <span
                 aria-hidden="true"
-                className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber"
+                className="mt-[0.5625rem] h-1.5 w-1.5 shrink-0 rounded-full bg-amber"
               />
               <span className="text-petrol">{sector}</span>
             </li>

@@ -13,7 +13,9 @@
 --  * El artículo del pan queda en DRAFT y su mención a la OMS
 --    está marcada como en revisión.
 --  * Los 12 productos quedan en DRAFT hasta aprobación.
---  * Los datos de contacto NO se cargan (pendientes de confirmar).
+--  * Los datos de contacto oficiales (teléfono, WhatsApp, dirección y
+--    ciudad) se cargan desde 2026-08-20. Correo y horario siguen sin
+--    confirmar y quedan en NULL.
 --  * No se crea ningún usuario administrador aquí.
 --
 -- Ejecutar DESPUÉS de las migraciones 0001 y 0002.
@@ -21,14 +23,22 @@
 -- ============================================================
 
 -- ------------------------------------------------------------
--- site_settings (fila única). Contacto en NULL: el sitio público
--- oculta los canales no configurados.
+-- site_settings (fila única). Los números llevan indicativo +57
+-- porque el sitio los normaliza a dígitos para armar wa.me/ y tel:.
+-- Correo y horario en NULL: el sitio público oculta los canales no
+-- configurados.
 -- ------------------------------------------------------------
-insert into public.site_settings (id, company_name, slogan, seo_title, seo_description)
+insert into public.site_settings (
+  id, company_name, slogan, phone, whatsapp, address, city, seo_title, seo_description
+)
 values (
   1,
   'Compañía Mundial de Comercio S.A.S.',
   'Su aliado en los negocios',
+  '+57 311 255 5296',
+  '+57 310 396 3790',
+  'Av. Carrera 68 # 75A-50, C.C. Metrópolis, Torre Ofiespacios, Of. 325-326',
+  'Bogotá D.C.',
   'Compañía Mundial de Comercio S.A.S.',
   'Empresa colombiana dedicada a la producción y distribución de margarinas, mantequillas y aceites para panadería, repostería e industria.'
 )
