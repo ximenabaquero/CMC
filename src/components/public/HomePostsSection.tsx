@@ -108,10 +108,11 @@ function PostRow({
 }
 
 /**
- * Blog estático: un artículo destacado (el más reciente) y el resto en
- * jerarquía secundaria. Lo usa `/blog`, donde el lector viene a escanear el
- * archivo y nada debe moverse solo. Recibe siempre al menos un post: los
- * estados de error/vacío los gestiona la página.
+ * Blog estático: un artículo destacado y el resto en jerarquía secundaria.
+ * Ya no lo monta ninguna página directamente — la home y `/blog` usan
+ * `HomePostsRotator`, que cae aquí cuando hay un solo artículo y no hay nada
+ * que turnar. Recibe siempre al menos un post: los estados de error/vacío los
+ * gestiona la página.
  */
 export function HomePostsSection({ posts }: { posts: PostWithCover[] }) {
   const [featured, ...rest] = posts;
@@ -137,9 +138,12 @@ export function HomePostsSection({ posts }: { posts: PostWithCover[] }) {
 }
 
 /**
- * Blog de la home: el mismo par escenario + lista, pero los artículos se
- * turnan en el escenario con un fundido encadenado (6 s cada uno) y la fila
- * correspondiente del índice se marca con una barra ámbar sincronizada.
+ * Cabecera del blog en la home y en `/blog`: el mismo par escenario + lista,
+ * pero los artículos se turnan en el escenario con un fundido encadenado
+ * (6 s cada uno) y la fila correspondiente del índice se marca con una barra
+ * ámbar sincronizada. En `/blog` la rotación no esconde ningún destino: el
+ * índice lista siempre los tres artículos en escena, así que cambia lo que se
+ * muestra en grande, no lo que se puede clicar.
  *
  * CSS puro (restricción SSG): los turnos son `animation-delay` por
  * `nth-child` sobre un ciclo único, igual que el fondo rotativo del hero.

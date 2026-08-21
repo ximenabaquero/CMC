@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { getPublishedPosts } from "@/lib/content";
+import { getPublishedPosts, sortPostsByCoverFirst } from "@/lib/content";
 import { DataUnavailable, PostCard } from "@/components/public/shared";
-import { HomePostsSection } from "@/components/public/HomePostsSection";
+import { HomePostsRotator } from "@/components/public/HomePostsSection";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   let posts: Awaited<ReturnType<typeof getPublishedPosts>> | null = null;
   try {
-    posts = await getPublishedPosts();
+    posts = sortPostsByCoverFirst(await getPublishedPosts());
   } catch {
     posts = null;
   }
@@ -35,9 +35,11 @@ export default async function BlogPage() {
         </p>
       ) : (
         <>
-          {/* Jerarquía editorial: el más reciente destacado (mismo patrón que
-              la home) y el resto en tarjetas. */}
-          <HomePostsSection posts={posts.slice(0, 3)} />
+          {/* Misma cabecera que la home —escenario rotativo + índice— y el
+              resto en tarjetas. El índice lista siempre los tres artículos en
+              escena, así que la rotación nunca esconde un destino: cambia lo
+              que se muestra en grande, no lo que se puede clicar. */}
+          <HomePostsRotator posts={posts.slice(0, 3)} />
           {posts.length > 3 ? (
             <ul className="mt-12 grid gap-4 border-t border-border pt-10 sm:grid-cols-2 lg:grid-cols-3">
               {posts.slice(3).map((post, index) => (

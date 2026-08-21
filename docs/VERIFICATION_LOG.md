@@ -697,3 +697,25 @@ artículos con opacidad simultánea.
 | Turnos 1440×900 con fotos | Amasijos (tabla de madera) → pan (canasta) → hojaldre (macro de capas), cada uno con su miniatura en el índice y la barra ámbar siguiéndolo |
 | `npm run lint` / `npm run typecheck` | OK, en silencio |
 | **Pendiente (usuaria)** | Forzar la revalidación de producción: guardar cualquier artículo desde `/admin/blog/<id>` dispara `revalidatePublicContent(CACHE_TAGS.posts)` y reemplaza el HTML cacheado. Un `git push` nuevo también sirve (Workers Builds reconstruye con los datos ya cargados) |
+
+### Mismo día — `/blog` encabezaba con el único artículo sin foto
+
+La usuaria señaló que la página `/blog` «quedó igual». Dos defectos reales, no uno:
+seguía estática (decisión mía al implementar el rotador, para no mover contenido
+en una página de archivo) y, sobre todo, su escenario destacado mostraba
+«Consejos para almacenar…» —el único artículo **sin portada**— en el bloque
+petróleo de 640×400, mientras los dos artículos con foto quedaban de miniatura.
+
+Revisada la objeción de usabilidad: en este rotador **el índice lista siempre
+los tres artículos en escena**, así que la rotación cambia lo que se muestra en
+grande, no lo que se puede clicar — ningún destino se esconde tras un
+temporizador. Con eso, el argumento para dejar el archivo estático se cae.
+`/blog` pasa a usar `HomePostsRotator`, y el orden «primero los que tienen
+portada» se extrae a `sortPostsByCoverFirst` (`src/lib/content.ts`) para que la
+home y `/blog` compartan la misma regla.
+
+| Verificación | Resultado |
+|---|---|
+| `/blog` 1440×900 | Escenario rotando entre los 3 artículos con foto (amasijos → pan → hojaldre), cada uno con su miniatura en el índice y la barra ámbar siguiéndolo |
+| Artículo sin portada | «Consejos para almacenar…» baja a las tarjetas del final (`main ul li h3` devuelve solo ese título): no desaparece del archivo, deja de encabezarlo |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |

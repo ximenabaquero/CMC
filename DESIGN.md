@@ -333,8 +333,8 @@ hermana full-bleed, para no romper la alternancia de fondos ni dejar que el dibu
 botánico invada la lista.
 
 ### Rotación editorial del blog (home, 2026-08-21)
-`HomePostsRotator` reemplaza en la home al bloque estático de `HomePostsSection` (que
-sigue encabezando `/blog`): los artículos se turnan en el escenario grande con un fundido
+`HomePostsRotator` reemplaza al bloque estático de `HomePostsSection` como cabecera del
+blog en **la home y en `/blog`**: los artículos se turnan en el escenario grande con un fundido
 **encadenado** y **6 s de turno** cada uno — 5.4 s en pantalla, 0.6 s de salida y 0.6 s de
 entrada del siguiente, sin solaparse. Tiempo para leer titular y resumen, no un carrusel
 que huye. El cruce solapado se probó y se descartó: fundir dos titulares y dos resúmenes a
@@ -357,6 +357,16 @@ móvil el índice pierde la miniatura (`max-lg:hidden`): apilado bajo el escenar
 la tarjeta del artículo que ya está arriba se leía como duplicado, no como sumario. La
 barra ámbar es forma decorativa, no texto — no viola la Amber Guardrail — y es el único
 indicador: puntos aparte serían un segundo acento compitiendo (One Hero Rule).
+
+En `/blog` la rotación **no esconde ningún destino**: el índice lista siempre los tres
+artículos en escena, así que cambia lo que se muestra en grande, no lo que se puede clicar
+— por eso el archivo puede rotar sin castigar a quien viene a escanearlo. Y en las dos
+páginas el orden lo fija `sortPostsByCoverFirst` (`src/lib/content.ts`): **primero los
+artículos con portada**. El escenario destacado es una superficie fotográfica; encabezarla
+con la portada tipográfica mientras hay artículos con foto esperando en las miniaturas
+malvende el contenido. Los que no tienen foto no desaparecen: caen a las tarjetas del
+final de `/blog`. Se corrige cargando la portada que falte desde el panel, no tocando ese
+orden.
 
 ### Motion (vocabulario del sitio)
 CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-out`

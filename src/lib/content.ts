@@ -185,6 +185,20 @@ export const getPublishedPosts = unstable_cache(fetchPublishedPosts, ["posts-lis
   tags: [CACHE_TAGS.posts],
 });
 
+/**
+ * Orden de presentación del blog: primero los artículos con portada.
+ * El escenario destacado —tanto el rotador de la home como la cabecera de
+ * `/blog`— es una superficie fotográfica; encabezarla con la portada
+ * tipográfica mientras hay artículos con foto esperando en las miniaturas
+ * malvende el contenido. `sort` es estable, así que dentro de cada grupo se
+ * conserva el orden por fecha que trae el fetcher. Los artículos sin foto no
+ * desaparecen: caen a las tarjetas del final de `/blog`. Se corrige cargando
+ * la portada que falte desde el panel, no tocando este orden.
+ */
+export function sortPostsByCoverFirst(posts: PostWithCover[]): PostWithCover[] {
+  return [...posts].sort((a, b) => Number(Boolean(b.cover)) - Number(Boolean(a.cover)));
+}
+
 export const getPostBySlug = unstable_cache(
   async (slug: string): Promise<PostWithCover | null> => {
     const supabase = createSupabasePublicClient();

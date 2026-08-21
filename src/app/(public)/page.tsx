@@ -8,6 +8,7 @@ import {
   getPublishedProducts,
   getPublishedSections,
   getSiteSettings,
+  sortPostsByCoverFirst,
 } from "@/lib/content";
 import { BrandsMarquee } from "@/components/public/BrandsMarquee";
 import { HomeHero } from "@/components/public/HomeHero";
@@ -48,13 +49,10 @@ export default async function HomePage() {
   const brands = brandsResult.status === "fulfilled" ? brandsResult.value : [];
   // Settings alimenta eyebrow del hero y canales del CTA; sin él se degradan.
   const settings = settingsResult.status === "fulfilled" ? settingsResult.value : null;
-  // El escenario del blog rota entre fotos: los artículos que aún no tienen
-  // portada pasan al final para no intercalar un bloque de color en la
-  // secuencia. El orden por fecha se conserva dentro de cada grupo (sort
-  // estable) y /blog sigue mostrando el archivo completo por fecha.
-  const homePosts = posts
-    ? [...posts].sort((a, b) => Number(Boolean(b.cover)) - Number(Boolean(a.cover)))
-    : null;
+  // El escenario del blog rota entre fotos: los artículos sin portada pasan al
+  // final para no intercalar un bloque de color en la secuencia (misma regla
+  // en /blog; ver sortPostsByCoverFirst).
+  const homePosts = posts ? sortPostsByCoverFirst(posts) : null;
 
   const hero = sections?.home_hero;
   const intro = sections?.home_intro;
