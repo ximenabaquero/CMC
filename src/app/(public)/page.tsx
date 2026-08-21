@@ -14,7 +14,7 @@ import { HomeHero } from "@/components/public/HomeHero";
 import { HomeStats } from "@/components/public/HomeStats";
 import { HomePillars } from "@/components/public/HomePillars";
 import { HomeProductCard } from "@/components/public/HomeProductCard";
-import { HomePostsSection } from "@/components/public/HomePostsSection";
+import { HomePostsRotator } from "@/components/public/HomePostsSection";
 import { HomeCta } from "@/components/public/HomeCta";
 import {
   CatalogInPreparation,
@@ -48,6 +48,13 @@ export default async function HomePage() {
   const brands = brandsResult.status === "fulfilled" ? brandsResult.value : [];
   // Settings alimenta eyebrow del hero y canales del CTA; sin él se degradan.
   const settings = settingsResult.status === "fulfilled" ? settingsResult.value : null;
+  // El escenario del blog rota entre fotos: los artículos que aún no tienen
+  // portada pasan al final para no intercalar un bloque de color en la
+  // secuencia. El orden por fecha se conserva dentro de cada grupo (sort
+  // estable) y /blog sigue mostrando el archivo completo por fecha.
+  const homePosts = posts
+    ? [...posts].sort((a, b) => Number(Boolean(b.cover)) - Number(Boolean(a.cover)))
+    : null;
 
   const hero = sections?.home_hero;
   const intro = sections?.home_intro;
@@ -265,15 +272,15 @@ export default async function HomePage() {
           title="Últimos artículos"
           description="Consejos y contenido sobre panadería, repostería y nuestros productos."
         />
-        {posts === null ? (
+        {homePosts === null ? (
           <DataUnavailable resource="los artículos" />
-        ) : posts.length === 0 ? (
+        ) : homePosts.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border bg-surface-muted p-8 text-center text-sm text-muted-foreground">
             Muy pronto publicaremos nuestros primeros artículos.
           </p>
         ) : (
           <>
-            <HomePostsSection posts={posts.slice(0, 3)} />
+            <HomePostsRotator posts={homePosts.slice(0, 3)} />
             <div className="mt-8">
               <Link
                 href="/blog"

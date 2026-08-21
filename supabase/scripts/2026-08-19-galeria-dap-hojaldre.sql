@@ -60,7 +60,12 @@ from (values
 ) as v(storage_path, sort_order)
 join public.products p on p.slug = 'dap-hojaldre'
 join public.media_assets m on m.storage_path = v.storage_path
-on conflict do nothing;
+-- El árbitro va explícito a propósito: `on conflict do nothing` a secas
+-- toma como árbitros TODOS los índices únicos de la tabla, y desde la
+-- migración 0004 `unique (product_id, sort_order)` es DEFERRABLE, lo que
+-- Postgres rechaza con 55000. La unicidad que interesa aquí (no repetir
+-- la misma imagen en el producto) es la de 0001, que no es diferible.
+on conflict (product_id, media_asset_id) do nothing;
 
 -- Verificación final: 5 filas, sin huecos, portada intacta.
 do $$

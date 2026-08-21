@@ -449,6 +449,166 @@ h6 {
   }
 }
 
+/* ------------------------------------------------------------
+   Rotación editorial del blog en la home (2026-08-21). Los artículos
+   se turnan en el escenario grande con un fundido cruzado y la fila
+   correspondiente del índice enciende su barra ámbar con el mismo
+   reloj. Turno de 6s (tiempo suficiente para leer titular y resumen),
+   entrada y salida de 0.6s solapadas, ciclo = 6s × nº de artículos:
+   por eso hay un keyframe por recuento (2, 3 y 4, los que caben en la
+   home); con más, el `data-slides` no casa y la sección se queda
+   estática en el primer artículo, que es el fallback correcto.
+   Fuera de escena el artículo va en `visibility: hidden` y no solo en
+   `opacity: 0`, para que sus enlaces salgan del orden de tabulación y
+   del árbol de accesibilidad. Sin `aria-live`: anunciar un cambio que
+   nadie pidió es ruido para lectores de pantalla.
+   Pausa en `:hover` y `:focus-within` (WCAG 2.2.2), el mismo mecanismo
+   que el marquee de marcas. Solo opacity (compositor), sin
+   `will-change`: son 3 capas que pasan casi todo el ciclo ocultas.
+   ------------------------------------------------------------ */
+.blog-slide,
+.blog-index-bar {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Base sin animación (y bajo prefers-reduced-motion): el primer artículo
+   en escena y su fila marcada — el mismo bloque estático de /blog. */
+.blog-slide:first-child,
+.blog-rotator li:first-child .blog-index-bar {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes blog-turn-2 {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  5% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0;
+    visibility: visible;
+  }
+  55.01% {
+    visibility: hidden;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes blog-turn-3 {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  3.333% {
+    opacity: 1;
+  }
+  33.333% {
+    opacity: 1;
+  }
+  36.667% {
+    opacity: 0;
+    visibility: visible;
+  }
+  36.677% {
+    visibility: hidden;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes blog-turn-4 {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  2.5% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  27.5% {
+    opacity: 0;
+    visibility: visible;
+  }
+  27.51% {
+    visibility: hidden;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Propiedades largas, no el atajo `animation`: el atajo resetea
+     `animation-delay` a 0s y estas reglas tienen más especificidad que las
+     de escalonado de abajo, así que los tres turnos arrancarían a la vez y
+     los artículos se pintarían superpuestos. */
+  .blog-rotator .blog-slide,
+  .blog-rotator .blog-index-bar {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .blog-rotator[data-slides="2"] .blog-slide,
+  .blog-rotator[data-slides="2"] .blog-index-bar {
+    animation-name: blog-turn-2;
+    animation-duration: 12s;
+  }
+
+  .blog-rotator[data-slides="3"] .blog-slide,
+  .blog-rotator[data-slides="3"] .blog-index-bar {
+    animation-name: blog-turn-3;
+    animation-duration: 18s;
+  }
+
+  .blog-rotator[data-slides="4"] .blog-slide,
+  .blog-rotator[data-slides="4"] .blog-index-bar {
+    animation-name: blog-turn-4;
+    animation-duration: 24s;
+  }
+
+  /* Escalonado por turno de 6s. El índice comparte reloj con el escenario:
+     misma cadencia, mismos delays, así la barra marca siempre al que está
+     en escena sin necesidad de estado en JS. */
+  .blog-slide:nth-child(2),
+  .blog-rotator li:nth-child(2) .blog-index-bar {
+    animation-delay: 6s;
+  }
+
+  .blog-slide:nth-child(3),
+  .blog-rotator li:nth-child(3) .blog-index-bar {
+    animation-delay: 12s;
+  }
+
+  .blog-slide:nth-child(4),
+  .blog-rotator li:nth-child(4) .blog-index-bar {
+    animation-delay: 18s;
+  }
+
+  /* Pausa también al navegar con teclado: nadie debe perseguir un blanco
+     en movimiento (mismo criterio que .brands-marquee). */
+  .blog-rotator:hover .blog-slide,
+  .blog-rotator:hover .blog-index-bar,
+  .blog-rotator:focus-within .blog-slide,
+  .blog-rotator:focus-within .blog-index-bar {
+    animation-play-state: paused;
+  }
+}
+
 /* Reveal ligado al scroll para tarjetas y bloques bajo el fold.
    El stagger emerge de la posición de cada elemento; sin delays artificiales.
    Fallback: sin soporte de view(), el contenido queda visible tal cual.

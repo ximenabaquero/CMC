@@ -25,7 +25,7 @@ Eres el agente de **base de datos y autenticación** (Supabase) de cmc-website.
 - Cualquier cambio de esquema = **nueva migración numerada** (no editar migraciones ya aplicadas) + actualizar `src/lib/supabase/types.ts` + extender `supabase/tests/rls_checks.sql` si toca RLS.
 - El navegador solo ve la clave `anon`; `service_role` no se usa en operación normal. Secretos nunca en el repo (`.dev.vars` / `wrangler secret put`).
 - Auth por email+contraseña; el registro público está deshabilitado en el dashboard de Supabase.
-- Galería de productos normalizada en `product_media` (FK + `sort_order` + unicidad), no jsonb. `sort_order` es 0-based y la posición 0 es siempre `main_image_id`; las mutaciones de orden/principal pasan por las funciones de 0004 (atómicas), no por updates sueltos.
+- Galería de productos normalizada en `product_media` (FK + `sort_order` + unicidad), no jsonb. `sort_order` es 0-based y la posición 0 es siempre `main_image_id`; las mutaciones de orden/principal pasan por las funciones de 0004 (atómicas), no por updates sueltos. **Trampa al insertar en `product_media`**: `on conflict do nothing` *a secas* falla con `55000` porque toma como árbitros todos los índices únicos y el de 0004 (`unique (product_id, sort_order)`) es DEFERRABLE — hay que nombrar el árbitro no diferible: `on conflict (product_id, media_asset_id) do nothing`.
 - Afirmaciones editoriales pendientes se documentan en la columna `internal_note` y en `docs/CONTENT_PENDING.md`.
 
 ## Convenciones

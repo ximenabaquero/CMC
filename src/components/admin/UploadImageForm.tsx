@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useId } from "react";
 import type { ActionState } from "@/lib/action-state";
 import { initialActionState } from "@/lib/action-state";
 import { ActionFeedback, inputClass } from "./fields";
@@ -11,6 +11,13 @@ import { useAdminForm } from "./useAdminForm";
 /**
  * Formulario de carga de imagen con texto alternativo obligatorio.
  * Recibe una Server Action ya vinculada al recurso (producto/artículo).
+ *
+ * Los `id` se derivan de `useId()` y no son literales: `/admin/blog/[id]`
+ * monta dos instancias (imágenes del cuerpo y portada) y con ids fijos el
+ * `htmlFor` resolvía siempre al primer formulario del DOM — al pulsar la
+ * etiqueta «Archivo…» de la portada se abría el selector del cuerpo y la
+ * foto terminaba en el formulario equivocado. Los `name` sí siguen fijos:
+ * son el contrato con la Server Action.
  */
 export function UploadImageForm({
   action,
@@ -25,6 +32,9 @@ export function UploadImageForm({
   useActionToast(state);
   const { formProps } = useAdminForm(state);
   const fieldErrors = state.fieldErrors ?? {};
+  const uid = useId();
+  const fileId = `${uid}-file`;
+  const altId = `${uid}-alt_text`;
 
   useEffect(() => {
     if (state.status === "success") formProps.ref.current?.reset();
@@ -33,11 +43,11 @@ export function UploadImageForm({
   return (
     <form {...formProps} action={formAction} className="space-y-3">
       <div>
-        <label htmlFor="file" className="mb-1 block text-sm font-medium">
+        <label htmlFor={fileId} className="mb-1 block text-sm font-medium">
           Archivo (JPEG, PNG, WebP o AVIF; máx. {maxUploadMb} MB)
         </label>
         <input
-          id="file"
+          id={fileId}
           name="file"
           type="file"
           accept="image/jpeg,image/png,image/webp,image/avif"
@@ -46,11 +56,11 @@ export function UploadImageForm({
         />
       </div>
       <div>
-        <label htmlFor="alt_text" className="mb-1 block text-sm font-medium">
+        <label htmlFor={altId} className="mb-1 block text-sm font-medium">
           Texto alternativo (describe la imagen) *
         </label>
         <input
-          id="alt_text"
+          id={altId}
           name="alt_text"
           type="text"
           required
@@ -58,11 +68,11 @@ export function UploadImageForm({
           maxLength={300}
           placeholder="Ej.: Caja de Margarina DAP Hojaldre"
           aria-invalid={fieldErrors.alt_text ? true : undefined}
-          aria-describedby={fieldErrors.alt_text ? "alt_text-error" : undefined}
+          aria-describedby={fieldErrors.alt_text ? `${altId}-error` : undefined}
           className={inputClass}
         />
         {fieldErrors.alt_text ? (
-          <p id="alt_text-error" className="mt-1 text-sm text-accent">
+          <p id={`${altId}-error`} className="mt-1 text-sm text-accent">
             {fieldErrors.alt_text[0]}
           </p>
         ) : null}

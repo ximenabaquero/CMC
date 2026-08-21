@@ -565,3 +565,63 @@ primeros iconos **rellenos** del sitio; el resto sigue en trazo 2px.
 | Accesibilidad | Los dos SVG llevan `aria-hidden="true"` y ningún `<title>`: el texto del botón ya dice «WhatsApp» y «Llámanos», así que no hay anuncio duplicado |
 | Consola del navegador | Sin errores en ninguna de las tres páginas |
 | Datos de contacto en vivo | Primera verificación con `site_settings` ya cargado: los enlaces resuelven a `wa.me/573103963790` y `tel:+573112555296` — el prefijo `+57` guardado cumple su función |
+
+## 2026-08-21 — Auditoría de la BD de desarrollo y arreglo de `rls_checks.sql`
+
+Al ejecutar las pruebas RLS en el SQL Editor saltó
+`ERROR: 42P01: relation "rls_expected" does not exist`. La usuaria preguntó si
+además le faltaban otros scripts: se auditó la base `bkvvosaqtutnwyamqipo` vía
+PostgREST con la clave pública (solo lectura, sin service role — la variable
+existe en `.env.local` pero está vacía).
+
+| Elemento | Estado en dev |
+|---|---|
+| Migraciones `0001`–`0005` | **Todas aplicadas**: existen `profiles`, `media_assets`, `site_settings`, `company_content`, `product_categories`, `products`, `product_media`, `blog_posts`, `faqs`, `brands` y **`post_media`** |
+| `2026-08-17-normalizacion-catalogo.sql` | Aplicado: 9 productos DAP `PUBLISHED`, cada uno con `technical_sheet_media_id` |
+| `2026-08-20-datos-contacto.sql` | Aplicado: teléfono `+57 311 255 5296`, WhatsApp `+57 310 396 3790` y dirección cargados; `email` sigue nulo |
+| `2026-08-19-galeria-dap-hojaldre.sql` | **Pendiente**: DAP Hojaldre tiene 2 filas en `product_media` (sort 0 y 1), no 5 |
+| Portadas del blog | Los 4 artículos con `cover_image_id` en null y **ningún** `media_assets` bajo `/images/blog/` → siguen las portadas tipográficas |
+| Marcas | 0 filas (por eso la sección no aparece; correcto) |
+| Restos de la corrida fallida | **Ninguno**: sin `media_assets` `prueba-rls*` ni marcas de prueba — el fallo revirtió limpio |
+
+**Diagnóstico del 42P01.** El script creaba la tabla **temporal** `rls_expected`
+en una sentencia y la leía desde otras, después de `set local role anon`. Pasó
+el 2026-08-17 porque entonces se ejecutó por la **Management API** (una sola
+sesión, rol `postgres`), no por el editor del dashboard — que es justo lo que
+mandan `CLAUDE.md` y `docs/DEPLOYMENT.md`. En el editor la temporal no
+sobrevive y toda comprobación que la lee falla. No era un problema de la base
+ni de la migración 0005.
+
+**Arreglo.** `supabase/tests/rls_checks.sql` pasa a ser **una sola sentencia
+`do $$ … $$`**: los conteos esperados viven en variables plpgsql, los cambios
+de rol se hacen dentro con `set_config('role', …, true)` (y `'none'` al final,
+= RESET ROLE, para no suponer que la sesión se llama `postgres`), y el bloque
+borra sus propios datos de prueba al terminar. Si algo falla, la sentencia
+entera se revierte sola, así que ya no depende del `begin/rollback` exterior
+—que se mantiene como segunda red— ni de que la herramienta respete la
+transacción. Las escrituras de administrador se movieron a los datos de prueba
+(antes tocaban `dap-hojaldre` real). Se conservan todas las aserciones,
+incluidas las de `post_media` y el ciclo de funciones de galería de la 0004.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio (no cambia código de la app) |
+| **Pendiente (usuaria)** | Pegar el `rls_checks.sql` reescrito en el SQL Editor → debe terminar sin error y con «TODAS LAS PRUEBAS RLS PASARON». Después se comprueba desde aquí que no quedó ningún `prueba-rls*` en `media_assets` |
+
+## 2026-08-21 — `2026-08-19-galeria-dap-hojaldre.sql` fallaba con 55000
+
+Al pegarlo en el SQL Editor: `ERROR: 55000: ON CONFLICT does not support
+deferrable unique constraints/exclusion constraints as arbiters`. El script
+insertaba en `product_media` con `on conflict do nothing` **sin árbitro**, y sin
+árbitro Postgres toma como candidatos todos los índices únicos de la tabla —
+incluido `unique (product_id, sort_order)`, que la migración 0004 creó
+**DEFERRABLE INITIALLY DEFERRED**. Arreglado nombrando el árbitro no diferible
+de 0001: `on conflict (product_id, media_asset_id) do nothing`, que además es la
+unicidad que de verdad interesa (no repetir la misma imagen en el producto).
+
+| Verificación | Resultado |
+|---|---|
+| Estado tras el fallo (PostgREST, solo lectura) | **Nada quedó a medias**: ningún `media_assets` nuevo bajo `/images/products/dap-hojaldre/` (siguen solo caja, aplicación y ficha) y la galería sigue con 2 filas |
+| Dato colateral importante | Que la primera inserción NO se colara demuestra que **el SQL Editor sí respeta la transacción** (`begin; … error → abort`). Es decir, el `42P01` de `rls_checks.sql` no venía de que las sentencias no compartieran sesión, sino del **cambio de rol**: tras `set local role anon`, el rol no ve el esquema `pg_temp` del creador y la tabla temporal «no existe». La reescritura a variables plpgsql ataca justo esa causa |
+| Archivos con `on conflict do nothing` sin árbitro | Solo quedaba este y `supabase/seed.sql` (sobre `faqs`, sin restricciones diferibles: no le afecta) |
+| **Pendiente (usuaria)** | Volver a pegar el script corregido; después se comprueba desde aquí que la galería queda en 5 filas y que `main_image_id` sigue en `sort_order = 0` |
