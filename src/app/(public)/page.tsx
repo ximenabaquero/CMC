@@ -235,18 +235,20 @@ export default async function HomePage() {
                 </div>
               ) : null}
             </div>
-            {/* Palmeritas de hojaldre (foto aprobada 2026-08-19; de la
-                composición de tres, la clienta dejó solo esta) recortadas
-                con transparencia, flotando sobre la crema profunda — sin
-                tarjeta ni sombra (Flat-At-Rest). */}
-            <figure className="reveal">
+            {/* Panadero con el carro de croissants recién horneados (foto
+                entregada por la clienta el 2026-08-20; reemplaza el recorte
+                de palmeritas). Escena real, no packshot: conserva marco —
+                esquina lg, borde arena, sin sombra (DESIGN.md, «Escena real
+                enmarcada»). El rostro humano encarna la promesa de relación
+                que enuncia el texto. */}
+            <figure className="reveal overflow-hidden rounded-lg border border-border">
               <Image
-                src="/images/photos/palmerita-hojaldre-01-recorte.webp"
-                alt="Palmeritas de hojaldre caramelizadas con azúcar"
-                width={800}
-                height={551}
+                src="/images/photos/panadero-croissants-01.webp"
+                alt="Panadero sonriente detrás de un carro con bandejas de croissants recién horneados"
+                width={985}
+                height={700}
                 loading="lazy"
-                className="mx-auto w-full max-w-md"
+                className="w-full"
               />
             </figure>
           </div>

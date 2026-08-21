@@ -74,6 +74,20 @@ publica (montaje digital o indicios de IA).
 > porque aquí sí opera como escena real de la operación. El recorte de
 > buñuelos (`amasijo-bunuelo-01-recorte.webp`) queda disponible sin uso.
 
+> **Actualización 2026-08-20 — escena de panadería en «Propuesta de valor».**
+> La clienta entregó `nuestra-promesa.png` (panadero sonriente tras un carro
+> de croissants, 985×700) y pidió que reemplazara el recorte de palmeritas.
+> Publicada como `panadero-croissants-01.webp` (985×700, 47 KB, WebP q82; no
+> se amplía porque el original ya está bajo los 1200 px) con marco de escena
+> real. **No proviene del material entregado en `content-source/`** — ningún
+> archivo de esa carpeta coincide byte a byte (md5 `99700e5d…`), así que no
+> pasó por el QA de identificación del 2026-08-19 y **su origen no está
+> documentado**. Tiene aspecto de banco de imágenes (encuadre, iluminación y
+> croissants franceses, no amasijos colombianos), lo que choca con la regla
+> «cero fotografía de stock» de `PRODUCT.md`/`DESIGN.md`; se publica por
+> decisión explícita de la clienta y queda **pendiente confirmar su origen y
+> su licencia**. El recorte de palmeritas queda disponible sin uso.
+
 ## Características generales
 
 - `2.png` … `27.png`, `panes 1.png`, `Panes 2.png`: PNG cuadrados
@@ -101,7 +115,7 @@ publica (montaje digital o indicios de IA).
 | 6 (1).png | Pastel hojaldrado redondo con borde repulgado | PASTELERIA | pastel-hojaldre-redondo-01 | Pastel de hojaldre redondo con borde sellado y dorado brillante | galería producto | PENDIENTE |
 | 7.png | Croissant relleno gratinado con queso | PASTELERIA | croissant-gratinado-01 | Croissant dorado gratinado con queso rallado por encima | galería producto / decoración | PENDIENTE |
 | 8.png | Rollo tipo cachito liso, ¿pan suave u hojaldre? | PENDIENTE | pan-rollo-mantequilla-01 | Rollo de pan dorado tipo cachito con espiral marcada | galería producto | PENDIENTE |
-| 9.png | Tres palmeritas de hojaldre azucaradas (inequívocas) | PASTELERIA | palmerita-hojaldre-01 | Palmeritas de hojaldre caramelizadas con azúcar | «Propuesta de valor» (home), recorte con alfa | APROBADA (2026-08-19) |
+| 9.png | Tres palmeritas de hojaldre azucaradas (inequívocas) | PASTELERIA | palmerita-hojaldre-01 | Palmeritas de hojaldre caramelizadas con azúcar | recorte con alfa **disponible sin uso** desde el 2026-08-20 (salió de «Propuesta de valor», reemplazado por la escena del panadero) | APROBADA (2026-08-19) |
 | 10.png | Dos pastelitos de hojaldre azucarados con relleno rojizo (¿guayaba?) | PASTELERIA | hojaldre-relleno-dulce-01 | Pastelitos de hojaldre azucarados con relleno de fruta roja | galería producto / blog | PENDIENTE |
 | 11.png | Torres de panecillos dorados apiladas (montaje digital espejo evidente) | PENDIENTE | pan-suave-apilado-01 | — | no publicar | DESCARTADA (2026-08-19, montaje digital) |
 | 12.png | Dos pasteles cuadrados de hojaldre gratinados con queso | PASTELERIA | hojaldre-queso-cuadrado-01 | Pasteles cuadrados de hojaldre gratinados con queso | galería producto (DAP Hojaldre) | PENDIENTE |

@@ -260,11 +260,14 @@ Solo existen en el admin (fuera de este sistema); el sitio público no tiene for
 - Footer sobre crema profunda, 3 columnas.
 
 ### Figura editorial de «Propuesta de valor»
-Una sola preparación real (las palmeritas, recorte editorial flotante `max-w-md`) en la
-columna derecha de la sección, con `loading="lazy"` y `reveal` de entrada. Sin tarjeta:
-el recorte flota sobre la crema profunda. La imagen nació como banda de tres al pie del
-hero; la clienta la movió aquí y la redujo a una el 2026-08-19 — un solo protagonista
-por sección (One Hero Rule) y el hero queda solo con el logo.
+Una sola imagen protagonista en la columna derecha de la sección (One Hero Rule), con
+`loading="lazy"` y `reveal` de entrada. Desde el 2026-08-20 es una **escena real
+enmarcada**: el panadero con el carro de croissants (`panadero-croissants-01.webp`,
+`w-full` dentro del marco `rounded-lg` + borde arena), elegida por la clienta en
+reemplazo del recorte flotante de palmeritas — el rostro humano encarna la promesa de
+relación que enuncia el texto. Historia previa: la imagen nació como banda de tres al
+pie del hero, la clienta la movió aquí y la redujo a una el 2026-08-19 (el hero quedó
+solo con el logo), y el 2026-08-20 la sustituyó por la escena del panadero.
 
 ### Acordeón FAQ (signature)
 `FaqAccordion`, único patrón de FAQ del sitio (2026-08-19; el `FaqList` compacto de la

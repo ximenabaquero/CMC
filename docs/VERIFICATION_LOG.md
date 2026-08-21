@@ -474,3 +474,36 @@ dirección del CMS, sin API key ni campo nuevo; (3) `AudienceSectors` cierra
 | Consola del navegador | Sin errores |
 | **Bloqueado hasta ejecutar el SQL** | Teléfono, WhatsApp, dirección y **el mapa dentro de `/contacto`** no se renderizan todavía: `site_settings` sigue en NULL en la BD de desarrollo (el `.env.local` no tiene `SUPABASE_SERVICE_ROLE_KEY`, así que no se pudo cargar desde aquí). La página muestra «Canales de contacto en preparación». Ejecutar el script en el SQL Editor de dev y de producción, y guardar en `/admin/contacto` para revalidar |
 | **Pendiente manual (usuaria)** | Tras cargar los datos: comprobar que el botón de WhatsApp abre `wa.me/573103963790` y el de llamada `tel:+573112555296` |
+
+## 2026-08-20 — «¿Quiénes somos?» (home) pasa de los buñuelos a la bodega DAP
+
+La clienta reemplazó el recorte de buñuelos por una **escena real de bodega**
+(pasillo con estibas de cajas DAP) y pidió, en la misma revisión, que el texto
+de la sección quedara centrado verticalmente respecto a la foto.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Derivado publicado | `public/images/photos/bodega-dap-01.webp` 1200×845, 260 KB (receta del importador: máx. 1200 px, WebP q82, desde el JPEG de 1227×864 / 377 KB). Ya estaba versionado; la regeneración salió **byte-idéntica** |
+| Procedencia del original | `quienessomosprincipal.jpeg` es **byte-idéntica** (md5 `7161cff1…`) a `content-source/fotos-adicionales/98f713d0-…d9.jpeg`, fila DESCARTADA el 2026-08-19 por indicios de IA. Se publica por **elección explícita de la clienta** (salvedad prevista en la alerta de `docs/FOTOS_ADICIONALES.md`); su origen sigue **sin confirmar** |
+| Tratamiento visual | Escena real ⇒ no se recorta y conserva marco: `rounded-lg` + `border border-border`, sin sombra (Flat-At-Rest). Ocupa el ancho de la columna corta del grid `lg:grid-cols-[2fr_3fr]` |
+| Home 1440 (CDP headless) | Foto enmarcada en la columna izquierda y párrafo centrado verticalmente contra ella (`lg:items-center`): centro del bloque de texto ≈ centro de la columna de la foto; sin errores de consola |
+| **Pendiente (clienta)** | Confirmar el origen de la foto de bodega. Si resultara generada con IA, chocaría con «no fabricar evidencia» de `PRODUCT.md`, porque aquí opera como escena real de la operación |
+| **Pendiente manual (usuaria)** | Revisión de la captura antes del commit; el recorte `amasijo-bunuelo-01-recorte.webp` queda disponible sin uso |
+
+## 2026-08-20 — «Propuesta de valor» (home) pasa de las palmeritas al panadero
+
+Segundo relevo fotográfico del día: la clienta reemplazó el recorte flotante
+de palmeritas por una **escena de panadería** (panadero tras un carro de
+croissants), entregada como `public/images/photos/nuestra-promesa.png`.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Derivado publicado | `public/images/photos/panadero-croissants-01.webp` 985×700, **47 KB** (desde el PNG de 985×700 / 964 KB; WebP q82, sin reescalado porque ya está bajo los 1200 px del importador) |
+| Procedencia del original | **Sin coincidencia byte a byte en `content-source/`** (md5 `99700e5d…`): no pasó por el QA de identificación del 2026-08-19 y su origen no está documentado. Aspecto de banco de imágenes (croissants franceses, no amasijos colombianos) frente a «cero fotografía de stock» de `PRODUCT.md`/`DESIGN.md` |
+| Tratamiento visual | Escena real ⇒ marco `overflow-hidden rounded-lg border border-border`, sin sombra; `w-full` en la columna derecha del grid `lg:grid-cols-[3fr_2fr]`, que ya traía `lg:items-center` |
+| Home 1440 (CDP headless) | Foto enmarcada a la derecha, alineada verticalmente con el bloque de texto sobre crema profunda; el marco arena se lee bien sobre ese fondo; sin errores de consola |
+| Nota de entorno | El dev server de la usuaria se había caído (`ERR_CONNECTION_REFUSED` en la primera captura); se relanzó `npm run dev` y **queda corriendo** |
+| **Pendiente (clienta)** | Confirmar origen y licencia de la foto; si es de banco de imágenes, choca con la regla «cero fotografía de stock» |
+| **Pendiente manual (usuaria)** | Revisión de la captura antes del commit; el recorte `palmerita-hojaldre-01-recorte.webp` queda disponible sin uso |
