@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPublishedPosts } from "@/lib/content";
+import { getPostBySlug, getPublishedPosts, getSiteSettings } from "@/lib/content";
 import { PostArticle } from "@/components/public/PostArticle";
 import { mediaUrl } from "@/lib/media";
 
@@ -43,5 +43,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  return <PostArticle post={post} />;
+  // Ambos fetchers están cacheados por tag, así que las bandas de cierre no
+  // añaden consultas por visita. Si alguno falla, el artículo se sirve igual:
+  // sin «Sigue leyendo» y con el CTA degradado al enlace de /contacto.
+  const [related, settings] = await Promise.all([
+    getPublishedPosts()
+      .then((posts) => posts.filter((item) => item.id !== post.id).slice(0, 3))
+      .catch(() => []),
+    getSiteSettings().catch(() => null),
+  ]);
+
+  return <PostArticle post={post} related={related} settings={settings} />;
 }

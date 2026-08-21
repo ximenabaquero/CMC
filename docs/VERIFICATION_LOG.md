@@ -670,5 +670,30 @@ sincronizado por barra ámbar. `/blog` conserva la versión estática.
 | 390×844 | Primer intento: el índice repetía justo debajo la tarjeta del artículo que ya estaba en escena, con miniatura y todo — se leía como duplicado. Corregido ocultando la miniatura bajo `lg` (`max-lg:hidden`): queda un sumario de titulares con la barra ámbar |
 | `/blog` | 0 `.blog-rotator` en la página: el archivo sigue estático, como debe |
 | Consola del navegador | Sin errores en ninguna captura |
-| **Pendiente (usuaria)** | Cargar las 3 portadas. Hasta entonces la rotación muestra los bloques tipográficos de `EditorialCover`, no fotos. Si se suben desde el panel, hacerlo **en el sitio publicado** (en local el archivo va al bucket simulado y producción daría 404); la alternativa es pegar `supabase/scripts/2026-08-20-covers-blog.sql`, que registra los 3 WebP ya versionados como `STATIC` y sirve igual en local y en producción |
 | **Pendiente (verificación)** | La pausa en `:hover`/`:focus-within` está en el CSS (mismo patrón que `.brands-marquee`) pero **no se probó interactivamente**: el driver CDP no expone hover |
+
+### Mismo día, más tarde — portadas cargadas y dos correcciones
+
+La usuaria ejecutó `supabase/scripts/2026-08-20-covers-blog.sql` y reportó que
+«no sale nada». El script **sí funcionó**; lo que fallaba era otra cosa.
+
+| Verificación | Resultado |
+|---|---|
+| BD tras el script (PostgREST) | Las 3 filas `STATIC` creadas y asignadas: amasijos → `2bb21fee…`, pan → `0be2f935…`, hojaldre → `987fea84…`. Solo «consejos-para-almacenar…» sigue en null, como estaba previsto |
+| Producción | HTML con `x-nextjs-cache: HIT` y sin ningún `src` a `/images/blog/`: el commit del rotador **sí** está desplegado (`.blog-slide` presente en el HTML), pero la página se prerenderizó **antes** de correr el SQL y la copia cacheada en R2 no se invalidó sola. El sitio no revalida por tiempo — solo bajo demanda desde el admin — así que el SQL directo a la BD nunca dispara `revalidateTag` |
+| Local, tras `rm -rf .next/cache` | Los 3 `src` correctos y las 3 fotos decodificadas (`naturalWidth` 1200/985/1200). La primera captura salió en gris solo porque el servidor acababa de arrancar |
+| `public/images/blog/` | Los 4 WebP están **rastreados por git** y el servidor los entrega (200, `image/webp`). No aplica el riesgo de bucket: son `STATIC`, no R2 |
+
+**Corrección del fundido.** Con fotos reales se vio lo que con los bloques de
+color pasaba desapercibido: el cruce **solapado** de 0.6 s superponía los dos
+titulares y los dos resúmenes (visión doble) y encendía dos barras del índice a
+la vez. Se pasó a fundido **encadenado**: 5.4 s en pantalla, 0.6 s de salida y
+0.6 s de entrada del siguiente, sin solape. Muestreo de opacidades durante una
+transición: `0.50/0/0` → `0/0.19/0` → `0/0.78/0` → `0/1.00/0` — nunca hay dos
+artículos con opacidad simultánea.
+
+| Verificación | Resultado |
+|---|---|
+| Turnos 1440×900 con fotos | Amasijos (tabla de madera) → pan (canasta) → hojaldre (macro de capas), cada uno con su miniatura en el índice y la barra ámbar siguiéndolo |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| **Pendiente (usuaria)** | Forzar la revalidación de producción: guardar cualquier artículo desde `/admin/blog/<id>` dispara `revalidatePublicContent(CACHE_TAGS.posts)` y reemplaza el HTML cacheado. Un `git push` nuevo también sirve (Workers Builds reconstruye con los datos ya cargados) |

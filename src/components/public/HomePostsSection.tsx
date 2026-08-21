@@ -138,7 +138,7 @@ export function HomePostsSection({ posts }: { posts: PostWithCover[] }) {
 
 /**
  * Blog de la home: el mismo par escenario + lista, pero los artículos se
- * turnan en el escenario con un fundido cruzado (6 s cada uno) y la fila
+ * turnan en el escenario con un fundido encadenado (6 s cada uno) y la fila
  * correspondiente del índice se marca con una barra ámbar sincronizada.
  *
  * CSS puro (restricción SSG): los turnos son `animation-delay` por

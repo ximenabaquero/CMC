@@ -199,6 +199,71 @@ h6 {
 }
 
 /* ------------------------------------------------------------
+   Prosa de artículo (2026-08-21): modificador de `.prose-cmc` que solo
+   usa el cuerpo del blog. Las FAQs y los bloques institucionales son
+   textos cortos y conservan la prosa base; un artículo es lectura larga
+   y necesita cuerpo más grande, más aire entre secciones y una jerarquía
+   de sección visible. Va después de `.prose-cmc` a propósito: misma
+   especificidad, gana por orden.
+   ------------------------------------------------------------ */
+.prose-article {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+
+/* Bajada: solo cuando el resumen NO se imprimió ya en la cabecera
+   (lo decide PostArticle). Así el artículo tiene siempre exactamente
+   un párrafo de entrada, nunca dos. */
+.prose-article--entrada > p:first-child {
+  font-size: 1.1875rem;
+  line-height: 1.7;
+  color: var(--petrol);
+}
+
+/* Cada sección se anuncia con un filete naranja corto: marca el corte
+   con el acento editorial del sitio sin numerar. No se numera porque el
+   Markdown del CMS no garantiza que los h2 sean una secuencia ordenada
+   (mismo criterio que AudienceSectors frente a HomePillars). */
+.prose-article h2 {
+  margin-top: 2.5em;
+  font-size: 1.5rem;
+  color: var(--petrol);
+}
+
+.prose-article h2::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-bottom: 0.75rem;
+  background: var(--orange);
+}
+
+.prose-article h3 {
+  margin-top: 2em;
+  font-size: 1.1875rem;
+  color: var(--petrol);
+}
+
+/* El marcador es forma, no texto: el naranja aquí no compite con la
+   lectura y ata la lista al mismo acento de los filetes. */
+.prose-article li::marker {
+  color: var(--orange);
+}
+
+/* Cita destacada: Fraunces en petróleo, el único momento en que la voz
+   display entra en el cuerpo del texto. */
+.prose-article blockquote {
+  border-left: 2px solid var(--orange);
+  padding-left: 1.25rem;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--petrol);
+}
+
+/* ------------------------------------------------------------
    Marquee de marcas (página de inicio). El track tiene dos copias
    de la lista: -50% recorre exactamente una y el bucle es continuo.
    ------------------------------------------------------------ */
@@ -451,13 +516,17 @@ h6 {
 
 /* ------------------------------------------------------------
    Rotación editorial del blog en la home (2026-08-21). Los artículos
-   se turnan en el escenario grande con un fundido cruzado y la fila
+   se turnan en el escenario grande con un fundido encadenado y la fila
    correspondiente del índice enciende su barra ámbar con el mismo
-   reloj. Turno de 6s (tiempo suficiente para leer titular y resumen),
-   entrada y salida de 0.6s solapadas, ciclo = 6s × nº de artículos:
-   por eso hay un keyframe por recuento (2, 3 y 4, los que caben en la
-   home); con más, el `data-slides` no casa y la sección se queda
-   estática en el primer artículo, que es el fallback correcto.
+   reloj. Turno de 6s (tiempo suficiente para leer titular y resumen):
+   5.4s en pantalla, 0.6s de salida y 0.6s de entrada del siguiente
+   **sin solaparse**. El cruce solapado se probó y se descartó: fundir
+   dos titulares y dos resúmenes a la vez se lee como visión doble
+   (con fotos funcionaría, con texto no) y encendía dos barras del
+   índice al tiempo. Ciclo = 6s × nº de artículos: por eso hay un
+   keyframe por recuento (2, 3 y 4, los que caben en la home); con más,
+   el `data-slides` no casa y la sección se queda estática en el primer
+   artículo, que es el fallback correcto.
    Fuera de escena el artículo va en `visibility: hidden` y no solo en
    `opacity: 0`, para que sus enlaces salgan del orden de tabulación y
    del árbol de accesibilidad. Sin `aria-live`: anunciar un cambio que
@@ -488,14 +557,14 @@ h6 {
   5% {
     opacity: 1;
   }
-  50% {
+  45% {
     opacity: 1;
   }
-  55% {
+  50% {
     opacity: 0;
     visibility: visible;
   }
-  55.01% {
+  50.01% {
     visibility: hidden;
   }
   100% {
@@ -512,14 +581,14 @@ h6 {
   3.333% {
     opacity: 1;
   }
-  33.333% {
+  30% {
     opacity: 1;
   }
-  36.667% {
+  33.333% {
     opacity: 0;
     visibility: visible;
   }
-  36.677% {
+  33.343% {
     visibility: hidden;
   }
   100% {
@@ -536,14 +605,14 @@ h6 {
   2.5% {
     opacity: 1;
   }
-  25% {
+  22.5% {
     opacity: 1;
   }
-  27.5% {
+  25% {
     opacity: 0;
     visibility: visible;
   }
-  27.51% {
+  25.01% {
     visibility: hidden;
   }
   100% {

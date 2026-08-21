@@ -335,8 +335,11 @@ botánico invada la lista.
 ### Rotación editorial del blog (home, 2026-08-21)
 `HomePostsRotator` reemplaza en la home al bloque estático de `HomePostsSection` (que
 sigue encabezando `/blog`): los artículos se turnan en el escenario grande con un fundido
-cruzado de 0.6 s y **6 s de reposo** cada uno — tiempo para leer titular y resumen, no un
-carrusel que huye. El índice lateral lista los mismos artículos y hace de indicador: la
+**encadenado** y **6 s de turno** cada uno — 5.4 s en pantalla, 0.6 s de salida y 0.6 s de
+entrada del siguiente, sin solaparse. Tiempo para leer titular y resumen, no un carrusel
+que huye. El cruce solapado se probó y se descartó: fundir dos titulares y dos resúmenes a
+la vez se lee como visión doble —con fotos funcionaría, con texto no— y encendía dos
+barras del índice al tiempo. El índice lateral lista los mismos artículos y hace de indicador: la
 fila del que está en escena enciende una barra ámbar de 2 px. Escenario e índice comparten
 reloj (`animation-delay` por `nth-child` sobre un ciclo de 6 s × nº de artículos), así que
 la sincronía no necesita estado en JS. Vocabulario en `globals.css` (`.blog-rotator`), CSS

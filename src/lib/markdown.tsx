@@ -5,10 +5,12 @@ import rehypeSanitize from "rehype-sanitize";
 /**
  * Render de Markdown SANITIZADO (sin HTML crudo) para artículos del
  * blog, respuestas de FAQs y bloques de contenido institucional.
+ * `className` añade modificadores de prosa sobre la base `.prose-cmc`
+ * (hoy solo `prose-article`, el cuerpo del blog).
  */
-export function Markdown({ children }: { children: string }) {
+export function Markdown({ children, className }: { children: string; className?: string }) {
   return (
-    <div className="prose-cmc">
+    <div className={className ? `prose-cmc ${className}` : "prose-cmc"}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeSanitize]}
