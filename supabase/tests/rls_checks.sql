@@ -42,7 +42,8 @@ values
   ('99999999-9999-4999-8999-999999999921', 'R2', 'prueba-rls-1.webp', 'prueba-rls-1.webp', 'image/webp', 100, 'Imagen de prueba 1'),
   ('99999999-9999-4999-8999-999999999922', 'R2', 'prueba-rls-2.webp', 'prueba-rls-2.webp', 'image/webp', 100, 'Imagen de prueba 2'),
   ('99999999-9999-4999-8999-999999999923', 'R2', 'prueba-rls-3.webp', 'prueba-rls-3.webp', 'image/webp', 100, 'Imagen de prueba 3'),
-  ('99999999-9999-4999-8999-999999999924', 'R2', 'prueba-rls-ficha.pdf', 'ficha-de-prueba.pdf', 'application/pdf', 100, 'Ficha técnica de prueba');
+  ('99999999-9999-4999-8999-999999999924', 'R2', 'prueba-rls-ficha.pdf', 'ficha-de-prueba.pdf', 'application/pdf', 100, 'Ficha técnica de prueba'),
+  ('99999999-9999-4999-8999-999999999925', 'R2', 'prueba-rls-cuerpo.webp', 'prueba-rls-cuerpo.webp', 'image/webp', 100, 'Imagen del cuerpo de un artículo');
 
 insert into public.products (id, name, slug, main_image_id, status)
 values ('99999999-9999-4999-8999-999999999931', 'Producto prueba RLS', 'producto-prueba-rls', '99999999-9999-4999-8999-999999999921', 'DRAFT');
@@ -51,6 +52,14 @@ insert into public.product_media (product_id, media_asset_id, sort_order) values
   ('99999999-9999-4999-8999-999999999931', '99999999-9999-4999-8999-999999999921', 0),
   ('99999999-9999-4999-8999-999999999931', '99999999-9999-4999-8999-999999999922', 1),
   ('99999999-9999-4999-8999-999999999931', '99999999-9999-4999-8999-999999999923', 2);
+
+-- Artículo de prueba con una imagen en el cuerpo (0005): la fila de
+-- post_media debe heredar la visibilidad del artículo, que queda DRAFT.
+insert into public.blog_posts (id, title, slug, body, status)
+values ('99999999-9999-4999-8999-999999999941', 'Artículo prueba RLS', 'articulo-prueba-rls', 'Cuerpo de prueba.', 'DRAFT');
+
+insert into public.post_media (post_id, media_asset_id) values
+  ('99999999-9999-4999-8999-999999999941', '99999999-9999-4999-8999-999999999925');
 
 -- Conteos esperados calculados sobre el estado real de la base (como
 -- superusuario, antes de cambiar de rol): las pruebas no asumen que el
@@ -69,7 +78,12 @@ select
   (select count(*)
      from public.product_media pm
      join public.products p on p.id = pm.product_id
-    where p.status = 'PUBLISHED') as published_product_media;
+    where p.status = 'PUBLISHED') as published_product_media,
+  (select count(*)
+     from public.post_media pm
+     join public.blog_posts bp on bp.id = pm.post_id
+    where bp.status = 'PUBLISHED') as published_post_media,
+  (select count(*) from public.post_media) as total_post_media;
 
 grant select on rls_expected to anon, authenticated;
 
@@ -122,6 +136,13 @@ begin
   select published_product_media into expected from rls_expected;
   if n <> expected then
     raise exception 'FALLO: anon ve % filas de product_media (esperadas %)', n, expected;
+  end if;
+
+  -- Imágenes del cuerpo (0005): solo las de artículos publicados.
+  select count(*) into n from public.post_media;
+  select published_post_media into expected from rls_expected;
+  if n <> expected then
+    raise exception 'FALLO: anon ve % filas de post_media (esperadas %)', n, expected;
   end if;
 
   -- media_assets: lectura pública (necesaria para resolver imágenes).
@@ -181,6 +202,14 @@ begin
   begin
     insert into public.brands (name, status) values ('hack', 'PUBLISHED');
     raise exception 'FALLO: anon pudo insertar en brands';
+  exception
+    when insufficient_privilege or check_violation then null;
+  end;
+
+  begin
+    insert into public.post_media (post_id, media_asset_id)
+    values ('99999999-9999-4999-8999-999999999941', '99999999-9999-4999-8999-999999999923');
+    raise exception 'FALLO: anon pudo insertar en post_media';
   exception
     when insufficient_privilege or check_violation then null;
   end;
@@ -259,6 +288,23 @@ begin
   select total_brands into expected from rls_expected;
   if n <> expected then
     raise exception 'FALLO: admin ve % marcas (esperadas % totales)', n, expected;
+  end if;
+
+  -- Ve las imágenes del cuerpo de TODOS los artículos, incluidos borradores.
+  select count(*) into n from public.post_media;
+  select total_post_media into expected from rls_expected;
+  if n <> expected then
+    raise exception 'FALLO: admin ve % filas de post_media (esperadas % totales)', n, expected;
+  end if;
+
+  -- Puede vincular y desvincular imágenes del cuerpo.
+  insert into public.post_media (post_id, media_asset_id)
+  values ('99999999-9999-4999-8999-999999999941', '99999999-9999-4999-8999-999999999923');
+  delete from public.post_media
+   where post_id = '99999999-9999-4999-8999-999999999941'
+     and media_asset_id = '99999999-9999-4999-8999-999999999923';
+  if not found then
+    raise exception 'FALLO: admin no pudo borrar una fila de post_media';
   end if;
 
   -- Puede escribir.

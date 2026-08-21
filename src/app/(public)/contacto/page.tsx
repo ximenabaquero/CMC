@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/content";
 import { BakerySideOrnament } from "@/components/public/BakerySideOrnament";
 import { ContactMap, mapsSearchHref } from "@/components/public/ContactMap";
+import { PhoneIcon, WhatsAppIcon } from "@/components/public/icons";
 import { AudienceSectors } from "@/components/public/AudienceSectors";
 import { DataUnavailable } from "@/components/public/shared";
 import type { SiteSettings } from "@/lib/supabase/types";
@@ -97,16 +98,18 @@ export default async function ContactPage() {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md bg-primary px-6 py-3.5 text-center text-base font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                  className="flex items-center justify-center gap-2.5 rounded-md bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
                 >
+                  <WhatsAppIcon className="size-5 shrink-0" />
                   Escríbenos por WhatsApp
                 </a>
               ) : null}
               {phoneHref ? (
                 <a
                   href={phoneHref}
-                  className="rounded-md border-2 border-petrol px-6 py-3.5 text-center text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                  className="flex items-center justify-center gap-2.5 rounded-md border-2 border-petrol px-6 py-3.5 text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
                 >
+                  <PhoneIcon className="size-5 shrink-0" />
                   Llámanos: {settings?.phone}
                 </a>
               ) : null}

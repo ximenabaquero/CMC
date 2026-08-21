@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { WhatsAppIcon } from "@/components/public/icons";
 import type { SiteSettings } from "@/lib/supabase/types";
 
 /**
@@ -83,8 +84,9 @@ export function HomeCta({ settings }: { settings: SiteSettings | null }) {
                 href={`https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block rounded-md bg-amber px-8 py-4 text-base font-semibold text-petrol-deep transition hover:bg-amber-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                className="inline-flex items-center gap-2.5 rounded-md bg-amber px-8 py-4 text-base font-semibold text-petrol-deep transition hover:bg-amber-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
+                <WhatsAppIcon className="size-5 shrink-0" />
                 Escríbenos por WhatsApp
               </a>
               <Link

@@ -14,6 +14,7 @@ import {
   type ActionState,
 } from "@/lib/action-state";
 import { saveUploadedImage, deleteManagedAsset } from "@/lib/media-upload";
+import { mediaUrl } from "@/lib/media";
 import { CACHE_TAGS, revalidatePublicContent } from "@/lib/revalidate";
 
 export async function createPost(_prev: ActionState, formData: FormData): Promise<ActionState> {
@@ -123,11 +124,21 @@ export async function deletePost(
     .eq("id", postId)
     .maybeSingle();
 
+  // Las imágenes del cuerpo se leen ANTES del borrado: la fila de
+  // post_media cae por cascada, pero el archivo en el almacenamiento no.
+  const { data: bodyImages } = await supabase
+    .from("post_media")
+    .select("media_asset_id")
+    .eq("post_id", postId);
+
   const { error } = await supabase.from("blog_posts").delete().eq("id", postId);
   if (error) return actionError("No se pudo eliminar el artículo. Intenta de nuevo.");
 
   if (post?.cover_image_id) {
     await deleteManagedAsset(supabase, post.cover_image_id);
+  }
+  for (const image of bodyImages ?? []) {
+    await deleteManagedAsset(supabase, image.media_asset_id);
   }
 
   revalidatePublicContent(CACHE_TAGS.posts);
@@ -178,6 +189,85 @@ export async function uploadPostCover(
   revalidatePublicContent(CACHE_TAGS.posts);
   revalidatePath(`/admin/blog/${postId}`);
   return actionSuccess("Imagen de portada actualizada.");
+}
+
+/**
+ * Sube una imagen para ilustrar el CUERPO del artículo y la vincula en
+ * post_media. No revalida el sitio público: subirla no cambia nada hasta
+ * que se inserte en el texto y se guarde el artículo.
+ */
+export async function uploadPostImage(
+  postId: string,
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const { userId } = await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const file = formData.get("file");
+  const result = await saveUploadedImage(
+    supabase,
+    file instanceof File ? file : null,
+    formData.get("alt_text"),
+    userId
+  );
+  if (result.error || !result.mediaId) {
+    return actionError(result.error ?? "No se pudo subir la imagen.");
+  }
+
+  const { error } = await supabase
+    .from("post_media")
+    .insert({ post_id: postId, media_asset_id: result.mediaId });
+
+  if (error) {
+    // Sin vínculo la imagen quedaría huérfana: deshacer la subida.
+    await deleteManagedAsset(supabase, result.mediaId);
+    return actionError(DB_ERROR_MESSAGE);
+  }
+
+  revalidatePath(`/admin/blog/${postId}`);
+  return actionSuccess("Imagen subida. Pulsa «Insertar en el texto» donde quieras que aparezca.");
+}
+
+/**
+ * Quita una imagen del cuerpo: desvincula y borra el archivo. Se niega
+ * mientras el Markdown siga apuntando a ella — borrarla dejaría una
+ * imagen rota en el artículo publicado.
+ */
+export async function removePostImage(
+  postId: string,
+  mediaId: string,
+  _prev: ActionState,
+  _formData: FormData
+): Promise<ActionState> {
+  await requireAdmin();
+  const supabase = await createSupabaseServerClient();
+
+  const [{ data: post }, { data: asset }] = await Promise.all([
+    supabase.from("blog_posts").select("body").eq("id", postId).maybeSingle(),
+    supabase.from("media_assets").select("*").eq("id", mediaId).maybeSingle(),
+  ]);
+
+  if (!asset) return actionError("Esa imagen ya no existe.");
+
+  if (post?.body.includes(mediaUrl(asset))) {
+    return actionError(
+      "La imagen sigue insertada en el contenido. Bórrala del texto, guarda el artículo y vuelve a intentarlo."
+    );
+  }
+
+  const { error } = await supabase
+    .from("post_media")
+    .delete()
+    .eq("post_id", postId)
+    .eq("media_asset_id", mediaId);
+  if (error) return actionError("No se pudo quitar la imagen del artículo.");
+
+  const removal = await deleteManagedAsset(supabase, mediaId);
+  if (removal.error) return actionError(removal.error);
+
+  revalidatePath(`/admin/blog/${postId}`);
+  return actionSuccess("Imagen eliminada.");
 }
 
 export async function removePostCover(

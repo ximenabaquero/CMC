@@ -2,6 +2,7 @@ import Link from "next/link";
 import { mediaUrl } from "@/lib/media";
 import { Markdown } from "@/lib/markdown";
 import { ProductGallery } from "@/components/public/ProductGallery";
+import { WhatsAppIcon } from "@/components/public/icons";
 import type { ProductDetailData } from "@/lib/content";
 import type { SiteSettings } from "@/lib/supabase/types";
 
@@ -100,8 +101,9 @@ export function ProductDetail({
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
+                <WhatsAppIcon className="size-4 shrink-0" />
                 Pedir información por WhatsApp
               </a>
             ) : (

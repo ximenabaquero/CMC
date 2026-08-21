@@ -116,6 +116,13 @@ type ProductMediaRow = {
   created_at: string;
 }
 
+type PostMediaRow = {
+  id: string;
+  post_id: string;
+  media_asset_id: string;
+  created_at: string;
+}
+
 type BlogPostRow = {
   id: string;
   title: string;
@@ -249,6 +256,11 @@ export type Database = {
         >,
         Partial<BlogPostRow>
       >;
+      post_media: TableDef<
+        PostMediaRow,
+        Generated<PostMediaRow, "id" | "created_at">,
+        Partial<PostMediaRow>
+      >;
       faqs: TableDef<
         FaqRow,
         Generated<
@@ -306,6 +318,7 @@ export type ProductCategory = ProductCategoryRow;
 export type Product = ProductRow;
 export type ProductMedia = ProductMediaRow;
 export type BlogPost = BlogPostRow;
+export type PostMedia = PostMediaRow;
 export type Faq = FaqRow;
 export type Brand = BrandRow;
 
