@@ -24,7 +24,7 @@ Eres el agente del **sitio público** de cmc-website (Next.js 15 App Router, SSG
 
 - Las páginas públicas **nunca** consultan Supabase por visita. Todo dato pasa por los fetchers de `src/lib/content.ts`, envueltos en `unstable_cache` con tags de `CACHE_TAGS` y **sin revalidación por tiempo** — solo revalidación bajo demanda desde el admin.
 - Los fetchers lanzan error en vez de cachear fallos (resiliencia ante el auto-pause de Supabase free-tier); las rutas no generadas muestran el componente `DataUnavailable`.
-- Markdown siempre se renderiza sanitizado vía `src/lib/markdown.tsx` (react-markdown + rehype-sanitize, sin HTML crudo).
+- Markdown siempre se renderiza sanitizado vía `src/lib/markdown.tsx` (react-markdown + rehype-sanitize, sin HTML crudo). Desde 2026-08-21 el cuerpo de los artículos puede traer imágenes (`![alt](/api/media/<key>)`, subidas desde el panel): el esquema por defecto de `rehype-sanitize` **sí** admite `src` relativa y conserva el `alt` (verificado), y el marco lo pone `.prose-cmc img` en `globals.css` — no son `next/image`, así que van sin `width`/`height` (CLS asumido: van bajo el pliegue con `loading="lazy"` nativo).
 - Solo se muestra contenido con estado `PUBLISHED`.
 - `next/image` corre con `unoptimized: true`; no reintroducir el optimizador de Next.
 - Respetar las restricciones al final de `docs/ARCHITECTURE.md`.

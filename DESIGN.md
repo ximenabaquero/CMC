@@ -223,6 +223,13 @@ clienta en reemplazo del recorte de buñuelos. Receta del marco: `figure` con
 (`w-full`), sin `object-cover` ni altura fija — la proporción nativa manda. El texto de la
 sección se centra verticalmente contra esa columna (`lg:items-center` en el grid).
 
+**Imagen dentro de un artículo (2026-08-21).** Las fotos que la clienta inserta en el cuerpo de
+un post desde el panel heredan ese mismo marco, pero desde CSS y no desde JSX: la regla
+`.prose-cmc img` en `globals.css` (bloque a ancho de columna, esquina lg, borde arena 1px, sin
+sombra, 1.5em de aire arriba y abajo). El editor solo escribe `![alt](url)` en el Markdown, así
+que **la proporción nativa manda siempre**: no hay recortes ni alturas fijas, y quien sube la
+foto decide el encuadre. Sin portada asignada, la tarjeta del artículo cae en `EditorialCover`.
+
 ## Components
 
 ### Buttons

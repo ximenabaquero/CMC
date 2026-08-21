@@ -161,6 +161,15 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - Ficha técnica por producto: `products.technical_sheet_media_id`
   (nullable → `media_assets`, `on delete set null`). El detalle público
   muestra «Descargar ficha técnica (PDF)» solo si existe.
+- Imágenes **dentro** del cuerpo de un artículo (migración `0005`):
+  `post_media` (`post_id` + `media_asset_id`, ambos `on delete cascade`,
+  unique por par, sin orden — lo fija el propio texto). El Markdown las
+  referencia por URL; la tabla existe para poder listarlas en el panel y
+  borrar el archivo del almacenamiento al quitarlas o al eliminar el
+  artículo (`deletePost` las recoge antes del borrado, porque la cascada
+  se lleva la fila pero no el objeto en R2). RLS: hereda la visibilidad
+  del artículo, escritura solo admin — mismas políticas que `product_media`.
+  La portada sigue aparte, en `blog_posts.cover_image_id`.
 - Estados `DRAFT`/`PUBLISHED` en todo el contenido; `internal_note`
   documenta el contenido en revisión editorial dentro del propio CMS.
 

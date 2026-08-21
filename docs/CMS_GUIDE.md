@@ -120,6 +120,21 @@ previa y publicar. El contenido usa un formato de texto sencillo:
 
 El botón «Ver cómo se verá» muestra el resultado mientras escribes.
 
+**Fotos dentro del artículo** (además de la portada): en la sección
+«Imágenes dentro del artículo», justo debajo del editor, sube la foto con su
+texto alternativo. Aparecerá en la lista; entonces haz clic en el texto, en el
+punto exacto donde quieras la foto, y pulsa **«Insertar en el texto»**. Se
+inserta un código como `![descripción](/api/media/…)`: ese es tu foto. Guarda
+el artículo para que se vea en el sitio.
+
+- El texto entre corchetes es la descripción para personas con lectores de
+  pantalla; puedes cambiarla ahí mismo.
+- Para quitar una foto del artículo, bórrala del texto, guarda, y luego usa
+  «Quitar» en la lista de imágenes (mientras siga en el texto, el panel no te
+  dejará borrarla para no dejar un hueco roto).
+- Sube las fotos ya recortadas y a un tamaño razonable: el panel las guarda
+  tal cual, sin reducirlas.
+
 ### Preguntas frecuentes
 
 Crear, editar, ordenar (campo «Orden»: menor número aparece primero) y
