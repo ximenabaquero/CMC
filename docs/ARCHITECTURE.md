@@ -124,12 +124,13 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   preparaciones aprobadas, referenciadas por **ruta literal en JSX**
   («Propuesta de valor» y «¿Quiénes somos?» en la home, figura de cierre de
   Nosotros) — **sin fila en `media_assets`**, igual que los GIFs de marca.
-- **Portadas del blog** (`public/images/blog/`, 2026-08-20): a diferencia de
-  las anteriores, estas **sí llevan fila en `media_assets`** (`STATIC`, ruta
-  bajo `public/`) porque `blog_posts.cover_image_id` es una FK; se registran
-  con `supabase/scripts/2026-08-20-covers-blog.sql` y no pasan por el
-  importador. Sin portada, el artículo cae en la portada tipográfica
-  `EditorialCover`.
+- **Portadas del blog** (2026-08-21): se suben **desde el panel**
+  (`/admin/blog/<id>` → «Imagen de portada»), así que son medios `R2` como
+  cualquier otra subida del CMS. `public/images/blog/` guarda solo los
+  derivados optimizados que la usuaria elige al subirlos, y desaparecerá —
+  con el script de respaldo `supabase/scripts/2026-08-20-covers-blog.sql` —
+  en cuanto las tres estén cargadas. Sin portada, el artículo cae en la
+  portada tipográfica `EditorialCover`.
   Bajo el h1 de /nosotros va una **ilustración dibujada a mano**
   (`public/images/decorative/quienes-somos-panes.webp`, entregada por la
   clienta el 2026-08-19 y optimizada a WebP con alfa; decorativa, `alt=""`),
@@ -243,6 +244,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   viewports angostos sin tocar el texto. La carpeta `decorative/` guarda
   también la ilustración de panes del h1 de /nosotros
   (`quienes-somos-panes.webp`), fuera del manifest como los ornamentos.
+- **Iconos** (`src/components/public/icons.tsx`, 2026-08-20): SVG inline con
+  `currentColor` y `aria-hidden`; el proyecto **no usa librería de iconos**.
+  `WhatsAppIcon` (glifo oficial de la marca) y `PhoneIcon` son los únicos
+  iconos rellenos y viven solo en los tres CTA de contacto (`/contacto`,
+  `HomeCta`, `ProductDetail`); el resto del vocabulario es de trazo 2px.
+  Reglas de uso y de tamaño óptico en `DESIGN.md` → «Iconos».
 - **Mapa y sectores de `/contacto`** (`ContactMap`, `AudienceSectors`,
   2026-08-20): la página incorpora el **único recurso de terceros del sitio**,
   un `<iframe>` de Google Maps (`https://www.google.com/maps?q=…&output=embed`)

@@ -143,17 +143,21 @@ publica (montaje digital o indicios de IA).
 | 98f713d0-…d9.jpeg | Pasillo alto de bodega con cajas DAP y operario | BODEGA | bodega-dap-01 | Bodega de la compañía con estibas de cajas de margarina DAP apiladas hasta el techo | home «¿Quiénes somos?», escena real con marco (no se recorta) | **PUBLICADA (2026-08-20, elección explícita de la clienta)** — revierte el descarte del 2026-08-19; origen sin confirmar |
 | cf095cbb-…bc.jpeg | Contenedor con estibas de cajas DAP Repostería en muelle | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
 
-## Covers del blog (2026-08-20, listos para ejecutar)
+## Covers del blog (2026-08-20, se suben desde el panel)
 
 La propuesta del 2026-08-19 (que repartía fotos del lote original: `13.png`
 para hojaldre, `21.png`/`23.png` para amasijos, `18.png` para pan y nada para
 almacenamiento) **quedó sin efecto**: el 2026-08-20 la clienta entregó fotos
-nuevas y eligió tres de ellas. Los derivados viven en `public/images/blog/`
-(WebP q82, máx. 1200 px) y se registran como `media_assets` STATIC con
-`supabase/scripts/2026-08-20-covers-blog.sql`, que además asigna
-`blog_posts.cover_image_id` resolviendo cada artículo por slug. **Pendiente de
-ejecutar en el SQL Editor** (dev y producción); hasta entonces los artículos
-siguen con la portada tipográfica `EditorialCover`.
+nuevas y eligió tres de ellas. Los derivados optimizados viven en
+`public/images/blog/` (WebP q82, máx. 1200 px) y **se cargan desde el panel**
+(`/admin/blog/<artículo>` → «Imagen de portada»), que es la vía elegida por la
+usuaria el 2026-08-21: así quedan como medios R2 normales del CMS y no hace
+falta SQL. Verificado ese mismo día: los 4 artículos siguen con
+`cover_image_id` en null, así que hasta subirlas se ven las portadas
+tipográficas `EditorialCover`. El script
+`supabase/scripts/2026-08-20-covers-blog.sql` (que las registraba como STATIC)
+queda solo de respaldo y se borrará —con la carpeta `public/images/blog/`—
+cuando las tres estén cargadas.
 
 | Artículo | Cover | Origen | Estado |
 |---|---|---|---|
@@ -184,8 +188,9 @@ siguen con la portada tipográfica `EditorialCover`.
    (no se publica nada con identificación dudosa).
 2. Ejecutar `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql` en el SQL
    Editor para activar las 3 fotos aprobadas en la galería de DAP Hojaldre.
-3. Ejecutar `supabase/scripts/2026-08-20-covers-blog.sql` para activar las 3
-   portadas del blog, y conseguir foto para el artículo de almacenamiento
-   (la de croissants es demasiado pequeña y no encaja).
+3. Subir las 3 portadas del blog desde el panel (`/admin/blog/<artículo>` →
+   «Imagen de portada», archivos en `public/images/blog/`) y conseguir foto
+   para el artículo de almacenamiento (la de croissants es demasiado pequeña
+   y no encaja).
 4. Si la clienta confirma el origen real de las fotos de bodega, revisar su
    estado `DESCARTADA`; mientras tanto no se publican.

@@ -257,6 +257,24 @@ foto decide el encuadre. Sin portada asignada, la tarjeta del artículo cae en `
   el empaque nunca se recorta. Solo **2 destacados en una fila** + «Ver catálogo»
   (2026-08-20); el catálogo completo vive en /productos.
 
+### Iconos
+No hay librería de iconos: son SVG inline con `currentColor` y `aria-hidden="true"`, para que
+hereden el color del contenedor y no lleguen al lector de pantalla.
+
+- **Vocabulario base — trazo.** `strokeWidth="2"`, extremos redondeados, lienzo 16–20.
+  Es el estilo de todo lo funcional: chevron de la FAQ, hamburguesa del menú móvil,
+  flechas y cierre de la galería.
+- **Excepción — relleno.** `src/components/public/icons.tsx` (2026-08-20) aporta los dos
+  únicos iconos sólidos del sitio: el **glifo oficial de WhatsApp** (marca registrada, se
+  dibuja tal cual y no se recolorea) y un **auricular** que lo acompaña. Viven solo en los
+  CTA de contacto — `/contacto`, la banda final de la home y la ficha de producto.
+  No extender el relleno a otros iconos: si aparece uno nuevo, va en trazo.
+- **Tamaño óptico, no nominal.** El glifo de WhatsApp llena sus 24×24; el auricular solo
+  ocupaba 18×18 y a igual clase se veía un 25 % más pequeño. Se corrige con el `viewBox`
+  (`2 2 20 20`), que lo deja al 90 % — no al 100 %, porque es una mancha sólida frente a un
+  anillo con hueco. Al añadir un icono, medir el trazado con `getBBox()` antes de fijar el
+  lienzo.
+
 ### Inputs / Fields
 Solo existen en el admin (fuera de este sistema); el sitio público no tiene formularios.
 

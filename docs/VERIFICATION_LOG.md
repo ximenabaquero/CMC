@@ -544,3 +544,24 @@ y marco CSS `.prose-cmc img`.
 | Aviso de ruta privada | Una carpeta `__tmp-md` con guiones bajos NO se enruta (Next la trata como privada): la verificación falló con 404 hasta renombrarla a `tmp-md` |
 | **Pendiente de ejecutar** | `supabase/migrations/0005_post_media.sql` en el SQL Editor (dev y producción) y después `supabase/tests/rls_checks.sql`. Mientras tanto la sección aparece vacía —la consulta falla en silencio y la página se degrada, no rompe— y subir da error de BD |
 | **Pendiente manual (usuaria, requiere sesión admin)** | Subir una imagen; comprobar que aparece en la lista, que «Insertar en el texto» la coloca en el cursor y enciende «Cambios sin guardar», que subir con cambios sin guardar no borra lo escrito, y que «Quitar» se niega mientras la imagen siga en el texto |
+
+## 2026-08-20 — Iconos en los CTA de WhatsApp y llamada
+
+Cambio (pedido de la clienta): los botones de contacto pasan de solo texto a
+llevar glifo. Componente nuevo `src/components/public/icons.tsx` con
+`WhatsAppIcon` (glifo oficial de la marca) y `PhoneIcon`, montados en los tres
+CTA: `/contacto`, la banda final de la home y la ficha de producto. Son los
+primeros iconos **rellenos** del sitio; el resto sigue en trazo 2px.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Tamaño óptico de los dos glifos | Medido con `getBBox()`: el trazado de WhatsApp ocupa 23.9×24 de su lienzo y el del auricular solo 18×18, así que a igual clase renderizaba a 15 px contra 20 px (**75 %**, visiblemente dispar). Corregido con `viewBox="2 2 20 20"` en `PhoneIcon` → **18 px contra 19.9 px (90 %)**, la proporción buscada para una mancha sólida frente a un anillo con hueco |
+| `/contacto` 1440×900 | Glifo blanco sobre el verde; auricular en petróleo sobre el botón outline. Los dos botones leen como pareja |
+| `/contacto` 390×844 | Ambos a ancho completo, icono y texto centrados como grupo, sin scroll horizontal |
+| Altura de los dos botones | Antes 52 px (relleno) contra 56 px (outline, por su borde de 2 px): desparejos al apilarse en móvil. Compensado con `py-3` en el outline → **52 px los dos**, en móvil y en escritorio. Es la misma convención que ya usaba el CTA outline de `ProductDetail` (`py-[10px]`) |
+| Home, banda `¿Hablamos de tu negocio?` | Glifo en petróleo profundo sobre el ámbar, contraste suficiente; botón sin cambio de altura |
+| Ficha de producto (`/productos/dap-hojaldre`) | Icono a `size-4` (15.9 px), alineado con el texto de 14 px; convive con el CTA de ficha técnica sin desbordar |
+| Accesibilidad | Los dos SVG llevan `aria-hidden="true"` y ningún `<title>`: el texto del botón ya dice «WhatsApp» y «Llámanos», así que no hay anuncio duplicado |
+| Consola del navegador | Sin errores en ninguna de las tres páginas |
+| Datos de contacto en vivo | Primera verificación con `site_settings` ya cargado: los enlaces resuelven a `wa.me/573103963790` y `tel:+573112555296` — el prefijo `+57` guardado cumple su función |

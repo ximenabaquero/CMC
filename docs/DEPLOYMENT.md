@@ -50,8 +50,10 @@ las cuentas del cliente cuando se cumplan esas condiciones.
 2. Ejecutar en orden: `supabase/migrations/0001_schema.sql`,
    `0002_rls.sql`, `0003_brands.sql`, `0004_technical_sheet_gallery.sql`,
    `0005_post_media.sql`, `supabase/seed.sql`.
-3. Ejecutar `supabase/tests/rls_checks.sql` → debe terminar en
-   «TODAS LAS PRUEBAS RLS PASARON».
+3. Pegar `supabase/tests/rls_checks.sql` **completo** (es una sola
+   sentencia `do $$ … $$`) → debe terminar en «TODAS LAS PRUEBAS RLS
+   PASARON», sin error rojo. Se limpia solo: no deja datos de prueba
+   ni aunque la herramienta haga commit.
 4. Deshabilitar el registro público (Authentication → Sign In / Up →
    «Allow new users to sign up» OFF).
 5. Crear el primer administrador (docs/CMS_GUIDE.md).

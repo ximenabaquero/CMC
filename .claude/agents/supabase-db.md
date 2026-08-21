@@ -12,9 +12,9 @@ Eres el agente de **base de datos y autenticación** (Supabase) de cmc-website.
 - Marcas: `supabase/migrations/0003_brands.sql` (tabla `brands` — carrusel de logos de la home, sin slug ni página de detalle; RLS propia en la misma migración; `internal_note` registra la autorización escrita de cada marca para exhibir su logo)
 - Fichas técnicas y galería: `supabase/migrations/0004_technical_sheet_gallery.sql` (`products.technical_sheet_media_id` nullable → `media_assets` con `on delete set null`; constraint `unique (product_id, sort_order)` diferible en `product_media`; funciones `security invoker` `set_product_main_image`, `swap_product_media_order` y `remove_product_media_entry` que mantienen el invariante «sort_order 0 = main_image_id», con EXECUTE solo para `authenticated`)
 - Seed: `supabase/seed.sql` (contenido real del cliente, sembrado como borradores; galería 0-based con la caja en 0; assets `e0…0N90` = fichas PDF)
-- Scripts de datos puntuales: `supabase/scripts/` (p. ej. `2026-08-17-normalizacion-catalogo.sql`, `2026-08-20-covers-blog.sql` — portadas STATIC del blog; todos idempotentes, para aplicar a una BD ya poblada lo que el seed no re-aplica; ejecución manual autorizada en el SQL Editor)
+- Scripts de datos puntuales: `supabase/scripts/` (idempotentes, para aplicar a una BD ya poblada lo que el seed no re-aplica; ejecución manual autorizada en el SQL Editor). Estado en dev al 2026-08-21: `2026-08-17-normalizacion-catalogo.sql` y `2026-08-20-datos-contacto.sql` **aplicados**; `2026-08-19-galeria-dap-hojaldre.sql` **pendiente** (DAP Hojaldre sigue con 2 imágenes); `2026-08-20-covers-blog.sql` **obsoleto** — las portadas se suben desde el panel y el script se borrará cuando estén cargadas.
 - Imágenes en el cuerpo de los artículos: `supabase/migrations/0005_post_media.sql` (`post_media` = `post_id` → `blog_posts` + `media_asset_id` → `media_assets`, ambas FK `on delete cascade`, `unique (post_id, media_asset_id)`, índice por `post_id`; **sin `sort_order`**: el orden lo fija el Markdown del artículo). RLS calcada de `product_media`: `select` si `is_admin()` o el artículo está `PUBLISHED`; `insert`/`update`/`delete` solo admin. La portada sigue en `blog_posts.cover_image_id`, aparte.
-- Pruebas RLS: `supabase/tests/rls_checks.sql` (aserciones auto-verificantes con rollback; los conteos esperados se calculan dinámicamente del estado real de publicación — tabla temporal `rls_expected` — así que corren sobre cualquier estado editorial; cubren también las funciones de galería de 0004)
+- Pruebas RLS: `supabase/tests/rls_checks.sql` — **una sola sentencia `do $$ … $$`** (2026-08-21). Los conteos esperados se calculan dinámicamente del estado real de publicación y viven en variables plpgsql; los cambios de rol se hacen dentro con `set_config('role', …, true)` y al final `'none'` (= RESET ROLE). Cubren anon / autenticado sin perfil / admin, las funciones de galería de 0004 y `post_media` de 0005. **No reintroducir la tabla temporal `rls_expected` ni repartir el script en varias sentencias**: el SQL Editor de Supabase no conserva temporales entre sentencias y fallaba con `42P01`. El script borra sus propios datos de prueba al terminar (y si algo falla, la sentencia se revierte entera), así que no depende del `begin/rollback` exterior.
 - Clientes Supabase: `src/lib/supabase/{client,server,middleware,types}.ts`
 - Middleware: `src/middleware.ts` (matcher acotado a `/admin/:path*`)
 - Autorización: `src/lib/auth.ts` (chequeo de perfil ADMIN en el layout protegido)
@@ -34,7 +34,7 @@ Eres el agente de **base de datos y autenticación** (Supabase) de cmc-website.
 
 ## Verificación
 
-- RLS: ejecutar `supabase/tests/rls_checks.sql` en el editor SQL de Supabase — debe terminar en "TODAS LAS PRUEBAS RLS PASARON".
+- RLS: pegar `supabase/tests/rls_checks.sql` completo en el editor SQL de Supabase — debe terminar en "TODAS LAS PRUEBAS RLS PASARON".
 - TypeScript: `npm run typecheck` tras cualquier cambio en `types.ts`.
 
 ## Mantenimiento del contexto

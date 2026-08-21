@@ -55,28 +55,29 @@ reunión 1, punto 2). Última actualización: 2026-08-20.
   sido **generadas con IA** (texto corrupto en las cajas, marca de agua de
   generador): quedaron **DESCARTADAS de publicación**; solo se
   reconsiderarían si Ana confirma su origen real.
-- **Migración pendiente de ejecutar** (2026-08-21):
-  `supabase/migrations/0005_post_media.sql` habilita las **imágenes dentro
-  del cuerpo de los artículos** (tabla `post_media`). Hasta ejecutarla en el
-  SQL Editor de dev y de producción, la sección «Imágenes dentro del
-  artículo» del panel se ve vacía y subir una imagen falla con error de base
-  de datos. Después conviene correr `supabase/tests/rls_checks.sql`.
-  Fuera de alcance por ahora (no pedido): biblioteca de medios reutilizable
-  entre artículos, pies de foto y redimensionado automático al subir — el
-  panel guarda el archivo tal cual, con el límite `MAX_UPLOAD_MB`.
-- **SQL pendiente de ejecutar** (2026-08-19):
-  `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql` añade las 3 fotos
-  aprobadas a la galería de DAP Hojaldre (los WebP ya están en `public/`).
-  Hasta ejecutarlo en el SQL Editor, la ficha sigue mostrando caja +
-  aplicación.
-- **Covers del blog** (actualizado 2026-08-20): la clienta entregó fotos
-  nuevas y eligió tres. Los derivados ya están en `public/images/blog/` y
-  `supabase/scripts/2026-08-20-covers-blog.sql` (**pendiente de ejecutar** en
-  el SQL Editor de dev y producción) crea los `media_assets` STATIC y asigna
-  `blog_posts.cover_image_id` para amasijos, pan y hojaldre. Sigue **sin
-  portada** el artículo de almacenamiento de materias primas: la cuarta foto
-  entregada (croissants, 325×245) es demasiado pequeña y no encaja con el
-  tema; se necesita una foto de almacenamiento real.
+- **Imágenes dentro del cuerpo de los artículos** (2026-08-21):
+  `supabase/migrations/0005_post_media.sql` **ya está aplicada en la base de
+  desarrollo** (verificado: la tabla `post_media` existe), así que la sección
+  «Imágenes dentro del artículo» del panel funciona. Fuera de alcance por
+  ahora (no pedido): biblioteca de medios reutilizable entre artículos, pies
+  de foto y redimensionado automático al subir — el panel guarda el archivo
+  tal cual, con el límite `MAX_UPLOAD_MB`.
+- **SQL pendiente de ejecutar** (2026-08-19) — el **único** que queda, según
+  la auditoría del 2026-08-21: `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`
+  añade las 3 fotos aprobadas a la galería de DAP Hojaldre (los WebP ya están
+  en `public/`). Verificado en la BD: la ficha sigue con 2 imágenes (caja +
+  aplicación) en vez de 5.
+- **Covers del blog** (actualizado 2026-08-21): las tres portadas se suben
+  **desde el panel** (`/admin/blog/<artículo>` → «Imagen de portada»), no por
+  SQL — decisión de la usuaria. Los archivos optimizados están en
+  `public/images/blog/`. Verificado: los 4 artículos siguen con
+  `cover_image_id` en null, así que hasta que se suban se ven las portadas
+  tipográficas. `supabase/scripts/2026-08-20-covers-blog.sql` queda como
+  respaldo y **se borrará** cuando estén subidas (junto con la carpeta
+  `public/images/blog/`, que solo sirve para elegir los archivos al subirlos).
+  Sigue **sin portada** el artículo de almacenamiento de materias primas: la
+  cuarta foto entregada (croissants, 325×245) es demasiado pequeña y no encaja
+  con el tema; se necesita una foto de almacenamiento real.
 - **Origen de las fotos entregadas el 2026-08-20** (bodega DAP de la home,
   panadero de «Propuesta de valor» y las 4 del blog): **ninguna proviene del
   material de `content-source/`** y varias tienen aspecto de banco de

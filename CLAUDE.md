@@ -40,7 +40,9 @@ como base de datos y **R2** para medios. Todo el contenido, copy, comentarios y 
 - `npm run lint` y `npm run typecheck` — verificación mínima tras cualquier cambio (no hay tests JS).
 - `npm run dev` — desarrollo local (storage driver local).
 - `npm run preview` — build OpenNext + workerd real (R2/D1 simulados).
-- RLS: ejecutar `supabase/tests/rls_checks.sql` en el SQL Editor de Supabase.
+- RLS: pegar `supabase/tests/rls_checks.sql` **completo** en el SQL Editor de Supabase. Es una
+  sola sentencia `do $$ … $$` a propósito (el editor no conserva tablas temporales entre
+  sentencias): no trocearlo ni reintroducir estado compartido entre sentencias.
 
 ## Agentes especializados
 
