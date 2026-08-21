@@ -48,7 +48,8 @@ las cuentas del cliente cuando se cumplan esas condiciones.
 
 1. Crear el proyecto (región más cercana: São Paulo `sa-east-1`).
 2. Ejecutar en orden: `supabase/migrations/0001_schema.sql`,
-   `0002_rls.sql`, `supabase/seed.sql`.
+   `0002_rls.sql`, `0003_brands.sql`, `0004_technical_sheet_gallery.sql`,
+   `0005_post_media.sql`, `supabase/seed.sql`.
 3. Ejecutar `supabase/tests/rls_checks.sql` → debe terminar en
    «TODAS LAS PRUEBAS RLS PASARON».
 4. Deshabilitar el registro público (Authentication → Sign In / Up →

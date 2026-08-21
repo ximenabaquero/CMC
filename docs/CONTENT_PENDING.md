@@ -55,6 +55,15 @@ reunión 1, punto 2). Última actualización: 2026-08-20.
   sido **generadas con IA** (texto corrupto en las cajas, marca de agua de
   generador): quedaron **DESCARTADAS de publicación**; solo se
   reconsiderarían si Ana confirma su origen real.
+- **Migración pendiente de ejecutar** (2026-08-21):
+  `supabase/migrations/0005_post_media.sql` habilita las **imágenes dentro
+  del cuerpo de los artículos** (tabla `post_media`). Hasta ejecutarla en el
+  SQL Editor de dev y de producción, la sección «Imágenes dentro del
+  artículo» del panel se ve vacía y subir una imagen falla con error de base
+  de datos. Después conviene correr `supabase/tests/rls_checks.sql`.
+  Fuera de alcance por ahora (no pedido): biblioteca de medios reutilizable
+  entre artículos, pies de foto y redimensionado automático al subir — el
+  panel guarda el archivo tal cual, con el límite `MAX_UPLOAD_MB`.
 - **SQL pendiente de ejecutar** (2026-08-19):
   `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql` añade las 3 fotos
   aprobadas a la galería de DAP Hojaldre (los WebP ya están en `public/`).

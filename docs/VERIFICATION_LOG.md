@@ -525,3 +525,22 @@ fotos editoriales referenciadas por ruta en JSX) y se preparó
 | Procedencia | Ninguna de las 4 coincide byte a byte con `content-source/`; sin QA de identificación ni licencia documentada (ver `docs/FOTOS_ADICIONALES.md`) |
 | **Pendiente de ejecutar** | El script en el SQL Editor (dev y producción). Hasta entonces los 4 artículos siguen con `EditorialCover`; la verificación visual de las portadas queda pendiente de esa ejecución |
 | **Pendiente (clienta)** | Confirmar origen/licencia de las fotos y entregar una imagen para el artículo de almacenamiento |
+
+## 2026-08-21 — Imágenes dentro del cuerpo de los artículos del blog
+
+El editor solo admitía una imagen por artículo (la portada). Ahora se pueden
+subir imágenes al cuerpo y colocarlas en el punto del texto donde está el
+cursor: migración `0005_post_media.sql`, acciones `uploadPostImage` /
+`removePostImage`, puente cliente `src/components/admin/markdown-insert.tsx`
+y marco CSS `.prose-cmc img`.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| `npm run build` (Turbopack) | Compila entero, incluidas las rutas de `/admin` — la única forma de validar el editor sin sesión, porque el middleware redirige a login (307) antes de compilar la página |
+| `rehype-sanitize` con `src` relativa | **Conserva** la imagen: ruta temporal `(public)/tmp-md` con `![alt](/images/blog/hojaldre-capas-macro-01.webp)` → `<img>` presente en el DOM con su `alt` intacto. Ruta ya borrada |
+| Marco CSS aplicado (misma ruta, CDP a 1440) | `display: block`, `border-radius: 16px` (= `--radius-lg`), borde `1px rgb(228,224,216)` (arena), `margin-top: 24px`; renderiza 736×492 desde un original de 1200×801 dentro de la columna `max-w-3xl`. Sin errores de consola |
+| Carga perezosa | El `img` de Markdown NO la trae de serie: se añade mapeando `components.img` en `src/lib/markdown.tsx` (`loading="lazy"`, `decoding="async"`) |
+| Aviso de ruta privada | Una carpeta `__tmp-md` con guiones bajos NO se enruta (Next la trata como privada): la verificación falló con 404 hasta renombrarla a `tmp-md` |
+| **Pendiente de ejecutar** | `supabase/migrations/0005_post_media.sql` en el SQL Editor (dev y producción) y después `supabase/tests/rls_checks.sql`. Mientras tanto la sección aparece vacía —la consulta falla en silencio y la página se degrada, no rompe— y subir da error de BD |
+| **Pendiente manual (usuaria, requiere sesión admin)** | Subir una imagen; comprobar que aparece en la lista, que «Insertar en el texto» la coloca en el cursor y enciende «Cambios sin guardar», que subir con cambios sin guardar no borra lo escrito, y que «Quitar» se niega mientras la imagen siga en el texto |

@@ -107,7 +107,10 @@ export default async function ContactPage() {
               {phoneHref ? (
                 <a
                   href={phoneHref}
-                  className="flex items-center justify-center gap-2.5 rounded-md border-2 border-petrol px-6 py-3.5 text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                  // py-3 (no py-3.5) compensa el borde de 2 px para que
+                  // apilados en móvil los dos botones midan igual — misma
+                  // convención que el CTA outline de ProductDetail.
+                  className="flex items-center justify-center gap-2.5 rounded-md border-2 border-petrol px-6 py-3 text-base font-semibold text-petrol transition hover:bg-petrol hover:text-white ease-out active:scale-[0.98] motion-reduce:active:scale-100"
                 >
                   <PhoneIcon className="size-5 shrink-0" />
                   Llámanos: {settings?.phone}
