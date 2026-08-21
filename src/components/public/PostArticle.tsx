@@ -67,9 +67,13 @@ export function PostArticle({
             artículo no tiene foto, que es el caso por defecto. */}
         <header className="border-b border-border bg-cream">
           <div className="mx-auto max-w-4xl px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
+            {/* 40rem es la medida de lectura del artículo (~75 caracteres a
+                17px): la comparten miga, titular, bajada y cuerpo para que
+                todo el texto caiga sobre el mismo eje. La portada es lo único
+                que rompe a un ancho mayor. */}
             <nav
               aria-label="Ruta de navegación"
-              className="mx-auto mb-8 max-w-3xl text-sm text-muted-foreground"
+              className="mx-auto mb-8 max-w-[40rem] text-sm text-muted-foreground"
             >
               <Link href="/blog" className="underline-offset-2 hover:underline">
                 Blog
@@ -80,7 +84,7 @@ export function PostArticle({
               </span>
             </nav>
 
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-[40rem]">
               <p className="text-sm font-semibold uppercase tracking-wide text-orange">Artículo</p>
               <h1 className="mt-3 text-balance text-4xl font-semibold leading-[1.08] text-petrol sm:text-5xl">
                 {post.title}
@@ -121,7 +125,7 @@ export function PostArticle({
           </div>
         </header>
 
-        <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-[40rem] px-4 py-12 sm:py-16">
           <Markdown className={lead ? "prose-article" : "prose-article prose-article--entrada"}>
             {post.body}
           </Markdown>
