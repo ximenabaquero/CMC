@@ -3,9 +3,16 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/media";
-import { deletePost, removePostCover, uploadPostCover } from "@/actions/posts";
+import {
+  deletePost,
+  removePostCover,
+  removePostImage,
+  uploadPostCover,
+  uploadPostImage,
+} from "@/actions/posts";
 import { PostForm } from "./PostForm";
 import { UploadImageForm } from "@/components/admin/UploadImageForm";
+import { InsertImageButton } from "@/components/admin/markdown-insert";
 import { ConfirmSubmitButton } from "@/components/admin/buttons";
 import { ActionForm } from "@/components/admin/ActionForm";
 import { FlashToast } from "@/components/admin/FlashToast";
@@ -36,6 +43,18 @@ export default async function EditPostPage({
     ? await supabase.from("media_assets").select("*").eq("id", post.cover_image_id).maybeSingle()
     : { data: null };
 
+  // Imágenes del cuerpo: post_media guarda el vínculo, media_assets los
+  // metadatos (mismo patrón que la galería de productos).
+  const { data: links } = await supabase
+    .from("post_media")
+    .select("media_asset_id")
+    .eq("post_id", id);
+
+  const bodyImageIds = (links ?? []).map((link) => link.media_asset_id);
+  const { data: bodyImages } = bodyImageIds.length
+    ? await supabase.from("media_assets").select("*").in("id", bodyImageIds).order("created_at")
+    : { data: [] };
+
   const maxUploadMb = Number(process.env.MAX_UPLOAD_MB ?? "5");
 
   return (
@@ -65,7 +84,60 @@ export default async function EditPostPage({
         </p>
       ) : null}
 
-      <PostForm post={post} />
+      <PostForm post={post}>
+        {/* Va dentro de PostForm (no dentro de su <form>) para poder
+            escribir en el cursor del editor; ver markdown-insert.tsx. */}
+        <section
+          aria-labelledby="imagenes-contenido"
+          className="rounded-lg border border-border bg-surface p-5"
+        >
+          <h2 id="imagenes-contenido" className="mb-1 text-lg font-semibold">
+            Imágenes dentro del artículo
+          </h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Son las fotos que aparecen entre los párrafos. Súbelas aquí y colócalas con «Insertar
+            en el texto»: se ponen donde tengas el cursor. La portada se sube más abajo.
+          </p>
+
+          {(bodyImages ?? []).length === 0 ? (
+            <p className="mb-4 text-sm text-muted-foreground">
+              Este artículo aún no tiene imágenes en el contenido.
+            </p>
+          ) : (
+            <ul className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {(bodyImages ?? []).map((asset) => (
+                <li key={asset.id} className="rounded-md border border-border p-2">
+                  <Image
+                    src={mediaUrl(asset)}
+                    alt={asset.alt_text}
+                    width={240}
+                    height={160}
+                    className="mb-2 aspect-[3/2] w-full rounded bg-surface-muted object-cover"
+                  />
+                  <div className="flex flex-wrap items-center gap-2">
+                    <InsertImageButton url={mediaUrl(asset)} alt={asset.alt_text} />
+                    <ActionForm action={removePostImage.bind(null, post.id, asset.id)}>
+                      <ConfirmSubmitButton
+                        pendingLabel="Quitando…"
+                        confirmMessage="¿Eliminar esta imagen? Se borrará del almacenamiento; si está insertada en el texto, quítala antes del contenido."
+                      >
+                        Quitar
+                      </ConfirmSubmitButton>
+                    </ActionForm>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <h3 className="mb-2 text-sm font-semibold">Subir imagen al contenido</h3>
+          <UploadImageForm
+            action={uploadPostImage.bind(null, post.id)}
+            buttonLabel="Subir imagen"
+            maxUploadMb={maxUploadMb}
+          />
+        </section>
+      </PostForm>
 
       <section aria-labelledby="portada" className="rounded-lg border border-border bg-surface p-5">
         <h2 id="portada" className="mb-4 text-lg font-semibold">

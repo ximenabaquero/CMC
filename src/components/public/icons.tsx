@@ -24,10 +24,19 @@ export function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-/** Auricular sólido: pareja visual del glifo de WhatsApp. */
+/**
+ * Auricular sólido: pareja visual del glifo de WhatsApp.
+ *
+ * El `viewBox` recortado a `2 2 20 20` es deliberado. El trazado ocupa 18×18
+ * unidades; en un lienzo de 24 se renderizaba al 75 % del glifo de WhatsApp
+ * (que sí llena sus 24×24) y la pareja se veía dispareja. Con este lienzo
+ * queda al 90 %: no al 100 %, porque el auricular es una mancha sólida y el
+ * glifo de WhatsApp es un anillo con hueco — a igual caja pesaría más.
+ * Si se cambia el trazado, volver a medirlo con `getBBox()`.
+ */
 export function PhoneIcon({ className }: { className?: string }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <svg aria-hidden="true" viewBox="2 2 20 20" fill="currentColor" className={className}>
       <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
     </svg>
   );

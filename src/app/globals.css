@@ -184,6 +184,20 @@ h6 {
   color: var(--muted-foreground);
 }
 
+/* Imágenes dentro del artículo (subidas desde el panel e insertadas en
+   el Markdown): escena real enmarcada — esquina lg + borde arena, sin
+   sombra (Flat-At-Rest). Bloque a ancho de columna: el editor no puede
+   fijar tamaños desde el Markdown, así que la proporción nativa manda. */
+.prose-cmc img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
 /* ------------------------------------------------------------
    Marquee de marcas (página de inicio). El track tiene dos copias
    de la lista: -50% recorre exactamente una y el bucle es continuo.

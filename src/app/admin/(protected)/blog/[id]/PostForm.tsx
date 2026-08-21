@@ -1,25 +1,73 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { updatePost } from "@/actions/posts";
 import { initialActionState } from "@/lib/action-state";
 import type { BlogPost } from "@/lib/supabase/types";
 import { ActionFeedback, StatusField, TextAreaField, TextField } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
 import { useActionToast } from "@/components/admin/toast";
+import { InsertMarkdownProvider } from "@/components/admin/markdown-insert";
 import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
 import { Markdown } from "@/lib/markdown";
 
-export function PostForm({ post }: { post: BlogPost }) {
+/**
+ * `children` = la sección «Imágenes dentro del artículo», renderizada en
+ * el servidor y colocada FUERA del <form> (sus botones son formularios
+ * propios). Llega hasta aquí para quedar bajo el mismo proveedor que
+ * expone la inserción en el cursor del textarea.
+ */
+export function PostForm({ post, children }: { post: BlogPost; children?: ReactNode }) {
   const action = updatePost.bind(null, post.id);
   const [state, formAction] = useActionState(action, initialActionState);
   useActionToast(state);
   const { formProps, dirty } = useAdminForm(state);
   const [body, setBody] = useState(post.body);
   const [showPreview, setShowPreview] = useState(false);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  // Última posición del cursor conocida. Se registra al mover el cursor
+  // porque al subir una imagen el foco se va del textarea; si nunca se
+  // tocó el texto, la imagen se añade al final en vez de al principio.
+  const lastCaret = useRef<number | null>(null);
+  // Posición del cursor pendiente de aplicar: el textarea es controlado,
+  // así que hay que esperar al re-render para moverlo.
+  const pendingCaret = useRef<number | null>(null);
   const fieldErrors = state.fieldErrors ?? {};
 
-  return (
+  useEffect(() => {
+    if (pendingCaret.current === null) return;
+    const textarea = bodyRef.current;
+    if (textarea) {
+      textarea.focus();
+      textarea.setSelectionRange(pendingCaret.current, pendingCaret.current);
+    }
+    pendingCaret.current = null;
+  }, [body]);
+
+  /**
+   * Inserta un bloque de Markdown donde está el cursor, separado por
+   * líneas en blanco (si no, Markdown lo pegaría al párrafo). Si estaba
+   * abierta la vista previa, vuelve al modo edición para que se vea.
+   */
+  const insertAtCursor = useCallback(
+    (markdown: string) => {
+      const at = Math.min(lastCaret.current ?? body.length, body.length);
+      const before = body.slice(0, at).replace(/\s+$/, "");
+      const after = body.slice(at).replace(/^\s+/, "");
+      const head = before ? `${before}\n\n${markdown}` : markdown;
+
+      setShowPreview(false);
+      setBody(after ? `${head}\n\n${after}` : `${head}\n`);
+      lastCaret.current = head.length;
+      pendingCaret.current = head.length;
+      // El hook marca «cambios sin guardar» por evento del formulario, y
+      // esta escritura es programática.
+      formProps.onInput();
+    },
+    [body, formProps]
+  );
+
+  const form = (
     <form
       {...formProps}
       action={formAction}
@@ -76,10 +124,17 @@ export function PostForm({ post }: { post: BlogPost }) {
           <textarea
             id="body"
             name="body"
+            ref={bodyRef}
             required
             rows={18}
             value={body}
-            onChange={(e) => setBody(e.target.value)}
+            onChange={(e) => {
+              setBody(e.target.value);
+              lastCaret.current = e.target.selectionStart;
+            }}
+            onSelect={(e) => {
+              lastCaret.current = e.currentTarget.selectionStart;
+            }}
             aria-invalid={fieldErrors.body ? true : undefined}
             aria-describedby={fieldErrors.body ? "body-error" : undefined}
             className="w-full rounded-md border border-border bg-surface px-3 py-2 font-mono text-sm"
@@ -94,7 +149,9 @@ export function PostForm({ post }: { post: BlogPost }) {
         ) : null}
         <p className="mt-1 text-xs text-muted-foreground">
           Formato: escribe párrafos normales. Para un subtítulo usa «## Subtítulo», para negrita
-          «**texto**» y para listas comienza la línea con «- ».
+          «**texto**» y para listas comienza la línea con «- ». Para poner una foto dentro del
+          texto, súbela abajo en «Imágenes dentro del artículo» y pulsa «Insertar en el texto»
+          con el cursor donde quieras que aparezca.
         </p>
       </div>
 
@@ -128,5 +185,12 @@ export function PostForm({ post }: { post: BlogPost }) {
         <UnsavedBadge dirty={dirty} />
       </div>
     </form>
+  );
+
+  return (
+    <InsertMarkdownProvider insert={insertAtCursor}>
+      {form}
+      {children}
+    </InsertMarkdownProvider>
   );
 }
