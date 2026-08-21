@@ -507,3 +507,21 @@ croissants), entregada como `public/images/photos/nuestra-promesa.png`.
 | Nota de entorno | El dev server de la usuaria se había caído (`ERR_CONNECTION_REFUSED` en la primera captura); se relanzó `npm run dev` y **queda corriendo** |
 | **Pendiente (clienta)** | Confirmar origen y licencia de la foto; si es de banco de imágenes, choca con la regla «cero fotografía de stock» |
 | **Pendiente manual (usuaria)** | Revisión de la captura antes del commit; el recorte `palmerita-hojaldre-01-recorte.webp` queda disponible sin uso |
+
+## 2026-08-21 — Portadas fotográficas para el blog (fotos entregadas la noche del 2026-08-20)
+
+La clienta dejó 4 fotos nuevas en `public/images/photos/`. Se derivaron a
+`public/images/blog/` (carpeta nueva: los covers **sí** llevan fila en
+`media_assets` porque `blog_posts.cover_image_id` es FK, a diferencia de las
+fotos editoriales referenciadas por ruta en JSX) y se preparó
+`supabase/scripts/2026-08-20-covers-blog.sql`.
+
+| Verificación | Resultado |
+|---|---|
+| Derivados generados (WebP q82, máx. 1200 px) | `amasijos-maiz-tabla-01` 1200×675 (129 KB), `panes-surtidos-canasta-01` 985×555 (94 KB), `hojaldre-capas-macro-01` 1200×801 (60 KB), `croissants-bandeja-horno-01` 325×245 (15 KB) |
+| Ruta de servicio | `mediaUrl()` devuelve `storage_path` tal cual para provider `STATIC` (`src/lib/media.ts:11`), así que `/images/blog/<archivo>.webp` se sirve como asset estático — sin pasar por `/api/media` |
+| Encaje de los recortes | Los covers se pintan con `object-cover` a `aspect-[16/10]` (destacado de la home), `aspect-[16/9]` (tarjetas) y ancho completo en el artículo: las tres fotos asignadas están entre 16:9 y 3:2, así que el recorte no pierde el motivo |
+| Cuarta foto **no asignada** | `Croissants-Julian-Plumart.webp` mide 325×245: como portada de artículo se estiraría a ~1200 px (borrosa) y el único hueco libre («Consejos para almacenar materias primas») no encaja temáticamente. Queda derivada pero fuera del script |
+| Procedencia | Ninguna de las 4 coincide byte a byte con `content-source/`; sin QA de identificación ni licencia documentada (ver `docs/FOTOS_ADICIONALES.md`) |
+| **Pendiente de ejecutar** | El script en el SQL Editor (dev y producción). Hasta entonces los 4 artículos siguen con `EditorialCover`; la verificación visual de las portadas queda pendiente de esa ejecución |
+| **Pendiente (clienta)** | Confirmar origen/licencia de las fotos y entregar una imagen para el artículo de almacenamiento |

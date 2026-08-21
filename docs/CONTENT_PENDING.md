@@ -60,11 +60,21 @@ reunión 1, punto 2). Última actualización: 2026-08-20.
   aprobadas a la galería de DAP Hojaldre (los WebP ya están en `public/`).
   Hasta ejecutarlo en el SQL Editor, la ficha sigue mostrando caja +
   aplicación.
-- **Covers del blog** (2026-08-19): propuesta foto→artículo en
-  `docs/FOTOS_ADICIONALES.md` (sección «Propuesta de covers»); pendiente de
-  aprobación de Ana y asignación desde el admin. El artículo de
-  almacenamiento queda sin candidata (sus únicas opciones eran las fotos de
-  bodega descartadas).
+- **Covers del blog** (actualizado 2026-08-20): la clienta entregó fotos
+  nuevas y eligió tres. Los derivados ya están en `public/images/blog/` y
+  `supabase/scripts/2026-08-20-covers-blog.sql` (**pendiente de ejecutar** en
+  el SQL Editor de dev y producción) crea los `media_assets` STATIC y asigna
+  `blog_posts.cover_image_id` para amasijos, pan y hojaldre. Sigue **sin
+  portada** el artículo de almacenamiento de materias primas: la cuarta foto
+  entregada (croissants, 325×245) es demasiado pequeña y no encaja con el
+  tema; se necesita una foto de almacenamiento real.
+- **Origen de las fotos entregadas el 2026-08-20** (bodega DAP de la home,
+  panadero de «Propuesta de valor» y las 4 del blog): **ninguna proviene del
+  material de `content-source/`** y varias tienen aspecto de banco de
+  imágenes — la de bodega es, byte a byte, una de las descartadas por
+  indicios de IA. Publicadas/preparadas por decisión explícita de la clienta;
+  falta que Ana confirme **origen y licencia** de cada una (regla «cero
+  fotografía de stock» de `PRODUCT.md`).
 
 ## 2. Material pendiente por recibir de Ana
 

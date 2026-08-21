@@ -124,6 +124,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   preparaciones aprobadas, referenciadas por **ruta literal en JSX**
   («Propuesta de valor» y «¿Quiénes somos?» en la home, figura de cierre de
   Nosotros) — **sin fila en `media_assets`**, igual que los GIFs de marca.
+- **Portadas del blog** (`public/images/blog/`, 2026-08-20): a diferencia de
+  las anteriores, estas **sí llevan fila en `media_assets`** (`STATIC`, ruta
+  bajo `public/`) porque `blog_posts.cover_image_id` es una FK; se registran
+  con `supabase/scripts/2026-08-20-covers-blog.sql` y no pasan por el
+  importador. Sin portada, el artículo cae en la portada tipográfica
+  `EditorialCover`.
   Bajo el h1 de /nosotros va una **ilustración dibujada a mano**
   (`public/images/decorative/quienes-somos-panes.webp`, entregada por la
   clienta el 2026-08-19 y optimizada a WebP con alfa; decorativa, `alt=""`),

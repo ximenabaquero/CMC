@@ -143,19 +143,40 @@ publica (montaje digital o indicios de IA).
 | 98f713d0-…d9.jpeg | Pasillo alto de bodega con cajas DAP y operario | BODEGA | bodega-dap-01 | Bodega de la compañía con estibas de cajas de margarina DAP apiladas hasta el techo | home «¿Quiénes somos?», escena real con marco (no se recorta) | **PUBLICADA (2026-08-20, elección explícita de la clienta)** — revierte el descarte del 2026-08-19; origen sin confirmar |
 | cf095cbb-…bc.jpeg | Contenedor con estibas de cajas DAP Repostería en muelle | BODEGA | — | — | no publicar | DESCARTADA (2026-08-19, indicios de IA) |
 
-## Propuesta de covers para el blog (2026-08-19, sin aplicar)
+## Covers del blog (2026-08-20, listos para ejecutar)
 
-Los 4 artículos están publicados con la portada tipográfica `EditorialCover`.
-El cover se asigna desde el admin (`blog_posts.cover_image_id`) cuando la
-clienta lo apruebe; estas fotos habría que importarlas o subirlas vía CMS en
-ese momento:
+La propuesta del 2026-08-19 (que repartía fotos del lote original: `13.png`
+para hojaldre, `21.png`/`23.png` para amasijos, `18.png` para pan y nada para
+almacenamiento) **quedó sin efecto**: el 2026-08-20 la clienta entregó fotos
+nuevas y eligió tres de ellas. Los derivados viven en `public/images/blog/`
+(WebP q82, máx. 1200 px) y se registran como `media_assets` STATIC con
+`supabase/scripts/2026-08-20-covers-blog.sql`, que además asigna
+`blog_posts.cover_image_id` resolviendo cada artículo por slug. **Pendiente de
+ejecutar en el SQL Editor** (dev y producción); hasta entonces los artículos
+siguen con la portada tipográfica `EditorialCover`.
 
-| Artículo | Foto propuesta | Nota |
-|---|---|---|
-| El arte de hacer hojaldre | `13.png` (hojaldre con crema pastelera) | identificación confirmada |
-| Amasijos colombianos… | `21.png` (buñuelos) o `23.png` (surtido) | ambas ya aparecen en la home — decidir al asignar |
-| Los beneficios de comer pan… | `18.png` (pan de molde integral) | identificación razonable (categoría PAN) |
-| Consejos para almacenar materias primas… | **pendiente** | las únicas candidatas (bodega) quedaron descartadas por indicios de IA |
+| Artículo | Cover | Origen | Estado |
+|---|---|---|---|
+| Amasijos colombianos… | `blog/amasijos-maiz-tabla-01.webp` (1200×675) | `69404ae2858b5.r_d.800-533.webp` | en el script |
+| Los beneficios de comer pan… | `blog/panes-surtidos-canasta-01.webp` (985×555) | `beneficiosdecomerpan.png` | en el script |
+| El arte de hacer hojaldre | `blog/hojaldre-capas-macro-01.webp` (1200×801) | `hojanldre.png` | en el script |
+| Consejos para almacenar materias primas… | **sin cover** | — | sigue con `EditorialCover` |
+
+> ⚠️ **Las 4 fotos del 2026-08-20 no vienen de `content-source/`** (ninguna
+> coincide byte a byte con el material entregado en su momento) y no pasaron
+> por el QA de identificación del 2026-08-19: su origen y licencia **no están
+> documentados**, y varias tienen aspecto de banco de imágenes —incluida la
+> de croissants franceses, ajenos al catálogo colombiano—, lo que choca con
+> «cero fotografía de stock» de `PRODUCT.md`/`DESIGN.md`. Se preparan porque
+> la clienta las eligió; confirmar procedencia antes de publicar en producción.
+
+> **Cuarta foto sin ubicación.** `Croissants-Julian-Plumart.webp` (panadero
+> con bandeja de croissants) mide **325×245 px**: se serviría estirada a los
+> ~1200 px de la portada del artículo, borrosa. Derivada igual en
+> `public/images/blog/croissants-bandeja-horno-01.webp` pero **no asignada** a
+> ningún artículo — el único hueco libre es «Consejos para almacenar materias
+> primas», donde además no encaja temáticamente. Pedir una versión en alta o
+> una foto de almacenamiento real.
 
 ## Próximos pasos (requieren decisión de la clienta)
 
@@ -163,6 +184,8 @@ ese momento:
    (no se publica nada con identificación dudosa).
 2. Ejecutar `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql` en el SQL
    Editor para activar las 3 fotos aprobadas en la galería de DAP Hojaldre.
-3. Aprobar los covers del blog propuestos arriba y asignarlos desde el admin.
+3. Ejecutar `supabase/scripts/2026-08-20-covers-blog.sql` para activar las 3
+   portadas del blog, y conseguir foto para el artículo de almacenamiento
+   (la de croissants es demasiado pequeña y no encaja).
 4. Si la clienta confirma el origen real de las fotos de bodega, revisar su
    estado `DESCARTADA`; mientras tanto no se publican.
