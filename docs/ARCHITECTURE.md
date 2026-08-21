@@ -207,7 +207,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `HomeProductCard` (la home muestra solo **2 destacados en una fila** +
   «Ver catálogo» desde el 2026-08-20, `products.slice(0, 2)`) y
   `HomePostsSection` (destacado +
-  secundarios; también encabeza el índice de `/blog`) y `HomeCta` (canales
+  secundarios; encabeza el índice de `/blog`) con su variante
+  `HomePostsRotator` (2026-08-21, solo la home: los artículos se turnan en
+  el escenario con fundido cruzado CSS y el índice lateral marca el que
+  está en escena) y `HomeCta` (canales
   de `site_settings`; con WhatsApp configurado el botón principal abre el
   chat directo). Los compartidos de `shared.tsx` (`ProductCard`, `PostCard`,
   `SectionHeading` con `tone="warm"` por defecto, `EditorialCover` para

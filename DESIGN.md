@@ -332,6 +332,29 @@ dos en `sm`, `reveal` por ítem. Vive fuera del wrapper de ornamentos, como secc
 hermana full-bleed, para no romper la alternancia de fondos ni dejar que el dibujo
 botánico invada la lista.
 
+### Rotación editorial del blog (home, 2026-08-21)
+`HomePostsRotator` reemplaza en la home al bloque estático de `HomePostsSection` (que
+sigue encabezando `/blog`): los artículos se turnan en el escenario grande con un fundido
+cruzado de 0.6 s y **6 s de reposo** cada uno — tiempo para leer titular y resumen, no un
+carrusel que huye. El índice lateral lista los mismos artículos y hace de indicador: la
+fila del que está en escena enciende una barra ámbar de 2 px. Escenario e índice comparten
+reloj (`animation-delay` por `nth-child` sobre un ciclo de 6 s × nº de artículos), así que
+la sincronía no necesita estado en JS. Vocabulario en `globals.css` (`.blog-rotator`), CSS
+puro como el resto del motion.
+
+Decisiones que lo separan del fondo del hero —que es **textura**, no contenido— y que hay
+que conservar: los artículos fuera de escena van en `visibility: hidden`, no solo
+`opacity: 0`, para que sus enlaces salgan del orden de tabulación; **sin `aria-live`**
+(anunciar un cambio que nadie pidió es ruido para lectores de pantalla); pausa en `:hover`
+y `:focus-within` como el marquee de marcas (WCAG 2.2.2 — nadie persigue un blanco en
+movimiento); y con `prefers-reduced-motion` la rotación **no arranca**: queda el primer
+artículo fijo, exactamente el bloque estático de `/blog`. Todos los artículos se apilan en
+una celda de grid, así que el alto lo fija el más largo y el relevo no desplaza nada. En
+móvil el índice pierde la miniatura (`max-lg:hidden`): apilado bajo el escenario, repetir
+la tarjeta del artículo que ya está arriba se leía como duplicado, no como sumario. La
+barra ámbar es forma decorativa, no texto — no viola la Amber Guardrail — y es el único
+indicador: puntos aparte serían un segundo acento compitiendo (One Hero Rule).
+
 ### Motion (vocabulario del sitio)
 CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-out`
 (cubic-bezier(0.23, 1, 0.32, 1)), `--ease-drawer` (0.32, 0.72, 0, 1), `--dur-fast` 150ms

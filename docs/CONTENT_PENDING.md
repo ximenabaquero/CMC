@@ -72,7 +72,15 @@ reunión 1, punto 2). Última actualización: 2026-08-20.
   SQL — decisión de la usuaria. Los archivos optimizados están en
   `public/images/blog/`. Verificado: los 4 artículos siguen con
   `cover_image_id` en null, así que hasta que se suban se ven las portadas
-  tipográficas. `supabase/scripts/2026-08-20-covers-blog.sql` queda como
+  tipográficas. **Causa encontrada el 2026-08-21**: la subida desde el panel
+  estaba rota — `UploadImageForm` usaba ids literales y la página de artículo
+  monta dos instancias, así que el clic en «Archivo…» de la portada abría el
+  selector del formulario del cuerpo y la portada nunca llegaba a la BD, sin
+  error visible. Corregido (ids con `useId()`); la subida desde el panel ya
+  es viable. **Hacerlo desde el sitio publicado**, no desde `npm run dev`: en
+  local el archivo va al bucket R2 simulado (`cmc-website-media-dev`) y
+  producción devolvería 404 en `/api/media/<key>`.
+  `supabase/scripts/2026-08-20-covers-blog.sql` queda como
   respaldo y **se borrará** cuando estén subidas (junto con la carpeta
   `public/images/blog/`, que solo sirve para elegir los archivos al subirlos).
   Sigue **sin portada** el artículo de almacenamiento de materias primas: la

@@ -625,3 +625,50 @@ unicidad que de verdad interesa (no repetir la misma imagen en el producto).
 | Dato colateral importante | Que la primera inserción NO se colara demuestra que **el SQL Editor sí respeta la transacción** (`begin; … error → abort`). Es decir, el `42P01` de `rls_checks.sql` no venía de que las sentencias no compartieran sesión, sino del **cambio de rol**: tras `set local role anon`, el rol no ve el esquema `pg_temp` del creador y la tabla temporal «no existe». La reescritura a variables plpgsql ataca justo esa causa |
 | Archivos con `on conflict do nothing` sin árbitro | Solo quedaba este y `supabase/seed.sql` (sobre `faqs`, sin restricciones diferibles: no le afecta) |
 | **Pendiente (usuaria)** | Volver a pegar el script corregido; después se comprueba desde aquí que la galería queda en 5 filas y que `main_image_id` sigue en `sort_order = 0` |
+
+## 2026-08-21 — Portadas del blog que no se guardaban + rotación editorial en la home
+
+La usuaria reportó que había subido imágenes para el blog y no se reflejaban en
+la home. **No era caché ni revalidación.**
+
+**Causa raíz.** `UploadImageForm` traía los ids del formulario escritos a mano
+(`id="file"`, `id="alt_text"`). `/admin/blog/[id]` es la **única** página que
+monta dos instancias del componente — «Imágenes dentro del artículo» (línea 134)
+y «Imagen de portada» (línea 170) — y la del cuerpo va primero en el DOM porque
+`PostForm` pinta `{form}{children}`. Con ids duplicados el navegador resuelve
+`htmlFor` al **primer** match: al pulsar «Archivo…» en la sección de portada se
+abría el selector del formulario del cuerpo. La foto acababa en el formulario
+equivocado o el de portada se enviaba vacío, y `cover_image_id` nunca cambiaba.
+`UploadDocumentForm` ya usaba ids propios (`sheet_file`, `display_name`)
+precisamente para convivir con `UploadImageForm` en la página de producto: al de
+imagen se le pasó. **Arreglo**: ids derivados de `useId()`; los `name` siguen
+fijos porque son el contrato con la Server Action.
+
+Descartado antes de llegar ahí: no hay desajuste form↔action (la portada la
+escribe `uploadPostCover`, no `updatePost`, y el `update` parcial de Supabase no
+la pisa), la cadena de revalidación está bien (`posts.ts:189` →
+`CACHE_TAGS.posts`), y `media_assets` es de lectura pública, así que RLS no
+oculta portadas.
+
+| Verificación | Resultado |
+|---|---|
+| BD (PostgREST, solo lectura) | Los 4 artículos con `cover_image_id` en null y **cero** filas `media_assets` con `storage_provider = 'R2'`: no llegó ninguna subida, nunca |
+| Producción (`/blog` en workers.dev) | Los 4 artículos con bloque de color y numeral (01–04), ningún `src` a `/images/blog/` ni `/api/media/` — mismo estado que en local, no era una pestaña vieja |
+| `.wrangler/state/v3/r2/cmc-website-media-dev/blobs/` | Vacío: tampoco quedó nada en el bucket simulado local |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+
+**Rotación editorial (`HomePostsRotator`).** Pedido de la usuaria: que los
+artículos «vayan rotando para que se vea movimiento». CSS puro (`.blog-rotator`
+en `globals.css`), turnos de 6 s con fundido de 0.6 s, índice lateral
+sincronizado por barra ámbar. `/blog` conserva la versión estática.
+
+| Verificación | Resultado |
+|---|---|
+| Fallo detectado en la primera pasada | Los tres artículos se pintaban **superpuestos**. El atajo `animation: … infinite` resetea `animation-delay` a 0 y sus reglas (`.blog-rotator[data-slides="3"] .blog-slide`, especificidad 0-3-0) ganaban a las de escalonado (`.blog-slide:nth-child(2)`, 0-2-0) → los tres turnos arrancaban a la vez. Corregido pasando a propiedades largas (`animation-name`/`-duration`), que no resetean nada. El hero se salva de esto solo por el orden de especificidad de sus selectores |
+| Retardos tras el arreglo (`getComputedStyle`) | `0s / 6s / 12s`; visibilidad `visible / hidden / hidden` — un solo artículo en escena |
+| Turnos 1440×900 (t=0, t≈6.5 s, t≈12.5 s) | Escenario en «Amasijos» (01) → «Los beneficios de comer pan» (02) → «Consejos para almacenar» (03), con la barra ámbar del índice moviéndose a la fila correspondiente. Sin desplazamiento de layout: los artículos comparten celda de grid |
+| 390×844 | Primer intento: el índice repetía justo debajo la tarjeta del artículo que ya estaba en escena, con miniatura y todo — se leía como duplicado. Corregido ocultando la miniatura bajo `lg` (`max-lg:hidden`): queda un sumario de titulares con la barra ámbar |
+| `/blog` | 0 `.blog-rotator` en la página: el archivo sigue estático, como debe |
+| Consola del navegador | Sin errores en ninguna captura |
+| **Pendiente (usuaria)** | Cargar las 3 portadas. Hasta entonces la rotación muestra los bloques tipográficos de `EditorialCover`, no fotos. Si se suben desde el panel, hacerlo **en el sitio publicado** (en local el archivo va al bucket simulado y producción daría 404); la alternativa es pegar `supabase/scripts/2026-08-20-covers-blog.sql`, que registra los 3 WebP ya versionados como `STATIC` y sirve igual en local y en producción |
+| **Pendiente (verificación)** | La pausa en `:hover`/`:focus-within` está en el CSS (mismo patrón que `.brands-marquee`) pero **no se probó interactivamente**: el driver CDP no expone hover |
