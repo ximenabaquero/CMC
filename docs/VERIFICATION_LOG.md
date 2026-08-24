@@ -719,3 +719,46 @@ home y `/blog` compartan la misma regla.
 | `/blog` 1440×900 | Escenario rotando entre los 3 artículos con foto (amasijos → pan → hojaldre), cada uno con su miniatura en el índice y la barra ámbar siguiéndolo |
 | Artículo sin portada | «Consejos para almacenar…» baja a las tarjetas del final (`main ul li h3` devuelve solo ese título): no desaparece del archivo, deja de encabezarlo |
 | `npm run lint` / `npm run typecheck` | OK, en silencio |
+
+## 2026-08-23 — Relevo GIF → vector del logo del hero
+
+La clienta reportó que el logo del hero se veía borroso. Causa medida: el GIF
+mide **512×340** y en el hero se pinta a **~638 px** (columna de 511 px con
+`scale-125`), así que el frame final quedaba interpolado y con la trama de la
+paleta de 256 colores. Solución: el GIF sigue haciendo la animación y, al
+terminar, **cede el puesto** al logotipo en vector `public/brand/logo-cmc.svg`
+(entregado por la clienta). No es un fundido cruzado sino un relevo seco con
+`step-end` — un crossfade dejaba ver la superposición de las dos capas.
+
+El SVG venía con el lema «SU ALIADO EN LOS NEGOCIOS» (7 % más alto que el
+lockup del GIF); su `viewBox` se recortó a `2 2.125 607.875 578.625`, corte que
+cae en el hueco entre la razón social (termina en y=580.75) y el lema (empieza
+en y=602).
+
+| Verificación | Resultado |
+|---|---|
+| Alineación vector ↔ frame final del GIF | Tinta del GIF medida en 19.53–78.32 % (x) y 15–99.41 % (y) del lienzo 512×340; el PNG `logo-cmc-png-copia-1` coincide dentro de 0.15 %. Diferencia de imagen del vector colocado sobre el frame final: solo hairlines de antialiasing, **sin desplazamiento ni cambio de escala** |
+| Colores | Vector `#4285F5` / `#33A854` / `#EB4236` = promedio por banda del ráster, exacto |
+| Geometría en el navegador (1440×900 y 390×844) | `left 19.53 % · top 15 % · ancho 58.79 %` respecto de la caja del GIF en ambos viewports; borde inferior a 99.26 % vs 99.41 % del GIF (0.6 px) |
+| Relevo sin solape | Muestreo de opacidades en t = 0…3000 ms: hasta 1999 ms `gif:1 / svg:0`, desde 2000 ms `gif:0 / svg:1`. **Nunca ambos visibles, nunca ninguno** |
+| Margen de tiempo real | GIF descargado a 2391 ms, primer paint 2880 ms (= arranque del GIF), reloj CSS a 2817 ms → relevo a 4817 ms; la animación del GIF termina a 4420 ms. **397 ms de holgura** |
+| Layout con reduced-motion | Con el GIF en `display:none` el contenedor conserva su alto (423.95 px, gracias a `aspect-[512/340]`) y el vector su tamaño. Se retiró el override `motion-reduce:top-[40%]` del círculo: ya no hace falta |
+| Resolución | El vector reemplaza a un ráster cuyo logo medía 608 px de tinta (el GIF, 301 px): ahora es nítido a cualquier densidad |
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+
+## 2026-08-23 — Foto de cargue DAP en /nosotros
+
+La clienta entregó `DAP.png` para reemplazar la ilustración de panes bajo el h1
+de `/nosotros`. Derivada a `cargue-cajas-dap-01.webp` (1200×642, 187 KB, WebP
+q82) con la receta del importador; el original de 2.3 MB se archivó en
+`content-source/fotos-adicionales/` para no publicarlo. Al ser escena real
+lleva marco (`overflow-hidden rounded-lg border border-border`) y alt
+descriptivo.
+
+⚠️ **La foto tiene los indicios de IA ya documentados** para el lote de
+bodega/transporte, y aquí a ancho completo se leen sin esfuerzo: cajas que
+dicen «AP» en vez de «DAP», pie «Compañía Mundial de **Cereales** S.A.S.»
+cuando la empresa es *de Comercio*, y texto menor corrupto («Chento de
+Hojaslos», «Fórmula Nejorodo», «Condenido Nedo»). Se publica por pedido
+explícito de la clienta; queda pendiente confirmar el origen —ver
+`docs/FOTOS_ADICIONALES.md`— y `PRODUCT.md` prohíbe fabricar evidencia.

@@ -67,15 +67,18 @@ export default async function AboutPage() {
         {/* Cargue de cajas DAP en el camión de despacho (foto entregada por la
             clienta el 2026-08-23; reemplaza la ilustración de panes dibujada a
             mano, que a su vez había reemplazado a hero-mesa-panaderia-01).
-            Al ser ESCENA REAL y no packshot ni recorte, va enmarcada y sin
-            recortar — «Recorte editorial flotante» en DESIGN.md — y con alt
-            descriptivo: aquí la foto es contenido, no decoración. */}
+            Al ser ESCENA REAL y no packshot ni recorte va enmarcada, con alt
+            descriptivo: aquí la foto es contenido, no decoración. El derivado
+            se recortó a las 3 filas superiores de cajas (pedido de la clienta,
+            mismo día): el corte cae en la junta de sombra entre la tercera y
+            la cuarta fila, así el borde inferior no rebana ninguna caja y la
+            foto queda como tira ancha. */}
         <figure className="reveal mt-10 overflow-hidden rounded-lg border border-border">
           <Image
             src="/images/photos/cargue-cajas-dap-01.webp"
             alt="Cajas de margarina DAP Alta Repostería Ponqué de 15 kg estibadas en el camión de despacho"
             width={1200}
-            height={642}
+            height={393}
             loading="lazy"
             className="w-full"
           />
