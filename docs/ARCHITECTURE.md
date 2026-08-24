@@ -86,6 +86,17 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
     **tercer** momento (logo CMC animado en lugar del packshot).
     `scripts/patch-gif-loop.mjs` genera la variante sin loop
     (`cmc-logo-entrada-una-vez.gif`) que reproduce la animación una sola vez.
+  - **Relevo a vector en el hero (2026-08-23)**: el GIF del hero mide 512 px
+    de ancho y allí se pinta a ~640 px, así que su frame final se veía
+    interpolado. Ahora el GIF solo cubre la animación (termina a los 1.54 s) y
+    a los 2 s cede el puesto a `public/brand/logo-cmc.svg` — logotipo en
+    vector, tres trazos, sin rasters embebidos — mediante un relevo seco
+    (`step-end`, `logo-relevo-*` en `globals.css`): ninguna de las dos capas
+    se ve superpuesta a la otra. El `viewBox` del SVG está recortado al mismo
+    lockup que el frame final del GIF (el arte original incluye además el lema
+    «SU ALIADO EN LOS NEGOCIOS», que en el hero ya vive como eyebrow), de modo
+    que el cambio no mueve un píxel. Con `prefers-reduced-motion` el GIF no se
+    monta y solo queda el vector.
   - `R2`: archivos subidos desde el CMS a través del adaptador
     (`src/lib/storage/`): R2 en producción, sistema de archivos local en
     desarrollo. URL estable `/api/media/<clave>` en ambos entornos.

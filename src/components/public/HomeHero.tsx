@@ -33,10 +33,17 @@ const HERO_SLIDES = [
  * desde el admin. La composición derecha muestra el logo animado de CMC
  * sobre un círculo blanco (decisión de la clienta, 2026-08-19: reemplaza el
  * packshot del primer producto publicado; el círculo pasó de ámbar a blanco
- * y se retiró el anillo naranja); con prefers-reduced-motion se usa la
- * versión estática del logotipo.
+ * y se retiró el anillo naranja).
  *
- * Nota: `mix-blend-multiply` integra el fondo blanco del GIF/PNG al crema;
+ * Relevo GIF → vector (2026-08-23): aquí el logo se pinta a ~640 px y el GIF
+ * solo tiene 512 px de ancho, así que al congelarse se veía interpolado. La
+ * animación sigue siendo el GIF, pero al terminar cede el puesto a
+ * `logo-cmc.svg`, cuyo viewBox está recortado al mismo lockup que el frame
+ * final. El cambio es seco y simultáneo (`step-end`, ver globals.css): nunca
+ * se ven las dos capas superpuestas. Con prefers-reduced-motion el GIF no se
+ * monta y solo queda el vector.
+ *
+ * Nota: `mix-blend-multiply` integra el fondo blanco del GIF al crema;
  * requiere `isolate` en la sección para no mezclarse con capas externas.
  *
  * Fondo (2026-08-20): capa rotativa de 7 fotos del cliente a baja opacidad
@@ -113,30 +120,45 @@ export function HomeHero({
           {/* Círculo blanco protagonista (decorativo; antes ámbar — pedido
               de la clienta, 2026-08-19). Centrado con el emblema del logo
               (medido sobre el frame final del GIF, con el scale-125 el centro
-              visual cae en ≈49/49 % del contenedor → centrar basta); en el
-              PNG estático de reduced-motion el emblema queda más arriba
-              (≈40 %), de ahí el override motion-reduce. */}
+              visual cae en ≈49/49 % del contenedor → centrar basta). Desde el
+              relevo al vector (2026-08-23) la geometría es idéntica con y sin
+              reduced-motion, así que ya no hace falta override. */}
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem] motion-reduce:top-[40%]"
+            className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem]"
           />
-          {/* Logo animado: entra una sola vez y queda fijo; estático con
-              prefers-reduced-motion (mismo patrón que el header). */}
-          <Image
-            src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
-            alt="Logotipo animado de Compañía Mundial de Comercio S.A.S."
-            width={512}
-            height={340}
-            priority
-            className="relative z-10 w-full scale-125 mix-blend-multiply motion-reduce:hidden"
-          />
-          <Image
-            src="/brand/logo-cmc-png.png"
-            alt="Logotipo de Compañía Mundial de Comercio S.A.S."
-            width={1920}
-            height={1080}
-            className="relative z-10 hidden w-full scale-125 mix-blend-multiply motion-reduce:block"
-          />
+          {/* Relevo GIF → vector (2026-08-23). Las dos capas ocupan el mismo
+              sitio y se turnan: el GIF manda hasta los 2 s y ahí el vector
+              toma el relevo, sin solape (ver `logo-relevo-*` en globals.css).
+              El `mix-blend-multiply` va en el contenedor y no en cada imagen,
+              para que el crema se multiplique una sola vez. El `aspect` fija
+              la caja sin depender del GIF, que con reduced-motion no se
+              monta. */}
+          <div className="relative z-10 aspect-[512/340] w-full scale-125 mix-blend-multiply">
+            {/* Posición medida sobre el frame final del GIF: su tinta ocupa
+                19.53–78.32 % en horizontal y arranca al 15 % en vertical del
+                lienzo 512×340. El viewBox de logo-cmc.svg está recortado a esa
+                misma tinta, así que el relevo no mueve ni un píxel (verificado
+                por diferencia de imagen, docs/VERIFICATION_LOG.md). */}
+            {/* Eager y sin bajar prioridad: es la capa que QUEDA. Si llegara
+                después del relevo, el GIF ya se habría retirado sobre nada. */}
+            <Image
+              src="/brand/logo-cmc.svg"
+              alt="Logotipo de Compañía Mundial de Comercio S.A.S."
+              width={608}
+              height={579}
+              loading="eager"
+              className="hero-logo-vector absolute left-[19.53%] top-[15%] w-[58.79%]"
+            />
+            <Image
+              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
+              alt=""
+              width={512}
+              height={340}
+              priority
+              className="hero-logo-gif absolute inset-0 h-full w-full motion-reduce:hidden"
+            />
+          </div>
         </div>
       </div>
     </section>

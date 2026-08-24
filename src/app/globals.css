@@ -436,6 +436,56 @@ h6 {
 }
 
 /* ------------------------------------------------------------
+   Relevo del logo del hero (2026-08-23). El GIF de entrada mide
+   512×340 y en el hero se pinta a ~640 px: al congelarse en su
+   último frame se veía interpolado. Cuando la animación termina,
+   el GIF cede el puesto al mismo lockup en vector
+   (`logo-cmc.svg`), nítido a cualquier densidad de pantalla.
+
+   Es un RELEVO, no un fundido cruzado: con `step-end` las dos
+   capas intercambian opacidad en el mismo instante (el GIF salta
+   a 0 y el vector a 1 a los 2 s exactos), así nunca hay dos logos
+   pintados a la vez. Un crossfade dejaba ver la superposición —
+   el fondo del GIF lavaba los colores del vector a mitad de
+   camino. El corte no se percibe como salto porque el viewBox del
+   SVG está recortado a la misma tinta que el frame final del GIF
+   y las dos capas coinciden al píxel.
+
+   Los 2 s salen del propio GIF: la animación termina a los 1.54 s
+   (suma de los 11 primeros retardos; el frame 12 queda fijo sin
+   loop). Los ~460 ms de margen cubren el desfase entre el reloj de
+   la animación CSS —que arranca en el primer paint— y el arranque
+   real del GIF, que depende de su decodificación (medido en local:
+   397 ms de holgura, docs/VERIFICATION_LOG.md).
+
+   Con reduced-motion el GIF ni se monta (motion-reduce:hidden en
+   el componente) y el vector queda visible sin animación: por eso
+   tanto el `opacity: 0` inicial como el relevo viven DENTRO del
+   media query de no-preference.
+   ------------------------------------------------------------ */
+@keyframes logo-relevo-sale {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes logo-relevo-entra {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-logo-gif {
+    animation: logo-relevo-sale 2s step-end forwards;
+  }
+  .hero-logo-vector {
+    opacity: 0;
+    animation: logo-relevo-entra 2s step-end forwards;
+  }
+}
+
+/* ------------------------------------------------------------
    Fondo fotográfico rotativo del hero (solo la home, 2026-08-20):
    7 fotos del cliente en crossfade + zoom Ken Burns sutil, como
    textura a baja opacidad DETRÁS de todo el contenido (capa
