@@ -64,18 +64,18 @@ export default async function AboutPage() {
           ))}
         </header>
 
-        {/* Ilustración de panes dibujada a mano (entregada por la clienta el
-            2026-08-19; misma familia que los ornamentos laterales), con
-            fondo transparente flotando sobre el hueso — sin tarjeta.
-            Decorativa pura: alt vacío. Reemplazó a la escena real
-            hero-mesa-panaderia-01 por decisión de la clienta. */}
-        <figure className="reveal mt-10">
+        {/* Cargue de cajas DAP en el camión de despacho (foto entregada por la
+            clienta el 2026-08-23; reemplaza la ilustración de panes dibujada a
+            mano, que a su vez había reemplazado a hero-mesa-panaderia-01).
+            Al ser ESCENA REAL y no packshot ni recorte, va enmarcada y sin
+            recortar — «Recorte editorial flotante» en DESIGN.md — y con alt
+            descriptivo: aquí la foto es contenido, no decoración. */}
+        <figure className="reveal mt-10 overflow-hidden rounded-lg border border-border">
           <Image
-            src="/images/decorative/quienes-somos-panes.webp"
-            alt=""
-            aria-hidden="true"
+            src="/images/photos/cargue-cajas-dap-01.webp"
+            alt="Cajas de margarina DAP Alta Repostería Ponqué de 15 kg estibadas en el camión de despacho"
             width={1200}
-            height={518}
+            height={642}
             loading="lazy"
             className="w-full"
           />

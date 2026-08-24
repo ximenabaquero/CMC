@@ -395,7 +395,9 @@ lleva `shadow-md` para separarse del contenido.
 - **Do** usar el producto real (caja DAP) como único héroe visual; lienzo blanco + `object-contain`.
 - **Do** alternar fondos (blanco/crema/crema profunda/petróleo) para estructurar la página.
 - **Do** envolver todo motion en `motion-safe:`/media queries y dar fallback en
-  `motion-reduce:` (los GIFs tienen variante estática PNG). Los GIFs de marca viven en
+  `motion-reduce:` (los GIFs tienen variante estática: PNG, y en el hero el logo en
+  vector `logo-cmc.svg`, que además releva al GIF al terminar la animación —
+  2026-08-23). Los GIFs de marca viven en
   exactamente cuatro momentos: logo del header, logo del hero, logo DAP junto al
   encabezado del catálogo de la home (los dos últimos, pedido de la clienta,
   2026-08-19) y mantequilla del CTA.

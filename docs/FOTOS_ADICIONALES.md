@@ -88,6 +88,25 @@ publica (montaje digital o indicios de IA).
 > decisión explícita de la clienta y queda **pendiente confirmar su origen y
 > su licencia**. El recorte de palmeritas queda disponible sin uso.
 
+> ⚠️ **Actualización 2026-08-23 — cargue de cajas DAP en /nosotros.** La
+> clienta entregó `DAP.png` (1459×781, 2.3 MB; original archivado en
+> `content-source/fotos-adicionales/`) y pidió que reemplazara la ilustración
+> de panes dibujada a mano bajo el h1 de `/nosotros`. Publicada como
+> `cargue-cajas-dap-01.webp` (1200×642, 187 KB, WebP q82) con marco de escena
+> real. **Presenta los mismos indicios de IA que la alerta de los 6 JPEG de
+> bodega/transporte**, y aquí son más visibles porque la foto va a ancho
+> completo: varias cajas dicen solo **«AP»** en vez de «DAP»; el pie de todas
+> las cajas dice **«Compañía Mundial de Cereales S.A.S.»** cuando la empresa
+> es *de Comercio*; y el texto menor está corrupto («Chento de Hojaslos»,
+> «Fórmula Nejorodo», «Condenido Nedo», «Cetidad e innovación»). Publicar
+> esto como escena real de la operación choca de frente con «no fabricar
+> evidencia» de `PRODUCT.md` — y el nombre equivocado de la empresa es además
+> un riesgo comercial, no solo de criterio. Se publica por pedido explícito
+> de la clienta, con la misma salvedad que `bodega-dap-01.webp`: queda
+> **pendiente que confirme el origen**; si es generada, sustituirla por una
+> foto real del despacho. La ilustración `decorative/quienes-somos-panes.webp`
+> queda disponible sin uso.
+
 ## Características generales
 
 - `2.png` … `27.png`, `panes 1.png`, `Panes 2.png`: PNG cuadrados
