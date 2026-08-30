@@ -42,6 +42,14 @@
   --amber-hover: #e6a92f;
   --orange: #b3491a; /* eyebrows y numeración editorial; AA sobre crema y blanco */
 
+  /* Color de identidad como FONDO (rediseño 2026-08-28: la clienta pidió
+     retirar los cremas y devolver el color en bandas y franjas). Los tres
+     colores del logotipo ya viven arriba como --primary (verde), --secondary
+     (azul) y --accent (rojo); aquí solo se añaden las piezas que faltaban.
+     Contrastes verificados sobre texto blanco: azul #2563c4 5.7:1,
+     verde profundo #15522d 9.2:1, rojo #c93a2e 5.1:1 (todos AA). */
+  --tint-blue: #e8f0fc; /* disco del hero: azul del logo lavado, solo forma */
+
   /* Forma y espaciado */
   --radius-sm: 0.375rem;
   --radius-md: 0.625rem;
@@ -91,6 +99,7 @@
   --color-amber: var(--amber);
   --color-amber-hover: var(--amber-hover);
   --color-orange: var(--orange);
+  --color-tint-blue: var(--tint-blue);
   --font-display: var(--font-fraunces);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
@@ -116,7 +125,8 @@ h6 {
 
 /* ------------------------------------------------------------
    Tipografía display del sitio público. Solo aplica dentro de
-   `.public-site` (el layout público): el panel admin conserva Geist.
+   `.public-site` (el layout público): el panel admin conserva Geist, salvo
+   donde pide `font-display` a mano (su h1 por página, 2026-08-28).
    ------------------------------------------------------------ */
 .public-site :is(h1, h2, h3) {
   font-family: var(--font-fraunces), var(--font-geist-sans), Georgia, serif;
@@ -757,6 +767,35 @@ h6 {
   }
 }
 
+/* ------------------------------------------------------------
+   Rodillo amasando (2026-08-28, requerimiento 03): detalle animado
+   de la banda de pilares. Dos capas con la MISMA onda y la misma
+   duración, así que no necesitan sincronizarse por JS: el rodillo
+   avanza 24 unidades y vuelve, y las vetas de la barra avanzan
+   otras 24 respecto a él. Ese 2× es exactamente lo que hace un
+   cilindro que rueda (el punto alto viaja el doble que el eje), y
+   como las vetas están separadas 24, al llegar al extremo el
+   patrón coincide consigo mismo y el ciclo no da un salto.
+
+   `ease-in-out` en lugar del `--ease-out` del sitio: aquí el
+   movimiento se frena y se invierte en los dos extremos, que es
+   el gesto de amasar; con una curva de salida el regreso arrancaría
+   de golpe. 7s es deliberadamente lento — es decoración de fondo,
+   no un elemento que reclame atención.
+   ------------------------------------------------------------ */
+@keyframes rodillo-vaiven {
+  50% {
+    transform: translateX(24px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rodillo,
+  .rodillo-vetas {
+    animation: rodillo-vaiven 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+}
+
 /* Acordeón FAQ: apertura/cierre animados sobre details/summary nativo
    (Chromium 131+; en el resto conserva el snap actual, sin JS). */
 @media (prefers-reduced-motion: no-preference) {
@@ -784,6 +823,19 @@ h6 {
     @starting-style {
       opacity: 0;
       translate: 0 -8px;
+    }
+  }
+
+  /* Desplegable de «Productos» (2026-08-28): mismo gesto que el drawer, más
+     corto porque el recorrido es de unos pocos píxeles. */
+  .nav-dropdown {
+    transition:
+      opacity var(--dur-fast) var(--ease-drawer),
+      translate var(--dur-fast) var(--ease-drawer);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -4px;
     }
   }
 }

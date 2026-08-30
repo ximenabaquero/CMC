@@ -65,7 +65,7 @@ export function PostArticle({
       <article>
         {/* Cabecera sobre crema: la banda hace de portada cuando el
             artículo no tiene foto, que es el caso por defecto. */}
-        <header className="border-b border-border bg-cream">
+        <header className="border-b border-border bg-surface-muted">
           <div className="mx-auto max-w-4xl px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
             {/* 40rem es la medida de lectura del artículo (~75 caracteres a
                 17px): la comparten miga, titular, bajada y cuerpo para que
@@ -142,7 +142,7 @@ export function PostArticle({
       </article>
 
       {related.length > 0 ? (
-        <section aria-labelledby="sigue-leyendo" className="border-t border-border bg-cream">
+        <section aria-labelledby="sigue-leyendo" className="border-t border-border bg-surface-muted">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-16">
             <SectionHeading id="sigue-leyendo" eyebrow="Sigue leyendo" title="Otros artículos" />
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -4,23 +4,32 @@ import { FlashToast } from "@/components/admin/FlashToast";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { EmptyState } from "@/components/admin/EmptyState";
+import { ListToolbar } from "@/components/admin/ListToolbar";
+import { matchesQuery, matchesStatus } from "@/lib/search";
 
 export const metadata = { title: "Blog" };
 
 export default async function AdminBlogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ eliminado?: string }>;
+  searchParams: Promise<{ eliminado?: string; q?: string; estado?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
 
-  const { data: posts, error } = await supabase
+  const { data: allPosts, error } = await supabase
     .from("blog_posts")
     .select("id, title, slug, status, published_at, internal_note")
     .order("created_at", { ascending: false });
 
   if (error) throw new Error("No se pudieron cargar los artículos.");
+
+  // Filtro en memoria: ver el porqué en src/lib/search.ts.
+  const posts = allPosts.filter(
+    (post) =>
+      matchesStatus(params.estado, post.status) &&
+      matchesQuery(params.q, post.title, post.slug, post.internal_note)
+  );
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -38,11 +47,29 @@ export default async function AdminBlogPage({
         }
       />
 
-      {posts.length === 0 ? (
+      {allPosts.length > 0 ? (
+        <ListToolbar
+          basePath="/admin/blog"
+          q={params.q}
+          status={params.estado}
+          searchLabel="Buscar artículos"
+          searchPlaceholder="Buscar por título o dirección web…"
+          total={allPosts.length}
+          shown={posts.length}
+          itemsLabel="artículos"
+        />
+      ) : null}
+
+      {allPosts.length === 0 ? (
         <EmptyState
           title="Aún no hay artículos"
           description="Crea el primer artículo del blog; quedará en borrador hasta que lo publiques."
           cta={{ href: "/admin/blog/nuevo", label: "Crear primer artículo" }}
+        />
+      ) : posts.length === 0 ? (
+        <EmptyState
+          title="Ningún artículo coincide con la búsqueda"
+          description="Prueba con otro término o quita el filtro de estado."
         />
       ) : null}
 

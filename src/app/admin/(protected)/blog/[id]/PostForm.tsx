@@ -8,7 +8,8 @@ import { ActionFeedback, StatusField, TextAreaField, TextField } from "@/compone
 import { SubmitButton } from "@/components/admin/buttons";
 import { useActionToast } from "@/components/admin/toast";
 import { InsertMarkdownProvider } from "@/components/admin/markdown-insert";
-import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
+import { useAdminForm } from "@/components/admin/useAdminForm";
+import { FormFooter } from "@/components/admin/FormFooter";
 import { Markdown } from "@/lib/markdown";
 
 /**
@@ -180,10 +181,9 @@ export function PostForm({ post, children }: { post: BlogPost; children?: ReactN
       <StatusField defaultValue={post.status} error={fieldErrors.status?.[0]} />
 
       <ActionFeedback state={state} />
-      <div className="flex flex-wrap items-center gap-3">
+      <FormFooter dirty={dirty}>
         <SubmitButton>Guardar cambios</SubmitButton>
-        <UnsavedBadge dirty={dirty} />
-      </div>
+      </FormFooter>
     </form>
   );
 

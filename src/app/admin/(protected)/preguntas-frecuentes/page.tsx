@@ -4,23 +4,32 @@ import { FlashToast } from "@/components/admin/FlashToast";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { EmptyState } from "@/components/admin/EmptyState";
+import { ListToolbar } from "@/components/admin/ListToolbar";
+import { matchesQuery, matchesStatus } from "@/lib/search";
 
 export const metadata = { title: "Preguntas frecuentes" };
 
 export default async function AdminFaqsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ eliminado?: string; creado?: string }>;
+  searchParams: Promise<{ eliminado?: string; creado?: string; q?: string; estado?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
 
-  const { data: faqs, error } = await supabase
+  const { data: allFaqs, error } = await supabase
     .from("faqs")
     .select("id, question, status, featured, sort_order, internal_note")
     .order("sort_order");
 
   if (error) throw new Error("No se pudieron cargar las preguntas frecuentes.");
+
+  // Filtro en memoria: ver el porqué en src/lib/search.ts.
+  const faqs = allFaqs.filter(
+    (faq) =>
+      matchesStatus(params.estado, faq.status) &&
+      matchesQuery(params.q, faq.question, faq.internal_note)
+  );
 
   const flashMessage = params.eliminado
     ? "Pregunta eliminada."
@@ -44,11 +53,29 @@ export default async function AdminFaqsPage({
         }
       />
 
-      {faqs.length === 0 ? (
+      {allFaqs.length > 0 ? (
+        <ListToolbar
+          basePath="/admin/preguntas-frecuentes"
+          q={params.q}
+          status={params.estado}
+          searchLabel="Buscar preguntas"
+          searchPlaceholder="Buscar por pregunta…"
+          total={allFaqs.length}
+          shown={faqs.length}
+          itemsLabel="preguntas"
+        />
+      ) : null}
+
+      {allFaqs.length === 0 ? (
         <EmptyState
           title="Aún no hay preguntas frecuentes"
           description="Crea la primera pregunta; quedará en borrador hasta que la publiques."
           cta={{ href: "/admin/preguntas-frecuentes/nueva", label: "Crear primera pregunta" }}
+        />
+      ) : faqs.length === 0 ? (
+        <EmptyState
+          title="Ninguna pregunta coincide con la búsqueda"
+          description="Prueba con otro término o quita el filtro de estado."
         />
       ) : null}
 

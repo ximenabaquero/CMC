@@ -12,7 +12,8 @@ import {
 } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
 import { useActionToast } from "@/components/admin/toast";
-import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
+import { useAdminForm } from "@/components/admin/useAdminForm";
+import { FormFooter } from "@/components/admin/FormFooter";
 
 export function BrandForm({ brand }: { brand: Brand }) {
   const [state, formAction] = useActionState(updateBrand.bind(null, brand.id), initialActionState);
@@ -62,10 +63,9 @@ export function BrandForm({ brand }: { brand: Brand }) {
         error={fieldErrors.internal_note?.[0]}
       />
       <ActionFeedback state={state} />
-      <div className="flex flex-wrap items-center gap-3">
+      <FormFooter dirty={dirty}>
         <SubmitButton>Guardar cambios</SubmitButton>
-        <UnsavedBadge dirty={dirty} />
-      </div>
+      </FormFooter>
     </form>
   );
 }

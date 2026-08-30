@@ -51,7 +51,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
                 </span>
               </span>
             </summary>
-            <div className="border-t border-border bg-cream px-5 py-5 sm:px-6">
+            <div className="border-t border-border bg-surface-muted px-5 py-5 sm:px-6">
               <Markdown>{faq.answer}</Markdown>
             </div>
           </details>

@@ -4,35 +4,193 @@
   "title": "Design System: CMC — Compañía Mundial de Comercio",
   "extensions": {
     "colorMeta": {
-      "petrol": { "role": "primary", "displayName": "Azul Petróleo", "canonical": "#123f4d", "tonalRamp": ["#06181e", "#0b2d38", "#123f4d", "#1d5c70", "#2f7d96", "#5ba3ba", "#93c6d6", "#d3e8ef"] },
-      "cream": { "role": "neutral", "displayName": "Crema", "canonical": "#faf6ec", "tonalRamp": ["#3d3626", "#6e6144", "#a08e64", "#c4b48c", "#ddd1af", "#eee4cb", "#f5eedd", "#faf6ec"] },
-      "amber": { "role": "secondary", "displayName": "Ámbar Mantequilla", "canonical": "#f2b63d", "tonalRamp": ["#402b05", "#6d4a0a", "#9a6a11", "#c48a1c", "#e6a92f", "#f2b63d", "#f7cd77", "#fbe6bb"] },
-      "orange": { "role": "secondary", "displayName": "Naranja Editorial", "canonical": "#b3491a", "tonalRamp": ["#2e1105", "#5a230a", "#863512", "#b3491a", "#d0662f", "#e18b5c", "#eeb392", "#f8dcc9"] },
-      "primary-green": { "role": "secondary", "displayName": "Verde Campos", "canonical": "#1e7a3c", "tonalRamp": ["#07230f", "#0f4520", "#166030", "#1e7a3c", "#2f9b53", "#5cbc7c", "#97d8ac", "#d3efdc"] },
-      "foreground": { "role": "neutral", "displayName": "Tinta", "canonical": "#1f2933", "tonalRamp": ["#12181e", "#1f2933", "#38434e", "#52606d", "#71808d", "#96a3ae", "#bcc5cd", "#e1e6ea"] }
+      "petrol": {
+        "role": "primary",
+        "displayName": "Azul Petróleo",
+        "canonical": "#123f4d",
+        "tonalRamp": [
+          "#06181e",
+          "#0b2d38",
+          "#123f4d",
+          "#1d5c70",
+          "#2f7d96",
+          "#5ba3ba",
+          "#93c6d6",
+          "#d3e8ef"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Crema",
+        "canonical": "#faf6ec",
+        "tonalRamp": [
+          "#3d3626",
+          "#6e6144",
+          "#a08e64",
+          "#c4b48c",
+          "#ddd1af",
+          "#eee4cb",
+          "#f5eedd",
+          "#faf6ec"
+        ]
+      },
+      "amber": {
+        "role": "secondary",
+        "displayName": "Ámbar Mantequilla",
+        "canonical": "#f2b63d",
+        "tonalRamp": [
+          "#402b05",
+          "#6d4a0a",
+          "#9a6a11",
+          "#c48a1c",
+          "#e6a92f",
+          "#f2b63d",
+          "#f7cd77",
+          "#fbe6bb"
+        ]
+      },
+      "orange": {
+        "role": "secondary",
+        "displayName": "Naranja Editorial",
+        "canonical": "#b3491a",
+        "tonalRamp": [
+          "#2e1105",
+          "#5a230a",
+          "#863512",
+          "#b3491a",
+          "#d0662f",
+          "#e18b5c",
+          "#eeb392",
+          "#f8dcc9"
+        ]
+      },
+      "primary-green": {
+        "role": "secondary",
+        "displayName": "Verde Campos",
+        "canonical": "#1e7a3c",
+        "tonalRamp": [
+          "#07230f",
+          "#0f4520",
+          "#166030",
+          "#1e7a3c",
+          "#2f9b53",
+          "#5cbc7c",
+          "#97d8ac",
+          "#d3efdc"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#1f2933",
+        "tonalRamp": [
+          "#12181e",
+          "#1f2933",
+          "#38434e",
+          "#52606d",
+          "#71808d",
+          "#96a3ae",
+          "#bcc5cd",
+          "#e1e6ea"
+        ]
+      },
+      "tint-blue": {
+        "role": "neutral",
+        "displayName": "Azul Lavado",
+        "canonical": "#e8f0fc",
+        "tonalRamp": [
+          "#0f2648",
+          "#173a6d",
+          "#1f4f92",
+          "#2e6cc0",
+          "#5b93d8",
+          "#94bceb",
+          "#c3d9f6",
+          "#e8f0fc"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display Fraunces", "purpose": "Solo el h1 del hero; max-w-16ch, text-balance, petróleo." },
-      "headline": { "displayName": "Headline Fraunces", "purpose": "h2 de sección tras el eyebrow naranja." },
-      "label": { "displayName": "Eyebrow", "purpose": "Uppercase tracking-wide; naranja sobre claro, ámbar sobre petróleo." }
+      "display": {
+        "displayName": "Display Fraunces",
+        "purpose": "Solo el h1 del hero; max-w-16ch, text-balance, petróleo."
+      },
+      "headline": {
+        "displayName": "Headline Fraunces",
+        "purpose": "h2 de sección tras el eyebrow naranja."
+      },
+      "label": {
+        "displayName": "Eyebrow",
+        "purpose": "Uppercase tracking-wide; naranja sobre claro, ámbar sobre petróleo."
+      }
     },
     "shadows": [
-      { "name": "hover-lift", "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)", "purpose": "Única sombra del sistema; solo en hover de tarjetas (Flat-At-Rest)." }
+      {
+        "name": "hover-lift",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "purpose": "Única sombra del sistema; solo en hover de tarjetas (Flat-At-Rest)."
+      }
     ],
     "motion": [
-      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Curva por defecto del sitio: entradas, reveal, acordeón." },
-      { "name": "ease-drawer", "value": "cubic-bezier(0.32, 0.72, 0, 1)", "purpose": "Drawer del menú móvil." },
-      { "name": "dur-fast", "value": "150ms", "purpose": "Feedback de pulsación (active:scale-[0.98]) y hovers." },
-      { "name": "dur-base", "value": "250ms", "purpose": "Cambios de estado: acordeón FAQ, drawer." },
-      { "name": "dur-enter", "value": "400ms", "purpose": "Entrada escalonada del hero (stagger 70ms; candidatos LCP solo transform)." },
-      { "name": "reveal", "value": "animation-timeline: view(); animation-range: entry 10% entry 40%", "purpose": "Reveal scroll-driven de tarjetas/ítems de la home; fallback visible sin soporte." },
-      { "name": "view-transition", "value": "200ms crossfade", "purpose": "Navegación entre páginas (Chromium); header con nombre propio para estabilidad." },
-      { "name": "marquee", "value": "35s linear infinite", "purpose": "Carrusel de marcas; pausa en hover y focus-within; scroll manual con reduced-motion." }
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Curva por defecto del sitio: entradas, reveal, acordeón."
+      },
+      {
+        "name": "ease-drawer",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Drawer del menú móvil."
+      },
+      {
+        "name": "dur-fast",
+        "value": "150ms",
+        "purpose": "Feedback de pulsación (active:scale-[0.98]) y hovers."
+      },
+      {
+        "name": "dur-base",
+        "value": "250ms",
+        "purpose": "Cambios de estado: acordeón FAQ, drawer."
+      },
+      {
+        "name": "dur-enter",
+        "value": "400ms",
+        "purpose": "Entrada escalonada del hero (stagger 70ms; candidatos LCP solo transform)."
+      },
+      {
+        "name": "reveal",
+        "value": "animation-timeline: view(); animation-range: entry 10% entry 40%",
+        "purpose": "Reveal scroll-driven de tarjetas/ítems de la home; fallback visible sin soporte."
+      },
+      {
+        "name": "view-transition",
+        "value": "200ms crossfade",
+        "purpose": "Navegación entre páginas (Chromium); header con nombre propio para estabilidad."
+      },
+      {
+        "name": "marquee",
+        "value": "35s linear infinite",
+        "purpose": "Carrusel de marcas; pausa en hover y focus-within; scroll manual con reduced-motion."
+      },
+      {
+        "name": "rodillo",
+        "value": "7s cubic-bezier(0.45, 0, 0.55, 1) infinite",
+        "purpose": "Rodillo amasando de la banda de pilares: vaivén que frena e invierte en los extremos."
+      }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "640px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" }
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
     ]
   },
   "components": [
@@ -85,23 +243,44 @@
   ],
   "narrative": {
     "northStar": "El Obrador Editorial",
-    "overview": "La calidez de un obrador de panadería —crema, ámbar, mantequilla derritiéndose— presentada con el rigor de una revista bien compuesta. El sitio habla a compradores B2B: cálido porque vende materia prima de panadería, serio porque es un proveedor industrial. La tensión se resuelve con composición editorial: numeración 01/02 en naranja, eyebrows en mayúsculas, titulares Fraunces con aire, y el producto real (la caja DAP) como único héroe fotográfico.",
+    "overview": "La calidez de un obrador de panadería —ámbar, mantequilla derritiéndose, pan recién horneado— presentada con el rigor de una revista bien compuesta. El sitio habla a compradores B2B: cálido porque vende materia prima de panadería, serio porque es un proveedor industrial. La tensión se resuelve con composición editorial: numeración 01/02 en naranja, eyebrows en mayúsculas, titulares Fraunces con aire, y el producto real (la caja DAP) como único héroe fotográfico. Desde el 2026-08-28 el fondo es blanco y el color de identidad entra en bandas plenas y franjas tricolores: la escalera de cremas se retiró por pedido de la clienta.",
     "keyCharacteristics": [
-      "Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo)",
+      "Blanco de lectura + bandas de color de identidad (verde, azul, rojo) + autoridad institucional (petróleo); la calidez vive en el ámbar y la fotografía, no en el fondo",
       "Composición editorial: eyebrow naranja → titular Fraunces → prosa Geist",
       "Producto real como héroe; cero fotografía de stock",
       "Plano y preciso: bordes finos, sombra solo como respuesta al hover"
     ],
     "rules": [
-      { "name": "The Amber Guardrail Rule", "body": "El ámbar NUNCA es texto sobre fondo claro; solo funciona sobre petróleo (8:1) o como forma decorativa.", "section": "colors" },
-      { "name": "The One Hero Rule", "body": "Cada viewport tiene un solo protagonista de color o imagen; los acentos no compiten en la misma vista.", "section": "colors" },
-      { "name": "The Eyebrow Rule", "body": "Toda sección se anuncia igual: eyebrow uppercase naranja → titular Fraunces petróleo → descripción gris piedra.", "section": "typography" },
-      { "name": "The Flat-At-Rest Rule", "body": "Ninguna superficie tiene sombra en reposo; la sombra es exclusivamente una respuesta al hover.", "section": "elevation" }
+      {
+        "name": "The Amber Guardrail Rule",
+        "body": "El ámbar NUNCA es texto sobre fondo claro; solo funciona sobre petróleo (8:1) o como forma decorativa.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Hero Rule",
+        "body": "Cada viewport tiene un solo protagonista de color o imagen; los acentos no compiten en la misma vista.",
+        "section": "colors"
+      },
+      {
+        "name": "The Eyebrow Rule",
+        "body": "Toda sección se anuncia igual: eyebrow uppercase naranja → titular Fraunces petróleo → descripción gris piedra.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "Ninguna superficie tiene sombra en reposo; la sombra es exclusivamente una respuesta al hover.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Color-Band Rule",
+        "body": "El color de identidad entra de tres maneras y de ninguna otra: banda plena a ancho completo, franja tricolor (BrandStripe) y filo grueso de tarjeta. Nunca como fondo de una columna de lectura ni como tinte del lienzo de producto.",
+        "section": "colors"
+      }
     ],
     "dos": [
       "Do anunciar toda sección con el patrón eyebrow → Fraunces → descripción.",
       "Do usar el producto real (caja DAP) como único héroe visual; lienzo blanco + object-contain.",
-      "Do alternar fondos (blanco/crema/crema profunda/petróleo) para estructurar la página.",
+      "Do alternar fondos (blanco/lino/bandas de color/petróleo) y meter el color en bandas y franjas, no en el fondo de lectura.",
       "Do envolver todo motion en motion-safe: y dar fallback en motion-reduce:.",
       "Do mantener el camino a WhatsApp/teléfono a un paso en cada página."
     ],
@@ -110,7 +289,8 @@
       "Don't añadir sombras en reposo.",
       "Don't usar fotografía de stock, testimonios o cifras no verificadas.",
       "Don't introducir librerías de animación JS ni client components innecesarios: motion CSS-first (SSG).",
-      "Don't poner más de un protagonista de color/imagen por viewport."
+      "Don't poner más de un protagonista de color/imagen por viewport.",
+      "Don't devolver los cremas al fondo de las secciones públicas (descartados por la clienta, 2026-08-28)."
     ]
   }
 }
