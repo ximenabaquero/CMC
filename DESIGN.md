@@ -339,9 +339,9 @@ solo con el logo), y el 2026-08-20 la sustituyó por la escena del panadero.
 
 El protagonista es el **producto y su resultado**. Columna izquierda: eyebrow → titular
 Fraunces → prosa → dos CTA. Columna derecha: el **sello de marca** arriba a la derecha
-(160–176 px) y, bajo él, un **escenario que se turna** entre las fotos de aplicación de
-los tres destacados —cada una con la caja y lo que sale de ella: ponqués y galletería,
-tortas, hojaldres— sobre un **disco azul lavado**. Todo con `mix-blend-multiply`: los
+(160–176 px) y, bajo él, un **escenario que se turna** entre tres fotos de aplicación
+—cada una con la caja y lo que sale de ella: ponqués y galletería, panes, hojaldres—
+sobre un **disco azul lavado**. Todo con `mix-blend-multiply`: los
 packshots se fotografiaron sobre blanco puro, así que multiplicar los funde con el disco
 sin recortarlos.
 
@@ -350,6 +350,16 @@ descartó: «no me convencen las cajas, sería mejor una foto de producto […] 
 panes o torta, que destaque el resultado de lo que pueden hacer con sus productos», y
 pidió el logo «al otro lado y un poquito más grandecito». De ahí las dos decisiones
 actuales: fotos de aplicación en vez de empaques sueltos, y el sello a la derecha.
+
+**Encuadre de las tres (2026-08-30).** No se usan los originales cuadrados sino
+derivados de 1200×560 (`scripts/recortar-hero-aplicaciones.mjs`): en el original el
+motivo ocupa una franja del 40–50 % del alto y deja 350–440 px de blanco arriba, que en
+el hero era hueco muerto. Y la tercera **no es DAP Repostería**, aunque sea el n.º 2 del
+podio: su tinta ocupa el 26 % del alto con aspecto 3.72 —tres objetos sueltos en una
+línea fina, no un grupo compacto— y en la rotación la composición se desinflaba en ese
+turno. Criterio a conservar: **en una rotación, las piezas se eligen por peso visual
+comparable, no por jerarquía comercial**; el podio se comunica en el catálogo, que es
+donde significa algo.
 
 **Regla que deja el episodio:** en el hero, el empaque nunca va solo. La caja sola dice
 qué se compra; la caja con el horneado dice para qué sirve, y esa es la pregunta del

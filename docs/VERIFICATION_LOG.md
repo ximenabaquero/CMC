@@ -817,3 +817,28 @@ con escenas**, sin aplicaciones.
 | Ciclo del fondo | Bajado de 42 s/7 fotos a 18 s/3 fotos. Los porcentajes de `hero-slide-cycle` se recalcularon (3.57/14.29/17.86 % → 8.33/33.33/41.67 %); sin eso, 3 fotos en un ciclo de 42 s habrían dejado 24 s de fondo vacío |
 | Opacidad de la textura | 0.15 → **0.12**: quedándose solo con escenas de panadería (claras, de grano fino) la capa pesaba más detrás del titular. Sigue dentro del rango revisado 0.12–0.18 |
 | Móvil 390 px | `scrollWidth` 375 ≤ 390; sello arriba a la derecha y foto a ancho completo, sin recortes |
+
+## 2026-08-31 — Encuadre del hero e indicadores
+
+Tres ajustes propuestos tras revisar la iteración anterior en pantalla.
+
+**Medición que los motivó** (caja de tinta de las fotos de aplicación, umbral de
+blanco 238, medido con sharp sobre los originales de 1200×1200):
+
+| Foto | Tinta | % del alto | Vacío arriba | Aspecto |
+|---|---|---|---|---|
+| Alta Repostería Ponqué | 1170×597 | 50 % | 348 px | 1.96 |
+| Hojaldre | 1139×511 | 43 % | 363 px | 2.23 |
+| Multipropósito | 1113×479 | 40 % | 364 px | 2.32 |
+| **Repostería** | **1166×313** | **26 %** | **441 px** | **3.72** |
+
+Las nueve fotos de aplicación miden entre 32 % y 50 % de tinta salvo Repostería, con
+26 %: es la única fuera de familia y por eso salió del escenario del hero.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` / `npm run build` | OK |
+| Derivados `-hero-01.webp` | 1200×560 (2.14:1, dentro de la familia de aspectos 1.96–2.32), 43–49 KB cada uno; generados por `scripts/recortar-hero-aplicaciones.mjs` y registrados en el manifiesto (3 entradas nuevas, sin reordenar el resto) |
+| Peso visual en la rotación | Los tres turnos ocupan el mismo lienzo; se acabó el hueco entre el sello y la foto |
+| Años de experiencia | Función probada contra cuatro fechas: 2026-08-31 → 6, 2026-09-08 → 6, 2026-09-09 → **7**, 2027-01-01 → 7. Coincide con el copy publicado («más de seis años») |
+| Staleness del indicador | La home es estática: la cifra se congela en el build y se refresca con cualquier revalidación desde el panel. Un día de desfase al año, a cambio de que nadie tenga que acordarse de actualizarla |

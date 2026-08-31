@@ -8,23 +8,36 @@ const FALLBACK_BODY =
   "Margarinas, mantequillas y aceites para panaderías, pastelerías e industrias que necesitan calidad, consistencia y respaldo en cada proceso.";
 
 /* Escenario del hero (2026-08-30, pedido de la clienta): las fotos de
-   APLICACIÓN de los tres productos destacados, turnándose en primer plano.
-   Cada una trae la caja y, al lado, lo que sale de ella —ponqués y galletería,
-   tortas, hojaldres—, que es exactamente lo que pidió: «que destaque el
-   resultado de lo que pueden hacer con sus productos». Están fotografiadas
-   sobre blanco puro, así que `mix-blend-multiply` las funde con el disco sin
-   recortarlas. El orden es el del podio de destacados. */
+   APLICACIÓN de tres productos, turnándose en primer plano. Cada una trae la
+   caja y, al lado, lo que sale de ella —ponqués y galletería, panes, hojaldres—,
+   que es exactamente lo que pidió: «que destaque el resultado de lo que pueden
+   hacer con sus productos». Están fotografiadas sobre blanco puro, así que
+   `mix-blend-multiply` las funde con el disco sin recortarlas.
+
+   Se usan los derivados `-hero-01.webp` (1200×560), no los originales
+   cuadrados: en el original el motivo ocupa una franja del 40-50 % del alto y
+   deja ~350-440 px de blanco arriba, que en el hero era hueco muerto entre el
+   sello y la foto. `scripts/recortar-hero-aplicaciones.mjs` recorta ese aire y
+   normaliza las tres al mismo lienzo — regenerarlos con ese script, no a mano.
+
+   **La tercera no es DAP Repostería, que es el n.º 2 del podio.** Su foto es la
+   única de las nueve fuera de familia: la tinta ocupa el 26 % del alto (las
+   demás, 32-50 %) con aspecto 3.72, tres objetos sueltos en una línea fina en
+   vez de un grupo compacto; en la rotación se leía como un bajón. Entra
+   Multipropósito, cuyo plato de panes además es literalmente lo que la clienta
+   pidió ver. El podio de destacados no cambia: vive en la sección de catálogo,
+   no aquí. */
 const STAGE_PHOTOS = [
   {
-    src: "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-aplicacion-01.webp",
+    src: "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-hero-01.webp",
     alt: "Caja de margarina DAP Alta Repostería Ponqué junto a ponqués, cupcakes, brazo de reina y galletería recién horneados",
   },
   {
-    src: "/images/products/dap-reposteria/dap-reposteria-aplicacion-01.webp",
-    alt: "Caja de margarina DAP Repostería entre una bandeja de galletas surtidas y una torta glaseada con almendras",
+    src: "/images/products/dap-multiproposito/dap-multiproposito-hero-01.webp",
+    alt: "Caja de margarina DAP Multipropósito junto a un plato con roscas, almojábanas, pan tajado y panecillos",
   },
   {
-    src: "/images/products/dap-hojaldre/dap-hojaldre-aplicacion-01.webp",
+    src: "/images/products/dap-hojaldre/dap-hojaldre-hero-01.webp",
     alt: "Caja de margarina DAP Hojaldre junto a palmeritas, pasteles y panes hojaldrados sobre rejilla",
   },
 ];
@@ -185,7 +198,7 @@ export function HomeHero({
                   src={photo.src}
                   alt={photo.alt}
                   width={1200}
-                  height={1200}
+                  height={560}
                   priority={index === 0}
                   loading={index === 0 ? "eager" : "lazy"}
                   className="hero-stage-photo col-start-1 row-start-1 h-auto w-full"

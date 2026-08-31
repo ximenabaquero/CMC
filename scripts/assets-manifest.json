@@ -184,6 +184,14 @@
     "sizeBytes": 81612
   },
   {
+    "kind": "product",
+    "productSlug": "dap-alta-reposteria-ponque",
+    "path": "/images/products/dap-alta-reposteria-ponque/dap-alta-reposteria-ponque-hero-01.webp",
+    "width": 1200,
+    "height": 560,
+    "sizeBytes": 45830
+  },
+  {
     "kind": "document",
     "productSlug": "dap-alta-reposteria-ponque",
     "path": "/images/products/dap-alta-reposteria-ponque/ficha-tecnica-dap-alta-reposteria-ponque.pdf",
@@ -214,6 +222,14 @@
     "width": 1200,
     "height": 1200,
     "sizeBytes": 67876
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-hojaldre",
+    "path": "/images/products/dap-hojaldre/dap-hojaldre-hero-01.webp",
+    "width": 1200,
+    "height": 560,
+    "sizeBytes": 49570
   },
   {
     "kind": "product",
@@ -278,6 +294,14 @@
     "width": 1200,
     "height": 1200,
     "sizeBytes": 79926
+  },
+  {
+    "kind": "product",
+    "productSlug": "dap-multiproposito",
+    "path": "/images/products/dap-multiproposito/dap-multiproposito-hero-01.webp",
+    "width": 1200,
+    "height": 560,
+    "sizeBytes": 43870
   },
   {
     "kind": "document",
