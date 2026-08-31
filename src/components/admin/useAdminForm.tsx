@@ -12,6 +12,15 @@ import type { ActionState } from "@/lib/action-state";
  *   de error (los inputs de archivo no se pueden restaurar).
  * - **"Cambios sin guardar"**: `dirty` se activa con onInput/onChange y
  *   se limpia cuando llega una respuesta de éxito.
+ * - **Aviso al salir** (2026-08-28): con cambios sin guardar, el navegador
+ *   pide confirmación antes de cerrar o recargar la pestaña. El diálogo lo
+ *   pinta el navegador y no admite texto propio; cubre solo la salida del
+ *   documento, no la navegación interna del panel (Next no expone un
+ *   bloqueo de rutas estable).
+ * - **Foco al primer campo con error** (2026-08-28): en formularios de
+ *   varias pantallas, un error en el tercer campo quedaba fuera de vista y
+ *   el toast solo decía «revisa los campos». Ahora el primero se enfoca y
+ *   se centra en pantalla.
  *
  * Uso: `const { formProps, dirty } = useAdminForm(state);` y esparcir
  * `{...formProps}` en el `<form>`.
@@ -53,6 +62,14 @@ export function useAdminForm(state: ActionState): {
     snapshot.current = items;
   }, []);
 
+  // Aviso del navegador al cerrar/recargar con cambios pendientes.
+  useEffect(() => {
+    if (!dirty) return;
+    const onBeforeUnload = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
+
   useEffect(() => {
     if (state.status === "success") {
       setDirty(false);
@@ -76,6 +93,25 @@ export function useAdminForm(state: ActionState): {
         element instanceof HTMLSelectElement
       ) {
         element.value = item.value;
+      }
+    }
+
+    // Foco al primer campo con error, en el orden del formulario y no en el
+    // de las claves de `fieldErrors` (que es el de Zod y no tiene por qué
+    // coincidir con lo que ve la usuaria).
+    const errored = new Set(Object.keys(state.fieldErrors ?? {}));
+    if (errored.size === 0) return;
+    for (const element of Array.from(form.elements)) {
+      if (
+        (element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement ||
+          element instanceof HTMLSelectElement) &&
+        element.name &&
+        errored.has(element.name)
+      ) {
+        element.focus({ preventScroll: true });
+        element.scrollIntoView({ block: "center", behavior: "smooth" });
+        return;
       }
     }
   }, [state]);

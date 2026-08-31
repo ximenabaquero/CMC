@@ -16,6 +16,7 @@ colors:
   accent-red: "#c93a2e"
   butter: "#f0cf72"
   butter-light: "#f7e7bb"
+  tint-blue: "#e8f0fc"
   green-deep: "#15522d"
   background: "#fdfcfa"
   surface: "#ffffff"
@@ -85,21 +86,27 @@ components:
 
 **Creative North Star: "El Obrador Editorial"**
 
-La calidez de un obrador de panadería —crema, ámbar, mantequilla derritiéndose— presentada
+La calidez de un obrador de panadería —ámbar, mantequilla derritiéndose, pan recién
+horneado— presentada
 con el rigor de una revista bien compuesta. El sitio habla a compradores B2B: debe sentirse
 cálido porque vende materia prima de panadería, y serio porque es un proveedor industrial.
 La tensión se resuelve con composición editorial: numeración `01/02` en naranja, eyebrows
 en mayúsculas, titulares Fraunces con mucho aire, y el producto real (la caja DAP) como
 único héroe fotográfico — nunca stock.
 
-La densidad es baja y el ritmo pausado: secciones generosas (`py-16/20`) que alternan
-fondos blanco → crema → crema profunda → petróleo. El color estructura la página; la
-decoración se limita a círculos ámbar recortados, GIFs de marca usados con moderación y
-los ornamentos botánicos dibujados a mano que enmarcan secciones puntuales (desktop,
-2026-08-20).
+La densidad es baja y el ritmo pausado: secciones generosas (`py-16/20`).
+**Giro de fondos (2026-08-28, pedido de la clienta).** La escalera de cremas se retiró
+—los leía como «antiguos y planos»— y la página pasó a **base blanca con el color en
+bandas y franjas**: blanco → banda azul → blanco → banda verde → blanco → lino →
+petróleo al cierre. El color ya no tiñe el fondo de lectura; lo corta. La decoración se
+limita a la franja tricolor de identidad, el disco azul del hero, círculos ámbar
+recortados, GIFs de marca usados con moderación y los ornamentos botánicos dibujados a
+mano, que desde ese mismo cambio solo enmarcan /nosotros y /contacto.
 
 **Key Characteristics:**
-- Calidez alimentaria (cremas, ámbar) + autoridad institucional (petróleo).
+- Blanco de lectura + bandas de color de identidad (verde, azul, rojo) + petróleo
+  institucional; la calidez alimentaria vive hoy en el ámbar y en la fotografía, no en
+  el fondo.
 - Composición editorial: eyebrow naranja → titular Fraunces → prosa Geist.
 - Producto real como héroe; cero fotografía de stock.
 - Plano y preciso: bordes finos, sombra solo como respuesta al hover.
@@ -131,15 +138,28 @@ puntuados por ámbar y naranja.
 - **Hueso** (#fdfcfa): fondo base del sitio. **Blanco** (#ffffff): superficies y lienzo de
   producto. **Lino** (#f5f3ee): superficies atenuadas.
 - **Crema** (#faf6ec) / **Crema Profunda** (#f3ead8) / **Crema Hero** (#f8f2e4): la escalera
-  de fondos cálidos que alterna entre secciones.
+  de fondos cálidos que alternaba entre secciones **hasta el 2026-08-28**. Los tokens
+  siguen definidos (los usa el admin) pero **el sitio público ya no los pinta**: su papel
+  lo tomaron el blanco, el lino y las bandas de color.
+- **Azul Lavado** (#e8f0fc): disco del hero. Forma decorativa, nunca texto ni fondo de
+  lectura.
 - **Tinta** (#1f2933): texto base. **Gris Piedra** (#52606d): texto secundario.
   **Arena** (#e4e0d8): bordes y divisores.
 
 ### Named Rules
 **The Amber Guardrail Rule.** El ámbar NUNCA es texto sobre fondo claro; solo funciona como
-texto/botón sobre petróleo (contraste 8:1) o como forma decorativa.
+texto/botón sobre petróleo (contraste 8:1) o como forma decorativa. Extensión documentada
+(2026-08-28): vale también sobre las bandas oscuras nuevas — 5.1:1 sobre verde profundo
+(cualquier tamaño) y 3.15:1 sobre azul, **solo para texto grande** (las cifras de los
+indicadores, 36–48 px semibold).
 **The One Hero Rule.** Cada viewport tiene un solo protagonista de color o imagen; los
 acentos (ámbar, naranja, verde) no compiten entre sí en la misma vista.
+**The Color-Band Rule** (2026-08-28). El color de identidad entra a la página de tres
+maneras y de ninguna otra: **banda plena** a ancho completo (una sección entera, texto
+blanco), **franja tricolor** (`BrandStripe`: 3 px bajo el header, 6 px como divisor y como
+remate del pie) y **filo de tarjeta** (regla gruesa de 6 px en el borde superior, como en
+las tarjetas de clima). Nunca como fondo de una columna de lectura, ni como tinte del
+lienzo de producto: los packshots viven sobre blanco puro, siempre.
 
 ## Typography
 
@@ -148,7 +168,7 @@ acentos (ámbar, naranja, verde) no compiten entre sí en la misma vista.
 
 **Character:** Fraunces aporta el carácter cálido-editorial (serifa con personalidad de
 obrador); Geist mantiene la lectura técnica y neutra. Fraunces vive SOLO dentro de
-`.public-site` en h1–h3; el admin es 100 % Geist.
+`.public-site` en h1–h3. El admin es Geist salvo **una excepción deliberada** (2026-08-28): el h1 de cada página del panel y el rótulo de la barra lateral van en Fraunces y petróleo, vía la utilidad `font-display`. Es un h1 por pantalla; el resto de la herramienta sigue en Geist, que es lo que la hace legible.
 
 ### Hierarchy
 - **Display** (600, clamp 2.75–4rem, lh 1.06, ls -0.01em): solo el h1 del hero; `max-w-[16ch]`,
@@ -167,7 +187,10 @@ Fraunces petróleo → (opcional) descripción gris piedra. Sin excepciones de f
 
 Contenedor único `max-w-6xl` (72rem, `--container-max`) con `px-4`. Ritmo vertical de
 sección: `py-16 sm:py-20` (py-14 en bandas comprimidas). Las secciones alternan fondo para
-marcar el ritmo: blanco → crema → blanco → crema profunda → petróleo profundo al cierre.
+marcar el ritmo; desde el **2026-08-28** la secuencia de la home es: blanco (hero) → banda
+**azul** (indicadores) → blanco (quiénes somos) → banda **verde** (pilares) → blanco
+(catálogo) → lino (clima) → franja tricolor + blanco (propuesta de valor) → blanco (blog)
+→ lino (FAQ) → **petróleo profundo** (CTA) → franja tricolor + blanco (pie).
 Grids de 2 columnas asimétricas para contenido editorial (`lg:grid-cols-[2fr_3fr]`,
 hero `[52fr_48fr]`), 2 columnas para tarjetas de producto de la home, 3 para pilares/blog
 en desktop. Breakpoints Tailwind estándar (sm 640, md 768, lg 1024). En móvil todo apila a
@@ -175,8 +198,8 @@ una columna; la decoración absoluta (círculos, GIFs) se oculta bajo `lg:` o `m
 
 ## Elevation & Depth
 
-Sistema plano con capas tonales: la profundidad la dan los cambios de fondo (crema sobre
-blanco, petróleo al cierre) y los bordes arena de 1px, no las sombras.
+Sistema plano con capas tonales: la profundidad la dan los cambios de fondo (lino sobre
+blanco, bandas de color, petróleo al cierre) y los bordes arena de 1px, no las sombras.
 
 ### Shadow Vocabulary
 - **Hover lift** (`shadow-md` de Tailwind): única sombra permitida; aparece solo en hover
@@ -209,8 +232,8 @@ columna de lectura.
 
 **Recorte editorial flotante (2026-08-19).** Las fotos editoriales aprobadas de packshot
 (fondo blanco puro) se publican como recortes con canal alfa (`-recorte.webp`, generados
-por `scripts/recortar-fotos-editoriales.mjs`) que **flotan directamente** sobre crema,
-hueso o petróleo — sin tarjeta, sin borde, sin sombra (Flat-At-Rest) — y, cuando van en
+por `scripts/recortar-fotos-editoriales.mjs`) que **flotan directamente** sobre blanco,
+lino o petróleo — sin tarjeta, sin borde, sin sombra (Flat-At-Rest) — y, cuando van en
 serie, apoyados en una línea de base común (`object-bottom`). El lienzo blanco +
 `object-contain` queda reservado a los packshots de producto (empaques); las escenas
 reales no se recortan y conservan su marco.
@@ -249,13 +272,16 @@ foto decide el encuadre. Sin portada asignada, la tarjeta del artículo cae en `
 
 ### Cards / Containers
 - **Corner Style:** lg (1rem).
-- **Background:** blanco sobre fondos crema; lino (#f5f3ee) para variantes atenuadas.
+- **Background:** blanco sobre lino; lino (#f5f3ee) para variantes atenuadas y para las
+  secciones que antes iban en crema.
 - **Shadow Strategy:** Flat-At-Rest; hover = borde `petrol/30` + shadow-md.
 - **Border:** 1px arena.
 - **Internal Padding:** p-5 a p-6.
 - **Producto (home):** lienzo blanco de altura fija (h-72 → h-[360px]) con `object-contain`;
-  el empaque nunca se recorta. Solo **2 destacados en una fila** + «Ver catálogo»
-  (2026-08-20); el catálogo completo vive en /productos.
+  el empaque nunca se recorta. **3 destacados en una fila** + «Ver catálogo» (2026-08-28;
+  eran 2 desde el 2026-08-20): son exactamente los tres del orden destacado —Alta
+  Repostería Ponqué, Repostería, Hojaldre—, los más vendidos según la clienta. El catálogo
+  completo vive en /productos.
 
 ### Iconos
 No hay librería de iconos: son SVG inline con `currentColor` y `aria-hidden="true"`, para que
@@ -279,10 +305,25 @@ hereden el color del contenedor y no lleguen al lector de pantalla.
 Solo existen en el admin (fuera de este sistema); el sitio público no tiene formularios.
 
 ### Navigation
-- Header sticky `bg-cream/95` con `backdrop-blur`, borde inferior arena. Links Geist
-  `text-sm font-medium`; el activo lleva subrayado naranja (`DesktopNav`). Móvil: drawer
-  con cierre por Escape y navegación.
-- Footer sobre crema profunda, 3 columnas.
+- Header sticky `bg-surface/95` con `backdrop-blur` y **franja tricolor** de 3 px como
+  borde inferior (sustituye al borde arena). Links Geist `text-sm font-medium`; el activo
+  lleva subrayado naranja (`DesktopNav`), separado del lockup por un filete vertical
+  arena. Móvil: drawer con cierre por Escape y navegación.
+- **Lockup de identidad** (`BrandLockup`, 2026-08-28): emblema vectorial
+  (`logo-cmc-emblema.svg`, solo sol azul y hojas verdes) + razón social y lema **en rojo**
+  (#c93a2e, 5.08:1 sobre blanco), con el lema centrado bajo el nombre (`w-fit` +
+  `text-center`). El emblema mide 48/56 px en el header y 64/80 px en el pie. El logotipo
+  entregado trae la razón social dibujada dentro del arte, y a esos tamaños se apelmazaba:
+  esa era la «pixelación» que reportó la clienta. Regla: **el texto del logotipo se compone
+  como texto**; el lockup dibujado solo se usa donde se pinta grande (hero).
+- **Desplegable de «Productos»** (2026-08-28): «Productos» sigue siendo enlace y suma un
+  botón chevron (`aria-expanded`/`aria-controls`) que abre «Ver productos» y «Descargar
+  catálogo». Abre por hover y por clic, cierra con Escape y al salir el foco del grupo. En
+  móvil no hay hover: los dos destinos se listan siempre, sangrados bajo «Productos». Sin
+  PDF cargado, la segunda entrada se pinta inerte con la etiqueta «Próximamente» — un menú
+  de una sola opción no se lee como menú, y un enlace que promete un archivo inexistente
+  cuesta más que decir la verdad.
+- Footer sobre blanco, coronado por la franja tricolor de 6 px, 3 columnas + acceso Admin.
 
 ### Figura editorial de «Propuesta de valor»
 Una sola imagen protagonista en la columna derecha de la sección (One Hero Rule), con
@@ -294,11 +335,63 @@ relación que enuncia el texto. Historia previa: la imagen nació como banda de 
 pie del hero, la clienta la movió aquí y la redujo a una el 2026-08-19 (el hero quedó
 solo con el logo), y el 2026-08-20 la sustituyó por la escena del panadero.
 
+### Hero de la home (2026-08-28)
+
+El protagonista es el **producto**, no el logotipo. Columna izquierda: eyebrow →
+titular Fraunces → prosa → dos CTA. Columna derecha: los **empaques de los tres
+destacados** en primer plano —el n.º 1 al centro, más grande y delante; los otros dos
+girados ±6° y bajados 20 px, con solape negativo— sobre un **disco azul lavado**, y el
+logotipo animado reducido a **sello de 144–160 px** arriba a la izquierda. Todo el grupo
+va con `mix-blend-multiply`: los packshots se fotografiaron sobre blanco puro, así que
+multiplicar los funde con el disco sin recortarlos.
+
+La pila desborda su caja un ~26 % por diseño (los laterales salen del disco). En
+pantallas angostas ese desborde llegaba al filo y rebanaba las cajas: la caja se encoge
+(`w-[78%] sm:w-[92%] lg:w-full`) y el desborde cabe entero. Sin catálogo publicado el
+hero cae al lockup vectorial centrado, sin hueco.
+
+Lo que **no** cambió, porque a la clienta le gustaba: el fondo fotográfico rotativo y la
+entrada escalonada. El eyebrow dejó de leer `site_settings.slogan` —ahora que el lema
+vive en el header, repetirlo aquí lo duplicaba en el mismo viewport— y pasó a ser un
+descriptor fijo de categoría.
+
+### Banda de pilares (2026-08-28)
+
+Sección entera en **verde profundo** (#15522d): el bloque de color más grande de la home
+después del CTA, y el que corta la secuencia de blancos justo a la mitad de la página.
+Reemplaza al fondo crema y a los ornamentos botánicos que lo acompañaban, los dos
+descartados por la clienta. Encabezado en `tone="onDark"` (eyebrow ámbar + título
+blanco), numeración ámbar (5.1:1), divisores `white/20`, descripciones `white/80`. La
+decoración es el **rodillo animado**, alineado con el encabezado en el mismo sitio donde
+la sección de catálogo pone el logo DAP.
+
+### Rodillo amasando (2026-08-28)
+
+SVG de trazo con `currentColor` —no un GIF—, así que hereda el color de la banda, pesa
+unos cientos de bytes y no se pixela. Va en vaivén de 7 s con `ease-in-out`: el gesto de
+amasar frena e invierte en los dos extremos, y por eso no usa el `--ease-out` del sitio.
+Los dos nudos de la madera se mueven con la **misma onda** que el rodillo, así que en
+absoluto avanzan el doble que el eje — que es lo que hace la superficie de un cilindro
+que rueda — y vuelven con él; van recortados a la barra. La masa es un óvalo plano y
+relleno, no una línea: con una barra recta bajo la barra del rodillo el conjunto se leía
+como una pesa. Solo ≥ lg, `aria-hidden`, quieto con `prefers-reduced-motion`.
+
+### Variantes por clima (2026-08-28)
+
+Banda de lino con tres tarjetas —clima frío (TB), cálido (TD) y costa (TDC)— cada una
+con una **franja gruesa de color** de 6 px en el borde superior que además codifica una
+rampa térmica: azul → naranja → rojo. Cada tarjeta lleva el código de la variante como
+eyebrow, el nombre como h3, una línea de contexto y una lista de definición con
+atemperado y almacenamiento en cifras tabulares. Todos los datos salen literales de las
+fichas técnicas oficiales; no hay redacción comercial inventada. Vive en la home (pegada
+al catálogo, porque explica lo que el visitante acaba de ver) y al cierre de
+`/productos` (donde el comprador compara).
+
 ### Acordeón FAQ (signature)
 `FaqAccordion`, único patrón de FAQ del sitio (2026-08-19; el `FaqList` compacto de la
 home se eliminó al unificar — los dos acordeones se veían distintos): `details/summary`
 nativo sin JavaScript, numeración `01…` naranja, chevron en círculo mostaza (ámbar al
-abrir), encabezado abierto en petróleo con texto blanco, respuesta sobre crema
+abrir), encabezado abierto en petróleo con texto blanco, respuesta sobre lino
 (16 px / 1.75), una sola pregunta abierta vía `<details name>` nativo (degrada a
 múltiples abiertas sin soporte). Lo usan `/preguntas-frecuentes` y las destacadas de la
 home. En la página FAQ lo acompaña un panel `petrol-deep` con eyebrow **ámbar**
@@ -378,7 +471,9 @@ y figuras de /nosotros, con la variante marcada `.reveal-strong` (36px de subida
 entry 0→65%) en los bloques institucionales de /nosotros — la estándar resultaba
 imperceptible ahí
 (`animation-timeline: view()`, el stagger emerge de la posición), acordeón FAQ animado vía
-`::details-content`, drawer móvil con `@starting-style`, crossfade de 200ms entre páginas
+`::details-content`, drawer móvil y desplegable de «Productos» (`.nav-dropdown`, 150ms) con
+`@starting-style`, rodillo de la banda de pilares (`.rodillo`/`.rodillo-vetas`: vaivén de
+7s con `ease-in-out`), crossfade de 200ms entre páginas
 (view transitions, header con nombre propio para percibirse estable), y el fondo rotativo
 del hero (`.hero-slides`/`.hero-slide`, 2026-08-20: 7 fotos del cliente en crossfade de
 42s con Ken Burns 1→1.06, capa aria-hidden a opacidad textura `--hero-slides-opacity`
@@ -393,18 +488,23 @@ lleva `shadow-md` para separarse del contenido.
 ### Do:
 - **Do** anunciar toda sección con el patrón eyebrow → Fraunces → descripción (The Eyebrow Rule).
 - **Do** usar el producto real (caja DAP) como único héroe visual; lienzo blanco + `object-contain`.
-- **Do** alternar fondos (blanco/crema/crema profunda/petróleo) para estructurar la página.
+- **Do** alternar fondos (blanco/lino/bandas de color/petróleo) para estructurar la
+  página, y meter el color en bandas y franjas, no en el fondo de lectura
+  (The Color-Band Rule).
 - **Do** envolver todo motion en `motion-safe:`/media queries y dar fallback en
   `motion-reduce:` (los GIFs tienen variante estática: PNG, y en el hero el logo en
   vector `logo-cmc.svg`, que además releva al GIF al terminar la animación —
   2026-08-23). Los GIFs de marca viven en
-  exactamente cuatro momentos: logo del header, logo del hero, logo DAP junto al
-  encabezado del catálogo de la home (los dos últimos, pedido de la clienta,
-  2026-08-19) y mantequilla del CTA.
+  exactamente **tres** momentos desde el 2026-08-28: sello del hero, logo DAP junto al
+  encabezado del catálogo de la home y mantequilla del CTA. El header perdió el suyo al
+  pasar al emblema vectorial —más grande, nítido y quieto—, así que el logotipo se anima
+  una sola vez por visita.
 - **Do** mantener el camino a WhatsApp/teléfono visible a un paso en cada página.
 
 ### Don't:
 - **Don't** usar ámbar como texto sobre fondos claros (The Amber Guardrail Rule).
+- **Don't** devolver los cremas al fondo de las secciones públicas: la clienta los
+  descartó explícitamente el 2026-08-28.
 - **Don't** añadir sombras en reposo (The Flat-At-Rest Rule).
 - **Don't** usar fotografía de stock, testimonios o cifras no verificadas (contenido en
   revisión listado en docs/CONTENT_PENDING.md).

@@ -28,8 +28,13 @@ Guía para administrar el contenido del sitio **sin conocimientos técnicos**.
   pierde.
 - Mientras una operación está en curso, el botón se desactiva y muestra
   «Guardando…», «Subiendo…» o «Eliminando…»; así no se envía dos veces.
-- Si editas un formulario y aún no guardas, verás la nota «Cambios sin
-  guardar» junto al botón Guardar.
+- El botón **Guardar** viaja contigo: en los formularios largos queda
+  anclado al pie de la pantalla, con la nota «Cambios sin guardar» al lado
+  mientras haya algo pendiente.
+- Si intentas cerrar la pestaña con cambios sin guardar, el navegador te
+  pregunta antes de descartar.
+- Si al guardar hay un campo mal diligenciado, el panel te lleva
+  directamente a él, aunque esté más abajo en la página.
 - Antes de eliminar algo, el sistema siempre pide confirmación. Las
   eliminaciones no se pueden deshacer.
 - Algunos contenidos tienen una **nota interna** (solo visible en el
@@ -40,7 +45,17 @@ Guía para administrar el contenido del sitio **sin conocimientos técnicos**.
 ### Inicio (dashboard)
 
 Resumen de cuántos productos, artículos y preguntas están publicados o en
-borrador.
+borrador. El número de borradores es un enlace: al pulsarlo se abre el
+listado ya filtrado por «Solo borradores». Arriba están los **accesos
+rápidos** para crear un producto, un artículo o una pregunta, y para editar
+los datos de contacto, sin pasar por el listado.
+
+**Buscar y filtrar.** Los listados de Productos, Blog y Preguntas
+frecuentes tienen arriba un buscador y un filtro por estado. La búsqueda
+ignora tildes y mayúsculas (escribir «reposteria» encuentra «Repostería»),
+y busca también por la dirección web y por la nota interna. El filtro queda
+guardado en la dirección de la página: puedes recargar, volver atrás o
+copiar el enlace y verás el mismo resultado. «Limpiar» quita todo.
 
 ### Contenido de la empresa
 

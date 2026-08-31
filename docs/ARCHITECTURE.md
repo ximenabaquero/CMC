@@ -81,9 +81,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
     (logo de entrada, margarina mezclándose) versionados a mano, fuera del
     flujo `import-assets`/`media_assets`. Tras la auditoría de diseño
     (2026-08-10) se usaban solo en **dos** momentos: el logo del header y la
-    mantequilla del CTA final de la home ("dieta de GIFs"); desde el
-    2026-08-19, por pedido de la clienta, el hero de la home añade un
-    **tercer** momento (logo CMC animado en lugar del packshot).
+    mantequilla del CTA final de la home ("dieta de GIFs"); el 2026-08-19, por
+    pedido de la clienta, el hero de la home añadió un tercero (logo CMC
+    animado en lugar del packshot) y el 2026-08-19 también el logo DAP junto
+    al encabezado del catálogo. Desde el **2026-08-28** el header dejó de
+    llevar GIF: monta el emblema vectorial, más grande y nítido, y el momento
+    animado del logo queda solo en el hero (sello pequeño).
     `scripts/patch-gif-loop.mjs` genera la variante sin loop
     (`cmc-logo-entrada-una-vez.gif`) que reproduce la animación una sola vez.
   - **Relevo a vector en el hero (2026-08-23)**: el GIF del hero mide 512 px
@@ -184,18 +187,38 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   La portada sigue aparte, en `blog_posts.cover_image_id`.
 - Estados `DRAFT`/`PUBLISHED` en todo el contenido; `internal_note`
   documenta el contenido en revisión editorial dentro del propio CMS.
+- **Orden destacado del catálogo (2026-08-28)**: `getPublishedProducts`
+  aplica `sortProductsByFeatured` (`src/lib/content.ts`), que sube al frente
+  los slugs de `FEATURED_PRODUCT_SLUGS` —Alta Repostería Ponqué, Repostería,
+  Hojaldre, los tres más vendidos según la clienta— y deja el resto con su
+  `sort_order`. Al vivir en el fetcher, la home (hero y destacados) y
+  `/productos` no pueden divergir. Si la clienta quiere gobernar el podio
+  desde el panel, se borra la constante y manda `sort_order`.
+- **Catálogo en PDF (2026-08-28)**: `src/lib/catalog.ts` expone
+  `CATALOG_PDF_HREF` (hoy `null`) y el rótulo. El menú «Productos» pinta la
+  entrada «Descargar catálogo» inerte y marcada «Próximamente» mientras no
+  haya archivo; en cuanto la constante apunte a un PDF (`public/catalogo/…` o
+  una URL) se vuelve enlace real, sin tocar nada más.
 
 ### Capa visual del sitio público
 
 - **Tema** centralizado en `src/app/globals.css` (Tailwind v4, `@theme inline`).
   Además de los tokens provisionales originales, el rediseño de la home añadió
   la paleta cálida pública: `--petrol`/`--petrol-deep` (titulares, franjas
-  institucionales), `--cream`/`--cream-deep` (fondos alternos), `--amber`
+  institucionales), `--cream`/`--cream-deep`, `--amber`
   (decorativo y botón sobre petróleo; **nunca** texto sobre fondos claros) y
   `--orange` (eyebrows/numeración; AA sobre crema y blanco).
+  **Giro de fondos (2026-08-28, pedido de la clienta)**: los cremas dejaron de
+  ser el fondo de las secciones —los leía como «antiguos»— y el sitio público
+  pasó a base blanca (`--surface`/`--surface-muted`) con el color devuelto en
+  **bandas plenas** (indicadores en azul `--secondary`, pilares en verde
+  `--green-deep`, CTA en petróleo) y **franjas tricolores** (`BrandStripe`).
+  Los tokens `--cream*` siguen definidos pero ya no se usan en el sitio
+  público; se añadió `--tint-blue` (disco del hero). No borrarlos sin revisar
+  el admin.
 - **Tipografía**: Geist (cuerpo) + Fraunces (display). Fraunces solo aplica a
   `h1–h3` dentro de `.public-site` (clase del layout público) y vía la
-  utilidad `font-display`; el panel admin conserva Geist íntegro.
+  utilidad `font-display`. El panel admin conserva Geist salvo el h1 de cada página y el rótulo de la barra lateral, que desde el 2026-08-28 usan `font-display` (Fraunces) para que el panel se lea como parte del mismo producto.
 - **Fundación de diseño** (2026-08-10): `PRODUCT.md` (verdad de producto) y
   `DESIGN.md` + `.impeccable/design.json` (sistema visual, North Star
   "El Obrador Editorial", reglas nombradas) en la raíz del repo. Son la
@@ -203,20 +226,22 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   generados con las skills de diseño instaladas en `.agents/skills/`
   (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
-  `hero` y `settings`; la composición derecha muestra el logo CMC animado
-  sobre un círculo blanco, sin anillo naranja — decisión de la clienta
-  2026-08-19; antes iba el packshot del primer producto publicado sobre el
-  círculo ámbar, hoy centrado con el emblema del logo. La banda editorial
-  de preparaciones que cerraba el hero desapareció el mismo 2026-08-19: tras
-  iteraciones de la clienta, «Propuesta de valor» quedó con una única figura
-  (las palmeritas, recorte con transparencia `max-w-md` en la columna
-  derecha del grid `lg:grid-cols-[3fr_2fr]`, `loading="lazy"`) y el hero
-  solo con el logo), `HomeStats`
+  `hero`, `settings` y `products`; desde el **2026-08-28** la composición
+  derecha son los **empaques de los tres productos destacados** en primer
+  plano sobre un disco azul suave, y el logotipo animado queda como sello
+  pequeño arriba — el protagonismo pasó del logo al producto por pedido de
+  la clienta, que ya lo tiene grande en el header. Historia previa: hasta el
+  2026-08-19 iba el packshot del primer producto sobre un círculo ámbar,
+  y de ahí al 2026-08-28 el logo CMC animado sobre círculo blanco. Sin
+  catálogo publicado, el hero cae al lockup vectorial centrado), `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
-  datos), `HomePillars` (numeración editorial; también lo reutiliza
-  `/nosotros`; en la home lleva `withOrnaments` — ver ornamentos),
-  `HomeProductCard` (la home muestra solo **2 destacados en una fila** +
-  «Ver catálogo» desde el 2026-08-20, `products.slice(0, 2)`) y
+  datos; banda **azul** desde el 2026-08-28), `HomePillars` (numeración
+  editorial sobre **banda verde profunda** desde el 2026-08-28; también lo
+  reutiliza `/nosotros`; en la home lleva `withOrnament`, que monta el
+  rodillo animado — antes eran los ornamentos botánicos, descartados por la
+  clienta), `HomeProductCard` (la home muestra **3 destacados**
+  desde el 2026-08-28 — antes 2 —, `products.slice(0, 3)`, que son los tres
+  del orden destacado de `sortProductsByFeatured`) y
   `HomePostsSection` (destacado +
   secundarios; hoy solo actúa de fallback con un único artículo) y su
   variante `HomePostsRotator` (2026-08-21, cabecera del blog en la home
@@ -228,7 +253,13 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   chat directo). Los compartidos de `shared.tsx` (`ProductCard`, `PostCard`,
   `SectionHeading` con `tone="warm"` por defecto, `EditorialCover` para
   posts sin portada…) siguen usándose en `/productos`, `/blog` y las vistas
-  previas del admin. Las imágenes de producto van siempre sobre lienzo
+  previas del admin. **Piezas de identidad y color (2026-08-28)**:
+  `BrandLockup` (emblema vectorial + razón social y lema en rojo; header y
+  pie), `BrandStripe` (franja tricolor decorativa: borde inferior del header,
+  divisor de «Propuesta de valor» y remate del pie), `ClimateVariants`
+  (variantes por clima, en la home y en `/productos`) y `RollingPinOrnament`
+  (rodillo animado de la banda de pilares). Las imágenes de producto van
+  siempre sobre lienzo
   blanco con `object-contain`: el empaque nunca se recorta (también en
   `ProductDetail`, que acepta `settings` para el CTA de WhatsApp con
   producto prellenado). La home («¿Quiénes somos?») y `/nosotros` llevan
@@ -247,10 +278,11 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   y misma constante de geometría; rutas literales sin `media_assets`).
   Desde el 2026-08-20 (pedido de la clienta) **ya no son fixed al viewport
   ni globales**: son `position: absolute` dentro de una sección anfitriona
-  y se montan solo en **tres anclas** — la sección de pilares de la home
-  (prop `withOrnaments` de `HomePillars`; /nosotros reutiliza el componente
-  sin ornamentos), la zona alta de /nosotros (título + ilustración) y la
-  página de contacto. Cada host debe ser full-bleed, `relative` y
+  y se montan solo en **dos anclas** — la zona alta de /nosotros (título +
+  ilustración) y la página de contacto. La tercera, la sección de pilares de
+  la home, la retiró la clienta el 2026-08-28 junto con el fondo crema: allí
+  la decoración es ahora el rodillo animado (`RollingPinOrnament`, prop
+  `withOrnament` de `HomePillars`). Cada host debe ser full-bleed, `relative` y
   `overflow-x-clip` (al no ser fixed, el recorte evita el scroll
   horizontal). Decorativos puros (`alt=""`, `aria-hidden`,
   `pointer-events: none`), centrados en su sección, opacidad 0.7, solo
@@ -299,7 +331,8 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   aprobado; entrada propia en `scripts/assets-manifest.json`). Acordeón
   propio `FaqAccordion` (server component): numeración naranja, chevron en
   círculo mostaza, encabezado abierto en petróleo con texto blanco,
-  respuesta sobre crema y **una sola pregunta abierta** vía `<details name>`
+  respuesta sobre lino (`surface-muted` desde el 2026-08-28; antes crema) y
+  **una sola pregunta abierta** vía `<details name>`
   nativo, sin JavaScript. Es el único patrón de FAQ del sitio: la sección de
   destacadas de la home reutiliza `FaqAccordion` (el `FaqList` compacto de
   `shared.tsx` se eliminó el 2026-08-19 al unificar ambos acordeones).

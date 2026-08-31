@@ -1,11 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getSiteSettings } from "@/lib/content";
 import { DesktopNav, MobileNav } from "@/components/public/MobileNav";
+import { BrandLockup } from "@/components/public/BrandLockup";
+import { BrandStripe } from "@/components/public/BrandStripe";
 import { NAV_ITEMS } from "@/lib/nav";
 import type { SiteSettings } from "@/lib/supabase/types";
 
 const FALLBACK_NAME = "Compañía Mundial de Comercio S.A.S.";
+/* El lema es parte del arte del logotipo entregado, así que tiene respaldo
+   propio aunque la base de datos no responda. */
+const FALLBACK_SLOGAN = "Su aliado en los negocios";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   // Si la base de datos no responde, el sitio sigue funcionando con
@@ -18,6 +22,7 @@ export default async function PublicLayout({ children }: { children: React.React
   }
 
   const companyName = settings?.company_name ?? FALLBACK_NAME;
+  const slogan = settings?.slogan?.trim() || FALLBACK_SLOGAN;
 
   const contactChannels = [
     settings?.phone ? { label: "Teléfono", value: settings.phone } : null,
@@ -46,40 +51,26 @@ export default async function PublicLayout({ children }: { children: React.React
         Saltar al contenido
       </a>
 
-      {/* Los ornamentos de obrador ya no viven aquí: desde el 2026-08-20 son
-          decoración por sección (pilares de la home, zona alta de /nosotros y
-          contacto) — ver BakerySideOrnament. */}
-      <header className="sticky top-0 z-40 border-b border-border bg-cream/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <Link href="/" className="flex items-center gap-2" aria-label={`${companyName} — Inicio`}>
-            {/* Logo animado: entra una sola vez y queda fijo (el loop continuo
-                dejaba el logo "en blanco" en cada reinicio); estático con
-                prefers-reduced-motion. */}
-            <Image
-              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
-              alt={`Logotipo de ${companyName}`}
-              width={512}
-              height={340}
-              priority
-              className="h-11 w-auto motion-reduce:hidden"
-            />
-            <Image
-              src="/brand/logo-cmc-png-copia-1.png"
-              alt={`Logotipo de ${companyName}`}
-              width={72}
-              height={48}
-              className="hidden h-11 w-auto motion-reduce:block"
-            />
-            <span className="hidden text-sm font-semibold leading-tight text-petrol sm:block">
-              Compañía Mundial
-              <br />
-              de Comercio S.A.S.
-            </span>
+      {/* Header sobre blanco (2026-08-28): la clienta pidió retirar el crema
+          de los fondos y devolver el color a franjas y bandas. El logotipo
+          animado ya no vive aquí — el emblema en vector se pinta más grande y
+          nítido, y el momento animado de marca queda solo en el hero.
+          Los ornamentos de obrador tampoco viven aquí: son decoración por
+          sección y, desde este mismo cambio, solo en dos anclas (zona alta de
+          /nosotros y contacto). En los pilares de la home los relevó el
+          rodillo animado. Ver BakerySideOrnament. */}
+      <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
+          <Link href="/" className="shrink-0" aria-label={`${companyName} — Inicio`}>
+            <BrandLockup companyName={companyName} slogan={slogan} />
           </Link>
-          <nav aria-label="Menú principal" className="hidden lg:block">
+          {/* Divisor vertical: separa la identidad del menú, que es
+              exactamente lo que pidió la clienta al agrandar el lockup. */}
+          <nav aria-label="Menú principal" className="hidden lg:flex lg:items-center lg:gap-5">
+            <span aria-hidden="true" className="h-9 w-px bg-border" />
             <DesktopNav />
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/contacto"
               className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary-hover ease-out active:scale-[0.98] motion-reduce:active:scale-100 sm:block"
@@ -89,29 +80,27 @@ export default async function PublicLayout({ children }: { children: React.React
             <MobileNav />
           </div>
         </div>
+        {/* La franja tricolor sustituye al borde arena: es el hilo de color
+            que recorre todas las páginas. */}
+        <BrandStripe />
       </header>
 
       <main id="contenido" className="flex-1">
         {children}
       </main>
 
-      <footer className="border-t border-border bg-cream-deep">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_auto]">
+      {/* Pie sobre blanco, coronado por la franja tricolor (2026-08-28): el
+          crema profundo desaparece y el color vuelve como franja, igual que
+          en el header. */}
+      <footer className="bg-surface">
+        <BrandStripe size="md" />
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_auto]">
           <div>
-            {/* Logo estático: el momento animado de marca vive solo en el
-                header; repetir el mismo GIF aquí devaluaba el gesto. */}
-            <Image
-              src="/brand/logo-cmc-png-copia-1.png"
-              alt=""
-              width={96}
-              height={64}
-              className="mb-3 h-10 w-auto"
-            />
-            <p className="text-sm font-semibold text-petrol">{companyName}</p>
-            {settings?.slogan ? (
-              <p className="text-sm italic text-muted-foreground">{settings.slogan}</p>
-            ) : null}
-            <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+            {/* Mismo lockup del header, a mayor escala: aquí no compite con
+                la navegación. El momento animado de marca sigue viviendo solo
+                en el hero. */}
+            <BrandLockup companyName={companyName} slogan={slogan} variant="footer" />
+            <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               Producción y distribución de margarinas, mantequillas y aceites.
             </p>
           </div>

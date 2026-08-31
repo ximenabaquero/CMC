@@ -29,7 +29,7 @@ const AUDIENCE_SECTORS = [
 
 export function AudienceSectors() {
   return (
-    <section className="border-t border-border bg-cream" aria-labelledby="publico-objetivo">
+    <section className="border-t border-border bg-surface-muted" aria-labelledby="publico-objetivo">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <SectionHeading
           id="publico-objetivo"

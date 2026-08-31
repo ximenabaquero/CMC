@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { mediaUrl } from "@/lib/media";
+import type { ProductWithImage } from "@/lib/content";
 import type { CompanyContent, SiteSettings } from "@/lib/supabase/types";
 
 const FALLBACK_EYEBROW = "Producción y distribución para el sector alimentario";
@@ -27,49 +29,72 @@ const HERO_SLIDES = [
   "/images/products/dap-multiproposito/dap-multiproposito-aplicacion-01.webp",
 ];
 
+/* Geometría de la pila de empaques. El del centro va delante y más grande
+   (es el producto n.º 1 del orden destacado); los laterales entran girados
+   y un poco más abajo, con solape negativo, para que se lea como una
+   composición y no como tres tarjetas. Si solo hay uno o dos productos
+   publicados con foto, se usan las primeras entradas y la pila se centra
+   sola: no hay hueco reservado. */
+const STACK = [
+  { width: "w-[40%]", offset: "-mr-[6%] translate-y-5", angle: "-rotate-6", z: "z-10" },
+  { width: "w-[54%]", offset: "", angle: "rotate-0", z: "z-20" },
+  { width: "w-[40%]", offset: "-ml-[6%] translate-y-5", angle: "rotate-6", z: "z-10" },
+];
+
 /**
  * Hero de la home. El texto (título y párrafo) viene de `company_content`
- * (`home_hero`) y el eyebrow del slogan de `site_settings`, ambos editables
- * desde el admin. La composición derecha muestra el logo animado de CMC
- * sobre un círculo blanco (decisión de la clienta, 2026-08-19: reemplaza el
- * packshot del primer producto publicado; el círculo pasó de ámbar a blanco
- * y se retiró el anillo naranja).
+ * (`home_hero`), editable desde el admin.
  *
- * Relevo GIF → vector (2026-08-23): aquí el logo se pinta a ~640 px y el GIF
- * solo tiene 512 px de ancho, así que al congelarse se veía interpolado. La
- * animación sigue siendo el GIF, pero al terminar cede el puesto a
- * `logo-cmc.svg`, cuyo viewBox está recortado al mismo lockup que el frame
- * final. El cambio es seco y simultáneo (`step-end`, ver globals.css): nunca
- * se ven las dos capas superpuestas. Con prefers-reduced-motion el GIF no se
- * monta y solo queda el vector.
+ * **Rediseño del 2026-08-28 (requerimiento 06).** El protagonista pasa de ser
+ * el logotipo a ser el producto: la columna derecha monta los empaques de los
+ * tres productos destacados en primer plano sobre un disco azul suave, y el
+ * logotipo animado queda como sello pequeño en la esquina. El razonamiento de
+ * la clienta es directo: el logo ya se muestra grande en el header, y el hero
+ * debe contestar «qué vende CMC», no «cómo se llama». Lo que NO cambia,
+ * porque le gustó: el fondo fotográfico rotativo y la animación de entrada.
  *
- * Nota: `mix-blend-multiply` integra el fondo blanco del GIF al crema;
- * requiere `isolate` en la sección para no mezclarse con capas externas.
+ * El eyebrow dejó de leer el lema (`site_settings.slogan`): desde que el lema
+ * vive en el lockup del header, repetirlo aquí lo duplicaba dentro del mismo
+ * viewport. Ahora es un descriptor fijo de categoría, que es lo que pide la
+ * Eyebrow Rule de DESIGN.md.
  *
- * Fondo (2026-08-20): capa rotativa de 7 fotos del cliente a baja opacidad
- * (`.hero-slides` en globals.css), `-z-10` bajo todo el contenido. El
- * mix-blend-multiply de los logos multiplica por blanco (identidad) en la
- * zona que sobresale del círculo: el fondo se ve igual a través del GIF.
+ * Los empaques van con `mix-blend-multiply`: se fotografiaron sobre blanco
+ * puro, así que multiplicar los funde con el disco y con el fondo sin
+ * recortarlos. Requiere `isolate` en la sección para no mezclarse con capas
+ * externas.
+ *
+ * Relevo GIF → vector (2026-08-23, conservado): el GIF de entrada cede el
+ * puesto a `logo-cmc.svg` al terminar (`step-end`, ver globals.css), así el
+ * frame congelado nunca se ve interpolado. Con prefers-reduced-motion el GIF
+ * no se monta y solo queda el vector.
  */
 export function HomeHero({
   hero,
   settings,
+  products,
 }: {
   hero?: CompanyContent;
   settings?: SiteSettings | null;
+  products?: ProductWithImage[] | null;
 }) {
-  const eyebrow = settings?.slogan?.trim() || FALLBACK_EYEBROW;
+  const eyebrow = FALLBACK_EYEBROW;
   const title = hero?.title?.trim() || FALLBACK_TITLE;
   const body = hero?.body?.trim() || FALLBACK_BODY;
+  // Solo productos con imagen: un hueco gris en la pila comunicaría descuido.
+  const showcase = (products ?? []).filter((product) => product.image).slice(0, 3);
+  // El del medio es el destacado n.º 1; con tres productos el orden de pintado
+  // es [2.º, 1.º, 3.º] para que el principal quede al centro y delante.
+  const stackOrder =
+    showcase.length === 3 ? [showcase[1], showcase[0], showcase[2]] : showcase;
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-border bg-hero-cream">
+    <section className="relative isolate overflow-hidden bg-surface">
       {/* Fondo fotográfico rotativo (2026-08-20): textura a baja opacidad
           DETRÁS de todo el contenido. `-z-10` dentro de la sección `isolate`
-          pinta sobre el crema y bajo el grid: círculo blanco, logos y texto
-          quedan intactos encima. Decorativo puro (aria-hidden, alt="");
-          con prefers-reduced-motion solo se ve la primera foto, estática.
-          El `overflow-hidden` de la sección acota el zoom Ken Burns. */}
+          pinta sobre el blanco y bajo el grid. Decorativo puro (aria-hidden,
+          alt=""); con prefers-reduced-motion solo se ve la primera foto,
+          estática. El `overflow-hidden` de la sección acota el zoom Ken
+          Burns. */}
       <div
         aria-hidden="true"
         className="hero-slides pointer-events-none absolute inset-0 -z-10 select-none"
@@ -87,13 +112,13 @@ export function HomeHero({
           />
         ))}
       </div>
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 lg:min-h-[min(88vh,44rem)] lg:grid-cols-[52fr_48fr] lg:gap-14 lg:py-12">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 lg:min-h-[min(84vh,42rem)] lg:grid-cols-[48fr_52fr] lg:gap-12 lg:py-12">
         {/* Columna izquierda: mensaje y acciones */}
         <div>
           <p className="enter text-sm font-semibold uppercase tracking-wider text-orange">
             {eyebrow}
           </p>
-          <h1 className="enter enter-lcp enter-2 mt-4 max-w-[16ch] text-balance text-[2.75rem] font-semibold leading-[1.06] text-petrol sm:text-6xl sm:leading-[1.04] lg:text-[4rem]">
+          <h1 className="enter enter-lcp enter-2 mt-4 max-w-[16ch] text-balance text-[2.6rem] font-semibold leading-[1.06] text-petrol sm:text-[3.4rem] sm:leading-[1.04] lg:text-[3.75rem]">
             {title}
           </h1>
           <p className="enter enter-3 mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -115,50 +140,79 @@ export function HomeHero({
           </div>
         </div>
 
-        {/* Columna derecha: logo CMC animado sobre el círculo blanco */}
+        {/* Columna derecha: los empaques en primer plano */}
         <div className="enter-visual relative mx-auto w-full max-w-md lg:max-w-none">
-          {/* Círculo blanco protagonista (decorativo; antes ámbar — pedido
-              de la clienta, 2026-08-19). Centrado con el emblema del logo
-              (medido sobre el frame final del GIF, con el scale-125 el centro
-              visual cae en ≈49/49 % del contenedor → centrar basta). Desde el
-              relevo al vector (2026-08-23) la geometría es idéntica con y sin
-              reduced-motion, así que ya no hace falta override. */}
-          <div
-            aria-hidden="true"
-            className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem]"
-          />
-          {/* Relevo GIF → vector (2026-08-23). Las dos capas ocupan el mismo
-              sitio y se turnan: el GIF manda hasta los 2 s y ahí el vector
-              toma el relevo, sin solape (ver `logo-relevo-*` en globals.css).
-              El `mix-blend-multiply` va en el contenedor y no en cada imagen,
-              para que el crema se multiplique una sola vez. El `aspect` fija
-              la caja sin depender del GIF, que con reduced-motion no se
-              monta. */}
-          <div className="relative z-10 aspect-[512/340] w-full scale-125 mix-blend-multiply">
-            {/* Posición medida sobre el frame final del GIF: su tinta ocupa
-                19.53–78.32 % en horizontal y arranca al 15 % en vertical del
-                lienzo 512×340. El viewBox de logo-cmc.svg está recortado a esa
-                misma tinta, así que el relevo no mueve ni un píxel (verificado
-                por diferencia de imagen, docs/VERIFICATION_LOG.md). */}
-            {/* Eager y sin bajar prioridad: es la capa que QUEDA. Si llegara
-                después del relevo, el GIF ya se habría retirado sobre nada. */}
-            <Image
-              src="/brand/logo-cmc.svg"
-              alt="Logotipo de Compañía Mundial de Comercio S.A.S."
-              width={608}
-              height={579}
-              loading="eager"
-              className="hero-logo-vector absolute left-[19.53%] top-[15%] w-[58.79%]"
-            />
-            <Image
-              src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
-              alt=""
-              width={512}
-              height={340}
-              priority
-              className="hero-logo-gif absolute inset-0 h-full w-full motion-reduce:hidden"
-            />
-          </div>
+          {stackOrder.length > 0 ? (
+            <>
+              {/* Sello de marca: el logotipo conserva su entrada animada pero
+                  pequeño y arriba, fuera de la pila. Al pintarse a ~160 px
+                  —una cuarta parte de antes— el GIF ya no se ve interpolado,
+                  que era la queja de la clienta, y el relevo al vector lo deja
+                  nítido en cuanto termina. */}
+              <div className="relative z-20 mb-2 w-36 mix-blend-multiply sm:w-40">
+                <div className="relative aspect-[512/340] w-full">
+                  <Image
+                    src="/brand/logo-cmc.svg"
+                    alt={`Logotipo de ${settings?.company_name ?? "Compañía Mundial de Comercio S.A.S."}`}
+                    width={608}
+                    height={579}
+                    loading="eager"
+                    className="hero-logo-vector absolute left-[19.53%] top-[15%] w-[58.79%]"
+                  />
+                  <Image
+                    src="/gifsanimados/cmc-logo-entrada-una-vez.gif"
+                    alt=""
+                    width={512}
+                    height={340}
+                    priority
+                    className="hero-logo-gif absolute inset-0 h-full w-full motion-reduce:hidden"
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                {/* Disco azul suave: escenario de los empaques y la nota de
+                    color que la clienta pidió traer al hero. Decorativo. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-1/2 top-1/2 h-60 w-60 -translate-x-1/2 -translate-y-1/2 rounded-full bg-tint-blue sm:h-72 sm:w-72 lg:h-[23rem] lg:w-[23rem]"
+                />
+                {/* La pila desborda su caja un ~26 % por diseño (los laterales
+                    salen del disco). En móvil ese desborde llegaba al filo de
+                    la pantalla y rebanaba las cajas, así que la caja se
+                    encoge en pantallas angostas y el desborde cabe entero. */}
+                <div className="relative z-10 mx-auto flex w-[78%] items-end justify-center mix-blend-multiply sm:w-[92%] lg:w-full">
+                  {stackOrder.map((product, index) => {
+                    const shape = STACK[stackOrder.length === 3 ? index : index + 1] ?? STACK[1];
+                    return (
+                      <Image
+                        key={product.id}
+                        src={mediaUrl(product.image!)}
+                        alt={product.image!.alt_text}
+                        width={product.image!.width ?? 1200}
+                        height={product.image!.height ?? 1200}
+                        priority={index === Math.floor(stackOrder.length / 2)}
+                        className={`${shape.width} ${shape.offset} ${shape.angle} ${shape.z} h-auto`}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          ) : (
+            // Sin catálogo publicado el hero no se queda vacío: el lockup
+            // vectorial vuelve al centro, como antes del rediseño.
+            <div className="relative z-10 mx-auto w-2/3">
+              <Image
+                src="/brand/logo-cmc.svg"
+                alt="Logotipo de Compañía Mundial de Comercio S.A.S."
+                width={608}
+                height={579}
+                priority
+                className="w-full"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

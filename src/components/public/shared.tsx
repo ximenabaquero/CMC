@@ -10,7 +10,11 @@ import type { ProductWithImage, PostWithCover } from "@/lib/content";
  * - `tone`: "warm" (por defecto) = eyebrow naranja y título petróleo, el
  *   patrón de encabezado de todo el sitio público ("The Eyebrow Rule" de
  *   DESIGN.md). "default" conserva el eyebrow verde para contextos fuera de
- *   la paleta cálida.
+ *   la paleta cálida. "onDark" (2026-08-28) es la adaptación para las bandas
+ *   de color plenas —pilares en verde profundo, indicadores en azul—: el
+ *   naranja editorial cae a ~2.6:1 sobre ellas, así que el eyebrow pasa a
+ *   ámbar (5.1:1 sobre el verde profundo) y el título a blanco. Es la misma
+ *   excepción ya documentada para el panel petróleo de la página de FAQ.
  */
 export function SectionHeading({
   eyebrow,
@@ -25,13 +29,15 @@ export function SectionHeading({
   description?: string | null;
   id?: string;
   size?: "md" | "lg";
-  tone?: "default" | "warm";
+  tone?: "default" | "warm" | "onDark";
 }) {
-  const eyebrowColor = tone === "warm" ? "text-orange" : "text-primary";
+  const eyebrowColor =
+    tone === "warm" ? "text-orange" : tone === "onDark" ? "text-amber" : "text-primary";
+  const titleColor = tone === "warm" ? "text-petrol" : tone === "onDark" ? "text-white" : "";
   const titleClasses =
     size === "lg"
-      ? `text-3xl font-semibold sm:text-4xl ${tone === "warm" ? "text-petrol" : ""}`
-      : `text-2xl font-semibold sm:text-3xl ${tone === "warm" ? "text-petrol" : ""}`;
+      ? `text-3xl font-semibold sm:text-4xl ${titleColor}`
+      : `text-2xl font-semibold sm:text-3xl ${titleColor}`;
   return (
     <div className="mb-8 max-w-2xl">
       {eyebrow ? (
@@ -42,7 +48,11 @@ export function SectionHeading({
       <h2 id={id} className={titleClasses.trim()}>
         {title}
       </h2>
-      {description ? <p className="mt-2 text-muted-foreground">{description}</p> : null}
+      {description ? (
+        <p className={`mt-2 ${tone === "onDark" ? "text-white/80" : "text-muted-foreground"}`}>
+          {description}
+        </p>
+      ) : null}
     </div>
   );
 }

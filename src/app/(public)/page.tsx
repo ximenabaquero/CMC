@@ -16,6 +16,8 @@ import { HomeStats } from "@/components/public/HomeStats";
 import { HomePillars } from "@/components/public/HomePillars";
 import { HomeProductCard } from "@/components/public/HomeProductCard";
 import { HomePostsRotator } from "@/components/public/HomePostsSection";
+import { ClimateVariants } from "@/components/public/ClimateVariants";
+import { BrandStripe } from "@/components/public/BrandStripe";
 import { HomeCta } from "@/components/public/HomeCta";
 import {
   CatalogInPreparation,
@@ -64,8 +66,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero corporativo con el logo animado de CMC */}
-      <HomeHero hero={hero} settings={settings} />
+      {/* Hero con los empaques destacados en primer plano (2026-08-28) */}
+      <HomeHero hero={hero} settings={settings} products={products} />
 
       {/* Indicadores calculados del catálogo */}
       <HomeStats products={products} />
@@ -144,9 +146,9 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      {/* Pilares en presentación editorial, con los ornamentos de obrador
-          anclados a la sección (única ancla de la home, 2026-08-20). */}
-      <HomePillars section={pillarsSection} pillars={pillars} withOrnaments />
+      {/* Pilares en banda verde con el rodillo animado (2026-08-28): la
+          clienta descartó el fondo crema y los ornamentos botánicos. */}
+      <HomePillars section={pillarsSection} pillars={pillars} withOrnament />
 
       {/* Vista previa del catálogo */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="catalogo">
@@ -186,10 +188,13 @@ export default async function HomePage() {
           <CatalogInPreparation />
         ) : (
           <>
-            {/* Solo 2 destacados en una fila (pedido de la clienta,
-                2026-08-20); el catálogo completo vive en /productos. */}
-            <ul className="grid gap-6 sm:grid-cols-2">
-              {products.slice(0, 2).map((product) => (
+            {/* Tres destacados (2026-08-28): son exactamente los tres
+                productos más vendidos que la clienta pidió priorizar —
+                Alta Repostería Ponqué, Repostería y Hojaldre—, y el orden lo
+                fija `sortProductsByFeatured` en src/lib/content.ts. Antes eran
+                2. El catálogo completo sigue viviendo en /productos. */}
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products.slice(0, 3).map((product) => (
                 <li key={product.id} className="reveal">
                   <HomeProductCard product={product} />
                 </li>
@@ -207,9 +212,18 @@ export default async function HomePage() {
         )}
       </section>
 
+      {/* Variantes por clima: diferencial pedido por la clienta (2026-08-28).
+          Va pegada al catálogo porque explica lo que el visitante acaba de
+          ver: la misma referencia existe en tres versiones. */}
+      <ClimateVariants />
+
       {/* Propuesta de valor */}
       {valueProposition ? (
-        <section className="border-y border-border bg-cream-deep" aria-labelledby="propuesta">
+        <section className="bg-surface" aria-labelledby="propuesta">
+          {/* Franja tricolor gruesa como divisor: es el punto donde la página
+              pasa del catálogo a la promesa institucional, y el único sitio
+              del cuerpo donde el separador se hace ver (2026-08-28). */}
+          <BrandStripe size="md" />
           <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-20 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-14">
             <div className="max-w-3xl">
               <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-orange">
@@ -293,7 +307,7 @@ export default async function HomePage() {
 
       {/* Preguntas frecuentes destacadas */}
       {featuredFaqs.length > 0 ? (
-        <section className="border-t border-border bg-cream" aria-labelledby="faqs">
+        <section className="border-t border-border bg-surface-muted" aria-labelledby="faqs">
           <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
             <SectionHeading
               id="faqs"

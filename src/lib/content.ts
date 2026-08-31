@@ -92,11 +92,39 @@ async function fetchPublishedProducts(): Promise<ProductWithImage[]> {
   const imageById = new Map((images ?? []).map((img) => [img.id, img]));
   const categoryById = new Map((categories ?? []).map((c) => [c.id, c]));
 
-  return (products ?? []).map((product) => ({
+  const resolved = (products ?? []).map((product) => ({
     ...product,
     image: product.main_image_id ? (imageById.get(product.main_image_id) ?? null) : null,
     category: product.category_id ? (categoryById.get(product.category_id) ?? null) : null,
   }));
+
+  return sortProductsByFeatured(resolved);
+}
+
+/**
+ * Orden destacado del catálogo (requerimiento 09 de la clienta, 2026-08-28):
+ * los tres productos más vendidos encabezan la lista, en este orden exacto.
+ * Manda sobre el `sort_order` de la base solo para ellos; el resto conserva su
+ * orden (`sort` es estable). Se aplica dentro del fetcher para que la home
+ * (hero + destacados) y `/productos` no puedan divergir.
+ *
+ * Es una constante de código, no un dato editable: si la clienta quiere
+ * cambiar el podio con frecuencia, lo correcto es reordenar `sort_order` desde
+ * el panel y borrar esta lista — hoy no lo pidió así y la prioridad es que el
+ * orden quede fijo. Un slug que no exista en la base simplemente no hace nada.
+ */
+export const FEATURED_PRODUCT_SLUGS: readonly string[] = [
+  "dap-alta-reposteria-ponque",
+  "dap-reposteria",
+  "dap-hojaldre",
+];
+
+export function sortProductsByFeatured<T extends { slug: string }>(products: T[]): T[] {
+  const rank = (slug: string) => {
+    const position = FEATURED_PRODUCT_SLUGS.indexOf(slug);
+    return position === -1 ? FEATURED_PRODUCT_SLUGS.length : position;
+  };
+  return [...products].sort((a, b) => rank(a.slug) - rank(b.slug));
 }
 
 export const getPublishedProducts = unstable_cache(fetchPublishedProducts, ["products-list"], {

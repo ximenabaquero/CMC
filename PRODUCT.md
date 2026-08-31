@@ -55,11 +55,19 @@ lo aprueba la clienta (Ana) antes de publicarse desde el panel.
 
 - Nombre: Compañía Mundial de Comercio S.A.S. (CMC). Línea de producto: DAP.
 - Tema visual provisional pero **vinculante hasta nuevo aviso** (decisión 2026-08-10):
-  refinar sin cambiar identidad. Paleta petrol/crema/ámbar/naranja y tipografías
-  Fraunces (display) + Geist (texto) se mantienen; solo se mejora jerarquía, espaciado,
-  composición y motion. El manual de identidad oficial está pendiente (Ana).
-- Activos: 4 PNG de logo (falta vectorial), GIFs animados de marca en
-  public/gifsanimados/ (logo CMC, wordmark DAP, mantequilla mezclándose).
+  refinar sin cambiar identidad. Tipografías Fraunces (display) + Geist (texto) y la
+  arquitectura visual se mantienen; se mejora jerarquía, espaciado, composición y motion.
+  **Enmienda de la clienta (2026-08-28)**: ella misma levantó la parte de fondos. Los
+  cremas salieron del sitio público —los leía como «antiguos y planos»— y el color de
+  identidad (verde, azul y rojo del logotipo) entra ahora en bandas plenas y franjas
+  sobre base blanca. Petróleo, ámbar y naranja siguen vigentes en su papel. El manual de
+  identidad oficial sigue pendiente (Ana).
+- Identidad en header y pie (2026-08-28): emblema vectorial grande + razón social y lema
+  «Su aliado en los negocios» en rojo. La razón social del logotipo entregado se compone
+  como texto, no como imagen.
+- Activos: 4 PNG de logo + el vectorial `public/brand/logo-cmc.svg` (lockup completo,
+  2026-08-23) y `logo-cmc-emblema.svg` (solo el símbolo, 2026-08-28); GIFs animados de
+  marca en public/gifsanimados/ (logo CMC, wordmark DAP, mantequilla mezclándose).
 - Todo el copy en español.
 
 ## Evidence on Hand

@@ -5,7 +5,21 @@ través de Ana y (b) las afirmaciones que quedaron **en revisión** y no se
 publican hasta ser verificadas.
 
 Responsable de recopilar y aprobar el contenido: **Ana** (según acuerdo de la
-reunión 1, punto 2). Última actualización: 2026-08-20.
+reunión 1, punto 2). Última actualización: 2026-08-28.
+
+## 0. Insumos que bloquean los ajustes pedidos el 2026-08-28
+
+Del documento «Requerimientos de ajustes — Landing CMC v1.0» quedaron cinco puntos
+esperando material de la clienta. Todo lo demás de ese documento está implementado.
+
+| N.º | Qué falta | Dónde entra cuando llegue |
+|---|---|---|
+| 07 | **Foto nueva del empaque de Alta Repostería Ponqué** (la presentación cambió) | Se sube como imagen principal del producto desde `/admin/productos/<id>`. Al ser un medio del CMS, se propaga sola a la ficha, a las tarjetas y a la pila del hero: no hay rutas literales que tocar |
+| 08 | **Foto/composición nueva para «¿Quiénes somos?»** de la home | Reemplaza `public/images/photos/bodega-dap-01.webp` en `src/app/(public)/page.tsx`. ⚠️ La imagen actual es una de las descartadas por indicios de IA y además muestra el empaque antiguo del Ponqué; sigue publicada por decisión explícita de la clienta. Su alternativa (usar otro producto destacado) también está abierta, pero implica repetir una foto ya usada o producir una composición nueva: decisión pendiente |
+| 10 | **Contenido de la FAQ de Alta Repostería** | No requiere código: se crea en `/admin/preguntas-frecuentes` y, marcada como destacada, aparece también en la home |
+| 13 | **Catálogo comercial en PDF** | Copiar el archivo a `public/catalogo/` y apuntar `CATALOG_PDF_HREF` en `src/lib/catalog.ts`. Mientras tanto, el menú «Productos» muestra la entrada «Descargar catálogo» inerte y rotulada «Próximamente» |
+| 14 | **Fotografía de una familia colombiana compartiendo pan** | No se implementó: no hay foto y la regla «cero fotografía de stock» de `PRODUCT.md` impide sustituirla por una de banco. La clienta pidió explícitamente que no se sienta de stock, así que necesita foto real |
+| 15 | **Fotografía real del técnico panadero** | Reemplaza `public/images/photos/panadero-croissants-01.webp` en la sección «Propuesta de valor» (`src/app/(public)/page.tsx`). Verificar resolución, encuadre y comportamiento responsive antes de dejarla; si pierde calidad, se conserva la actual |
 
 ## 1. Afirmaciones en revisión (NO publicadas)
 
@@ -146,6 +160,19 @@ reunión 1, punto 2). Última actualización: 2026-08-20.
       formulario de contacto (fuera del alcance actual).
 
 ## 2b. Copy publicado que aún no es editable desde el CMS
+
+- **Variantes por clima** (2026-08-28): las tres tarjetas de `ClimateVariants`
+  (clima frío/cálido/costa, con atemperado y almacenamiento) son una constante
+  del componente `src/components/public/ClimateVariants.tsx`, no una fila de
+  `company_content`. Todas las cifras salen literales de las fichas técnicas
+  oficiales (rangos de atemperado de Hojaldre, Industrial y Semi Hojaldrados;
+  máximos de almacenamiento de casi todas). Si la clienta va a editarlo, hay
+  que crear la sección `climate_variants` con el patrón `data.items` de
+  `pillars`; mientras tanto, cualquier cambio pasa por código.
+- **Orden destacado del catálogo** (2026-08-28): los tres productos que
+  encabezan la home y `/productos` están fijados por slug en
+  `FEATURED_PRODUCT_SLUGS` (`src/lib/content.ts`), no por `sort_order`. Si la
+  clienta quiere gobernarlo desde el panel, se borra esa constante.
 
 - **Público objetivo de `/contacto`** (recibido el 2026-08-20): los 12
   sectores viven como constante `AUDIENCE_SECTORS` en

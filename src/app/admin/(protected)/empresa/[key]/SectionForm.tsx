@@ -7,7 +7,8 @@ import type { CompanyContent, PillarItem } from "@/lib/supabase/types";
 import { ActionFeedback, StatusField, TextAreaField, TextField } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
 import { useActionToast } from "@/components/admin/toast";
-import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
+import { useAdminForm } from "@/components/admin/useAdminForm";
+import { FormFooter } from "@/components/admin/FormFooter";
 
 export function SectionForm({
   section,
@@ -102,10 +103,9 @@ export function SectionForm({
       <StatusField defaultValue={section.status} error={fieldErrors.status?.[0]} />
 
       <ActionFeedback state={state} />
-      <div className="flex flex-wrap items-center gap-3">
+      <FormFooter dirty={dirty}>
         <SubmitButton>Guardar cambios</SubmitButton>
-        <UnsavedBadge dirty={dirty} />
-      </div>
+      </FormFooter>
     </form>
   );
 }

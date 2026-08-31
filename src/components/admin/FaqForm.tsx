@@ -13,7 +13,8 @@ import {
 } from "@/components/admin/fields";
 import { SubmitButton } from "@/components/admin/buttons";
 import { useActionToast } from "@/components/admin/toast";
-import { UnsavedBadge, useAdminForm } from "@/components/admin/useAdminForm";
+import { useAdminForm } from "@/components/admin/useAdminForm";
+import { FormFooter } from "@/components/admin/FormFooter";
 
 export function FaqForm({
   faq,
@@ -69,12 +70,11 @@ export function FaqForm({
         defaultChecked={faq?.featured}
       />
       <ActionFeedback state={state} />
-      <div className="flex flex-wrap items-center gap-3">
+      <FormFooter dirty={dirty}>
         <SubmitButton pendingLabel={faq ? "Guardando…" : "Creando…"}>
           {faq ? "Guardar cambios" : "Crear pregunta"}
         </SubmitButton>
-        <UnsavedBadge dirty={dirty} />
-      </div>
+      </FormFooter>
     </form>
   );
 }

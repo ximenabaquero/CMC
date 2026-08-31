@@ -6,23 +6,32 @@ import { FlashToast } from "@/components/admin/FlashToast";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { EmptyState } from "@/components/admin/EmptyState";
+import { ListToolbar } from "@/components/admin/ListToolbar";
+import { matchesQuery, matchesStatus } from "@/lib/search";
 
 export const metadata = { title: "Productos" };
 
 export default async function AdminProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ eliminado?: string }>;
+  searchParams: Promise<{ eliminado?: string; q?: string; estado?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
 
-  const { data: products, error } = await supabase
+  const { data: allProducts, error } = await supabase
     .from("products")
     .select("id, name, slug, status, sort_order, internal_note, main_image_id")
     .order("sort_order");
 
   if (error) throw new Error("No se pudieron cargar los productos.");
+
+  // Filtro en memoria: ver el porqué en src/lib/search.ts.
+  const products = allProducts.filter(
+    (product) =>
+      matchesStatus(params.estado, product.status) &&
+      matchesQuery(params.q, product.name, product.slug, product.internal_note)
+  );
 
   const imageIds = products.map((p) => p.main_image_id).filter((id): id is string => Boolean(id));
   const { data: images } = imageIds.length
@@ -49,11 +58,29 @@ export default async function AdminProductsPage({
         }
       />
 
-      {products.length === 0 ? (
+      {allProducts.length > 0 ? (
+        <ListToolbar
+          basePath="/admin/productos"
+          q={params.q}
+          status={params.estado}
+          searchLabel="Buscar productos"
+          searchPlaceholder="Buscar por nombre o dirección web…"
+          total={allProducts.length}
+          shown={products.length}
+          itemsLabel="productos"
+        />
+      ) : null}
+
+      {allProducts.length === 0 ? (
         <EmptyState
           title="Aún no hay productos"
           description="Crea el primer producto del catálogo; quedará en borrador hasta que lo publiques."
           cta={{ href: "/admin/productos/nuevo", label: "Crear primer producto" }}
+        />
+      ) : products.length === 0 ? (
+        <EmptyState
+          title="Ningún producto coincide con la búsqueda"
+          description="Prueba con otro término o quita el filtro de estado."
         />
       ) : null}
 

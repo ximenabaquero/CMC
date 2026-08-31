@@ -762,3 +762,36 @@ cuando la empresa es *de Comercio*, y texto menor corrupto («Chento de
 Hojaslos», «Fórmula Nejorodo», «Condenido Nedo»). Se publica por pedido
 explícito de la clienta; queda pendiente confirmar el origen —ver
 `docs/FOTOS_ADICIONALES.md`— y `PRODUCT.md` prohíbe fabricar evidencia.
+
+## 2026-08-28 — Ajustes de la landing (documento de requerimientos v1.0)
+
+Cambio grande de color y composición: fondos crema fuera del sitio público,
+bandas de identidad, lockup nuevo en header y pie, hero con producto, menú
+desplegable de «Productos», variantes por clima y orden destacado del catálogo.
+
+**Contrastes calculados** (WCAG 2.1, fórmula de luminancia relativa):
+
+| Par | Ratio | Uso | Veredicto |
+|---|---|---|---|
+| Rojo `#c93a2e` sobre blanco | **5.08:1** | Razón social y lema del lockup | AA texto normal |
+| Blanco sobre azul `#2563c4` | **5.73:1** | Etiquetas de la banda de indicadores | AA texto normal |
+| Ámbar `#f2b63d` sobre azul `#2563c4` | **3.15:1** | Cifras de indicadores (36–48 px semibold) | AA **solo texto grande** — no bajar ese tamaño |
+| Blanco sobre verde profundo `#15522d` | **9.23:1** | Títulos y prosa de la banda de pilares | AAA |
+| Ámbar sobre verde profundo `#15522d` | **5.07:1** | Eyebrow y numeración de pilares | AA texto normal |
+| Blanco sobre rojo `#c93a2e` | **5.08:1** | Reservado para bandas rojas | AA texto normal |
+
+**Verificación en navegador** (dev server, driver CDP, Chrome):
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Home, `/productos`, `/nosotros`, `/contacto`, `/preguntas-frecuentes` a 1440 px | Sin errores de consola; ritmo de fondos blanco → azul → blanco → verde → blanco → lino → petróleo → pie correcto |
+| Orden destacado | Home y `/productos` abren con Alta Repostería Ponqué → Repostería → Hojaldre |
+| Emblema `logo-cmc-emblema.svg` | `viewBox 66 2 484 468` = caja de tinta exacta de los dos trazos, medida con `getBBox()` sobre el arte original; renderiza limpio sin recortes |
+| Header a 320 / 390 / 1440 px | `scrollWidth` 314 ≤ 320: sin scroll horizontal. La razón social envuelve en dos líneas bajo 640 px y va en una desde `sm` |
+| Pila de empaques del hero | Desborda su caja ~26 % por diseño; con `w-[78%]` en móvil el desborde entra completo (a 390 px las cajas laterales ya no se rebanan contra el filo) |
+| Desplegable de «Productos» | Abre por clic y por hover, cierra con Escape y al salir el foco; en móvil los dos destinos se listan sangrados. Sin PDF, «Descargar catálogo» sale inerte con la etiqueta «Próximamente» |
+| Datos del clima | Rangos de atemperado y máximos de almacenamiento contrastados uno a uno contra `supabase/seed.sql` (fichas técnicas oficiales de Hojaldre, Industrial y Semi Hojaldrados) |
+
+Pendiente de verificar con material del cliente: puntos 07, 08, 10, 13, 14 y 15
+del documento de requerimientos (ver `docs/CONTENT_PENDING.md` §0).
