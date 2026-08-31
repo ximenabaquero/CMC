@@ -176,6 +176,11 @@
         "name": "rodillo",
         "value": "7s cubic-bezier(0.45, 0, 0.55, 1) infinite",
         "purpose": "Rodillo amasando de la banda de pilares: vaivén que frena e invierte en los extremos."
+      },
+      {
+        "name": "hero-stage",
+        "value": "18s linear infinite (3 turnos de 6s, cruce de 0.72s)",
+        "purpose": "Escenario del hero: las fotos de aplicacion de los tres destacados se turnan con fundido cruzado."
       }
     ],
     "breakpoints": [
