@@ -227,8 +227,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
   `hero` y `settings`; desde el **2026-08-30** la composición derecha es un
-  **escenario que se turna** entre las fotos de aplicación de los tres
-  destacados —caja + horneado— sobre un disco azul suave, con el logotipo
+  **escenario que se turna** entre tres fotos de aplicación —caja + horneado,
+  en los derivados recortados `-hero-01.webp` que genera
+  `scripts/recortar-hero-aplicaciones.mjs`— sobre un disco azul suave, con el logotipo
   animado como sello arriba a la derecha. El protagonismo pasó del logo al
   producto por pedido de la clienta, que ya lo tiene grande en el header.
   Historia: hasta el 2026-08-19 iba el packshot del primer producto sobre un
@@ -238,7 +239,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   fotos de aplicación actuales. Las rutas de esas fotos son literales, como
   las del fondo: no salen de `media_assets`), `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
-  datos; banda **azul** desde el 2026-08-28), `HomePillars` (numeración
+  datos; banda **azul** desde el 2026-08-28, y desde el 2026-08-30 con un
+  tercer indicador —años de experiencia— calculado desde la fecha de fundación
+  publicada en el CMS, el único de la franja que no sale de la base), `HomePillars` (numeración
   editorial sobre **banda verde profunda** desde el 2026-08-28; también lo
   reutiliza `/nosotros`; en la home lleva `withOrnament`, que monta el
   rodillo animado — antes eran los ornamentos botánicos, descartados por la

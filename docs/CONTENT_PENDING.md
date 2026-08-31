@@ -169,6 +169,12 @@ esperando material de la clienta. Todo lo demás de ese documento está implemen
   máximos de almacenamiento de casi todas). Si la clienta va a editarlo, hay
   que crear la sección `climate_variants` con el patrón `data.items` de
   `pillars`; mientras tanto, cualquier cambio pasa por código.
+- **Fecha de fundación** (2026-08-30): la franja de indicadores de la home
+  muestra «Años de experiencia», calculado desde la constante `FOUNDED`
+  (9 de septiembre de 2019) en `src/components/public/HomeStats.tsx`. Esa
+  fecha está publicada literal en el bloque «¿Quiénes somos?» del CMS, pero
+  la constante **no** se parsea de ese texto: si la clienta corrige la fecha
+  desde el panel, hay que corregir también la constante.
 - **Orden destacado del catálogo** (2026-08-28): los tres productos que
   encabezan la home y `/productos` están fijados por slug en
   `FEATURED_PRODUCT_SLUGS` (`src/lib/content.ts`), no por `sort_order`. Si la
