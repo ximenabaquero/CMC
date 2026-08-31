@@ -66,8 +66,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero con los empaques destacados en primer plano (2026-08-28) */}
-      <HomeHero hero={hero} settings={settings} products={products} />
+      {/* Hero: producto y resultado en primer plano, turnándose (2026-08-30) */}
+      <HomeHero hero={hero} settings={settings} />
 
       {/* Indicadores calculados del catálogo */}
       <HomeStats products={products} />

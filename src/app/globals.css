@@ -497,10 +497,12 @@ h6 {
 
 /* ------------------------------------------------------------
    Fondo fotográfico rotativo del hero (solo la home, 2026-08-20):
-   7 fotos del cliente en crossfade + zoom Ken Burns sutil, como
+   fotos del cliente en crossfade + zoom Ken Burns sutil, como
    textura a baja opacidad DETRÁS de todo el contenido (capa
    aria-hidden con -z-10 dentro de la sección `isolate`).
-   Ciclo de 42s = 7 turnos de 6s; cada foto funde en 1.5s solapada
+   Ciclo de 18s = 3 turnos de 6s (2026-08-30: eran 7 fotos y 42s, pero
+   las de aplicación se fueron al escenario del primer plano); cada
+   foto funde en 1.5s solapada
    con la siguiente y hace zoom 1 → 1.06 mientras está visible
    (~7.5s en pantalla). Solo opacity/transform (compositor); sin
    will-change: 7 capas promocionadas de forma permanente gastarían
@@ -508,7 +510,11 @@ h6 {
    un solo sitio: --hero-slides-opacity (rango revisado 0.12–0.18).
    ------------------------------------------------------------ */
 .hero-slides {
-  --hero-slides-opacity: 0.15;
+  /* 0.12 desde el 2026-08-30 (era 0.15): al quedarse solo con escenas de
+     panadería —claras y de grano fino, sin la mancha oscura que aportaba
+     una caja— la capa pesaba más detrás del titular. Sigue dentro del
+     rango revisado. */
+  --hero-slides-opacity: 0.12;
   opacity: var(--hero-slides-opacity);
 }
 
@@ -523,14 +529,14 @@ h6 {
     transform: scale(1);
   }
   /* 1.5s: fundido de entrada, solapado con la salida de la anterior. */
-  3.57% {
+  8.33% {
     opacity: 1;
   }
   /* 6s: empieza a entrar la siguiente; esta sale hasta los 7.5s. */
-  14.29% {
+  33.33% {
     opacity: 1;
   }
-  17.86% {
+  41.67% {
     opacity: 0;
     transform: scale(1.06);
   }
@@ -542,27 +548,18 @@ h6 {
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-slide {
-    animation: hero-slide-cycle 42s linear infinite;
+    animation: hero-slide-cycle 18s linear infinite;
   }
   /* Escalonado por turno de 6s. nth-child y no clases: hermanas
-     homogéneas de una capa dedicada (como la copia del marquee). */
+     homogéneas de una capa dedicada (como la copia del marquee).
+     Los porcentajes del keyframe están atados a este ciclo: si cambia
+     el número de fotos, recalcularlos (entrada 1.5s, turno 6s, salida
+     7.5s, todo dividido por la duración total). */
   .hero-slide:nth-child(2) {
     animation-delay: 6s;
   }
   .hero-slide:nth-child(3) {
     animation-delay: 12s;
-  }
-  .hero-slide:nth-child(4) {
-    animation-delay: 18s;
-  }
-  .hero-slide:nth-child(5) {
-    animation-delay: 24s;
-  }
-  .hero-slide:nth-child(6) {
-    animation-delay: 30s;
-  }
-  .hero-slide:nth-child(7) {
-    animation-delay: 36s;
   }
 }
 
@@ -764,6 +761,65 @@ h6 {
   from {
     opacity: 0;
     transform: translateY(36px);
+  }
+}
+
+/* ------------------------------------------------------------
+   Escenario del hero (2026-08-30). Las fotos de aplicación de los
+   tres destacados se turnan en primer plano con fundido cruzado:
+   ciclo de 18s = 3 turnos de 6s, con ~5.3s en pantalla y 0.72s de
+   cruce. La clienta pidió «poner a pasar las fotos» y aquí el
+   cruce SÍ funciona —al revés que en el rotador del blog, donde
+   fundir dos titulares a la vez se leía como visión doble: con
+   fotos el solape se lee como una disolvencia, no como texto
+   duplicado.
+
+   Los retardos son NEGATIVOS a propósito (0, -12s, -6s) en vez de
+   los 0/6s/12s que saldrían solos. Con retardo positivo la capa
+   aún no ha arrancado y aparecería de golpe en su primer frame, y
+   además la primera foto —candidata a LCP— nacería a opacidad 0 y
+   retrasaría la métrica. Con retardo negativo las tres animaciones
+   ya están corriendo en el frame 1: la primera entra visible y las
+   otras dos entran por fundido cuando les toca.
+
+   Secuencia resultante: 1.ª visible 0→5.3s, 2.ª 6→11.3s, 3.ª
+   12→17.3s, con el cruce en los 0.72s de cada relevo.
+   ------------------------------------------------------------ */
+@keyframes hero-stage-cycle {
+  0%,
+  29.33% {
+    opacity: 1;
+  }
+  33.33%,
+  96% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Fuera del media query: con reduced-motion no hay animación y esta
+   es la regla que deja SOLO la primera foto en pantalla. */
+.hero-stage-photo:not(:first-child) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stage-photo {
+    animation: hero-stage-cycle 18s linear infinite;
+  }
+  .hero-stage-photo:nth-child(2) {
+    animation-delay: -12s;
+  }
+  .hero-stage-photo:nth-child(3) {
+    animation-delay: -6s;
+  }
+  /* WCAG 2.2.2: nadie persigue un blanco en movimiento. Mismo gesto
+     que el marquee de marcas y el rotador del blog. */
+  .hero-stage:hover .hero-stage-photo,
+  .hero-stage:focus-within .hero-stage-photo {
+    animation-play-state: paused;
   }
 }
 

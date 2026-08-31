@@ -226,14 +226,17 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   generados con las skills de diseño instaladas en `.agents/skills/`
   (impeccable, emil-design-eng y sub-skills, design-taste-frontend).
 - **Componentes de la home** (`src/components/public/`): `HomeHero` (recibe
-  `hero`, `settings` y `products`; desde el **2026-08-28** la composición
-  derecha son los **empaques de los tres productos destacados** en primer
-  plano sobre un disco azul suave, y el logotipo animado queda como sello
-  pequeño arriba — el protagonismo pasó del logo al producto por pedido de
-  la clienta, que ya lo tiene grande en el header. Historia previa: hasta el
-  2026-08-19 iba el packshot del primer producto sobre un círculo ámbar,
-  y de ahí al 2026-08-28 el logo CMC animado sobre círculo blanco. Sin
-  catálogo publicado, el hero cae al lockup vectorial centrado), `HomeStats`
+  `hero` y `settings`; desde el **2026-08-30** la composición derecha es un
+  **escenario que se turna** entre las fotos de aplicación de los tres
+  destacados —caja + horneado— sobre un disco azul suave, con el logotipo
+  animado como sello arriba a la derecha. El protagonismo pasó del logo al
+  producto por pedido de la clienta, que ya lo tiene grande en el header.
+  Historia: hasta el 2026-08-19 iba el packshot del primer producto sobre un
+  círculo ámbar; de ahí al 2026-08-28, el logo CMC animado sobre círculo
+  blanco; el 2026-08-28 pasó a una pila de los tres **empaques**, que la
+  clienta descartó dos días después —«no me convencen las cajas»— por las
+  fotos de aplicación actuales. Las rutas de esas fotos son literales, como
+  las del fondo: no salen de `media_assets`), `HomeStats`
   (indicadores calculados del catálogo; oculta cifras < 3 y desaparece sin
   datos; banda **azul** desde el 2026-08-28), `HomePillars` (numeración
   editorial sobre **banda verde profunda** desde el 2026-08-28; también lo

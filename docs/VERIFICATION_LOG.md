@@ -795,3 +795,25 @@ desplegable de «Productos», variantes por clima y orden destacado del catálog
 
 Pendiente de verificar con material del cliente: puntos 07, 08, 10, 13, 14 y 15
 del documento de requerimientos (ver `docs/CONTENT_PENDING.md` §0).
+
+## 2026-08-30 — Hero recompuesto tras revisión de la clienta
+
+Revisión suya por WhatsApp sobre el hero del 2026-08-28: «el logo ahí no queda bien,
+podemos probar poniéndolo al otro lado y un poquito más grandecito» y «no me convencen
+las cajas, sería mejor poner una foto de producto […] que se vieran panes o torta, que
+destaque el resultado de lo que pueden hacer con sus productos».
+
+Cambios: la pila de tres empaques se reemplaza por las **fotos de aplicación** de los
+tres destacados (caja + horneado), turnándose en el escenario; el sello del logotipo pasa
+de la esquina izquierda a la derecha y de 144 a 176 px; el fondo rotativo se queda **solo
+con escenas**, sin aplicaciones.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, en silencio |
+| Secuencia del escenario | Muestreo de opacidades en el navegador: t≈2.4 s `[1, 0, 0]`; t≈5.5 s `[0.69, 0.31, 0]` (cruce 1→2, coincide al 1 % con el cálculo: 30 % de la ventana de 0.72 s); t≈8.5 s `[0, 1, 0]`. Orden 1 → 2 → 3 y **una sola foto plena en cada turno** |
+| Primera foto y LCP | Con retardos negativos la 1.ª nace a opacidad 1 en el frame 1 (verificado: `[1,0,0]` en la primera medición), no sube desde 0 |
+| Por qué salieron las aplicaciones del fondo | Verificado en pantalla: `dap-reposteria-aplicacion-01` a `object-cover` sobre 1440 px dejaba la caja **legible** detrás del h1 («Materia prima para uso exclusivo de la industria», «15 Kg»), justo el empaque que la clienta descartó |
+| Ciclo del fondo | Bajado de 42 s/7 fotos a 18 s/3 fotos. Los porcentajes de `hero-slide-cycle` se recalcularon (3.57/14.29/17.86 % → 8.33/33.33/41.67 %); sin eso, 3 fotos en un ciclo de 42 s habrían dejado 24 s de fondo vacío |
+| Opacidad de la textura | 0.15 → **0.12**: quedándose solo con escenas de panadería (claras, de grano fino) la capa pesaba más detrás del titular. Sigue dentro del rango revisado 0.12–0.18 |
+| Móvil 390 px | `scrollWidth` 375 ≤ 390; sello arriba a la derecha y foto a ancho completo, sin recortes |

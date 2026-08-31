@@ -335,25 +335,30 @@ relación que enuncia el texto. Historia previa: la imagen nació como banda de 
 pie del hero, la clienta la movió aquí y la redujo a una el 2026-08-19 (el hero quedó
 solo con el logo), y el 2026-08-20 la sustituyó por la escena del panadero.
 
-### Hero de la home (2026-08-28)
+### Hero de la home (2026-08-28, recompuesto el 2026-08-30)
 
-El protagonista es el **producto**, no el logotipo. Columna izquierda: eyebrow →
-titular Fraunces → prosa → dos CTA. Columna derecha: los **empaques de los tres
-destacados** en primer plano —el n.º 1 al centro, más grande y delante; los otros dos
-girados ±6° y bajados 20 px, con solape negativo— sobre un **disco azul lavado**, y el
-logotipo animado reducido a **sello de 144–160 px** arriba a la izquierda. Todo el grupo
-va con `mix-blend-multiply`: los packshots se fotografiaron sobre blanco puro, así que
-multiplicar los funde con el disco sin recortarlos.
+El protagonista es el **producto y su resultado**. Columna izquierda: eyebrow → titular
+Fraunces → prosa → dos CTA. Columna derecha: el **sello de marca** arriba a la derecha
+(160–176 px) y, bajo él, un **escenario que se turna** entre las fotos de aplicación de
+los tres destacados —cada una con la caja y lo que sale de ella: ponqués y galletería,
+tortas, hojaldres— sobre un **disco azul lavado**. Todo con `mix-blend-multiply`: los
+packshots se fotografiaron sobre blanco puro, así que multiplicar los funde con el disco
+sin recortarlos.
 
-La pila desborda su caja un ~26 % por diseño (los laterales salen del disco). En
-pantallas angostas ese desborde llegaba al filo y rebanaba las cajas: la caja se encoge
-(`w-[78%] sm:w-[92%] lg:w-full`) y el desborde cabe entero. Sin catálogo publicado el
-hero cae al lockup vectorial centrado, sin hueco.
+La primera versión (2026-08-28) apilaba los tres **empaques** girados. La clienta la
+descartó: «no me convencen las cajas, sería mejor una foto de producto […] que se vieran
+panes o torta, que destaque el resultado de lo que pueden hacer con sus productos», y
+pidió el logo «al otro lado y un poquito más grandecito». De ahí las dos decisiones
+actuales: fotos de aplicación en vez de empaques sueltos, y el sello a la derecha.
 
-Lo que **no** cambió, porque a la clienta le gustaba: el fondo fotográfico rotativo y la
-entrada escalonada. El eyebrow dejó de leer `site_settings.slogan` —ahora que el lema
-vive en el header, repetirlo aquí lo duplicaba en el mismo viewport— y pasó a ser un
-descriptor fijo de categoría.
+**Regla que deja el episodio:** en el hero, el empaque nunca va solo. La caja sola dice
+qué se compra; la caja con el horneado dice para qué sirve, y esa es la pregunta del
+comprador. El fondo rotativo, por el mismo motivo, quedó **solo con escenas de producto
+terminado**: al ampliarse a pantalla completa, una foto de aplicación dejaba un empaque
+gigante y legible detrás del titular.
+
+Fondo y escenario giran en el **mismo compás de 6 s** (18 s de ciclo en las dos capas),
+así el hero cambia como una sola composición y no como dos relojes sueltos.
 
 ### Banda de pilares (2026-08-28)
 
@@ -474,10 +479,15 @@ imperceptible ahí
 `::details-content`, drawer móvil y desplegable de «Productos» (`.nav-dropdown`, 150ms) con
 `@starting-style`, rodillo de la banda de pilares (`.rodillo`/`.rodillo-vetas`: vaivén de
 7s con `ease-in-out`), crossfade de 200ms entre páginas
-(view transitions, header con nombre propio para percibirse estable), y el fondo rotativo
-del hero (`.hero-slides`/`.hero-slide`, 2026-08-20: 7 fotos del cliente en crossfade de
-42s con Ken Burns 1→1.06, capa aria-hidden a opacidad textura `--hero-slides-opacity`
-0.15 detrás de todo el contenido; con reduced-motion queda la primera foto estática).
+(view transitions, header con nombre propio para percibirse estable), el escenario del
+hero (`.hero-stage`/`.hero-stage-photo`, 2026-08-30: 3 fotos en fundido **cruzado**,
+ciclo de 18s con 5.3s en pantalla y 0.72s de cruce; retardos **negativos** —0, -12s,
+-6s— para que las tres animaciones ya corran en el frame 1 y la primera, candidata a
+LCP, nazca visible en vez de subir desde opacidad 0; pausa en hover y `focus-within`),
+y el fondo rotativo del hero (`.hero-slides`/`.hero-slide`, 2026-08-20: 3 escenas del
+cliente en crossfade de 18s con Ken Burns 1→1.06, capa aria-hidden a opacidad textura
+`--hero-slides-opacity` 0.12 detrás de todo el contenido; con reduced-motion queda la
+primera foto estática). Fondo y escenario comparten el compás de 6s.
 Todo con fallback
 íntegro sin soporte y `prefers-reduced-motion` tratado pieza a pieza (suavizar, no
 congelar el contenido). Excepción documentada a Flat-At-Rest: el drawer móvil (overlay)
