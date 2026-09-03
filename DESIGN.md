@@ -221,7 +221,24 @@ rotación sutil (-2°) con `mix-blend-multiply` en composiciones hero.
 
 **Ornamento de obrador (2026-08-19; por sección desde 2026-08-20).** Un dibujo botánico a
 mano (vid, espigas, gotas de aceite — `BakerySideOrnament`) en ambos márgenes (el derecho
-es el mismo dibujo en espejo), a opacidad 0.7. Desde el 2026-08-20, por pedido de la
+era hasta el 2026-09-03 el mismo dibujo en espejo), a opacidad 0.7.
+
+**Recoloreado a azul de identidad (2026-09-03, pedido de la clienta).** La tinta pasa del
+oliva oscuro original (`#3a3906`, que con el antialias y la opacidad 0.7 se leía arena) al
+**azul secundario `#2563c4`** — el mismo del emblema del logo y de la franja tricolor. La
+clienta entregó los dos PNG ya azules, con dos azules distintos entre sí (`#125fc2` y
+`#005ece`) y ninguno igual al token; se normalizaron los dos al token conservando el canal
+alfa intacto, así que el dibujo no perdió un solo matiz de forma. **Regla que deja: un
+color que entra al sitio se ancla al token más cercano de la paleta, no al valor exacto
+del archivo entregado** — dos decoraciones hermanas con azules distintos se leen como un
+error de imprenta, no como variedad.
+
+Con el cambio **el margen derecho deja de ser espejo exacto del izquierdo**: los dibujos
+nuevos son dos composiciones parecidas pero distintas (la tinta del derecho cae 1–2 % más
+afuera y su follaje es más denso). Se conserva porque a esa escala se lee como variación
+natural del trazo a mano, que es justo lo que el ornamento quiere aparentar; lo que sí hay
+que conservar es la **geometría**: mismo lienzo 887×1774 y tinta dentro del rango que
+espera la constante 0.158. Desde el 2026-08-20, por pedido de la
 clienta, **no acompaña el scroll**: es decoración estática anclada a **tres secciones** —
 pilares de la home, zona alta de /nosotros y contacto — y scrollea con ellas; el resto del
 sitio va limpio. Es tinta sobre el margen, nunca protagonista: sin fondo, sombra, filtro

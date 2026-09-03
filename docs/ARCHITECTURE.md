@@ -291,8 +291,12 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
 - **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19;
   reubicados el 2026-08-20): dibujo botánico a mano en ambos márgenes
   (`public/images/decorative/borde-ornamental-cmc.png` y
-  `borde-ornamental-cmc-derecha.png` — espejo exacto, mismo lienzo 887×1774
-  y misma constante de geometría; rutas literales sin `media_assets`).
+  `borde-ornamental-cmc-derecha.png` — mismo lienzo 887×1774 y misma
+  constante de geometría; rutas literales sin `media_assets`). Desde el
+  **2026-09-03** la tinta es el **azul de identidad `#2563c4`** (antes oliva
+  oscuro) y los dos dibujos **ya no son espejo exacto** entre sí: son dos
+  composiciones parecidas entregadas por la clienta, normalizadas al token de
+  color conservando el alfa.
   Desde el 2026-08-20 (pedido de la clienta) **ya no son fixed al viewport
   ni globales**: son `position: absolute` dentro de una sección anfitriona
   y se montan solo en **dos anclas** — la zona alta de /nosotros (título +

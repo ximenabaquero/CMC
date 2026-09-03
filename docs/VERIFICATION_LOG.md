@@ -862,3 +862,25 @@ sobre el blog.
 | `/blog` con 4 artículos | Con `ROTATING_POSTS = 4` desaparecen la tarjeta huérfana y los dos tercios de fila vacíos; el índice de la derecha pasa de 3 a 4 filas. `data-slides="4"` ya estaba cubierto por `blog-turn-4` en globals.css, no hizo falta CSS nuevo |
 | Extracción de `BlogCta` | Comparado en pantalla el cierre del artículo antes y después: idéntico (mismo petróleo, mismo eyebrow ámbar, mismo botón). `#cta-articulo` sigue existiendo y «Sigue leyendo» no se movió |
 | Consola del navegador | Sin errores en `/contacto`, `/nosotros`, `/blog` y dos artículos |
+
+## 2026-09-03 — Ornamento lateral en azul de identidad
+
+La clienta pidió cambiar el color del dibujo botánico de los márgenes y entregó los dos PNG
+ya recoloreados. Antes de sustituirlos se midió la geometría, porque el anclaje CSS depende
+de dónde cae la tinta dentro del lienzo (constante `0.158` de `.bakery-side-ornament`).
+
+| Archivo | Lienzo | Aspecto | Tinta (eje X) | Tinta (color) |
+|---|---|---|---|---|
+| Anterior izquierdo | 887×1774 | 0.5000 | 11,2 %–31,7 % | `#3a3906` |
+| Entregado izquierdo | 887×1774 | 0.5000 | 11,2 %–32,1 % | `#125fc2` |
+| Anterior derecho | 887×1774 | 0.5000 | 68,2 %–88,7 % | `#393906` |
+| Entregado derecho | 887×1774 | 0.5000 | 69,4 %–90,8 % | `#005ece` |
+
+| Verificación | Resultado |
+|---|---|
+| Compatibilidad con la constante 0.158 | **Sin cambios de CSS.** La constante equivale al 31,6 % del ancho del lienzo; la tinta nueva cae a 32,1 % (izq) y 30,6 % desde el borde opuesto (der). Desvío de 1–2 % del ancho = 2–5 px a la altura máxima de 900 px, y en el lado derecho el desvío aleja la tinta de la columna de lectura |
+| Color normalizado | Los dos archivos traían **azules distintos** (`#125fc2` y `#005ece`) y ninguno era el token del sitio. Se reemplazó el RGB por `#2563c4` (secondary-blue) **conservando el canal alfa píxel a píxel**: la forma es idéntica, verificado midiendo de nuevo el bounding box tras la conversión |
+| Espejo | **Se pierde.** El derecho ya no es el izquierdo reflejado: follaje más denso y tinta 1–2 % más afuera. Se acepta como variación de trazo a mano y se documenta, porque tres documentos afirmaban «espejo exacto» |
+| Peso | 138 KB → **49 KB** (izq) y 116 KB → **61 KB** (der), reencodificando con paleta y compresión 9. La decoración pesa menos que antes pese al cambio |
+| Revisión en pantalla | 1440 px (el clamp desliza casi todo el trazo fuera del lienzo, como está diseñado) y 1920 px (ambos ornamentos completos). A opacidad 0.7 el azul se lee como tinta de margen, no como protagonista; sin errores de consola |
+| `npm run lint` / `npm run typecheck` | OK (no se tocó código: el cambio es solo de activos) |
