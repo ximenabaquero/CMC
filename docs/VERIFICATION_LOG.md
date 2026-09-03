@@ -842,3 +842,23 @@ Las nueve fotos de aplicación miden entre 32 % y 50 % de tinta salvo Reposterí
 | Peso visual en la rotación | Los tres turnos ocupan el mismo lienzo; se acabó el hueco entre el sello y la foto |
 | Años de experiencia | Función probada contra cuatro fechas: 2026-08-31 → 6, 2026-09-08 → 6, 2026-09-09 → **7**, 2027-01-01 → 7. Coincide con el copy publicado («más de seis años») |
 | Staleness del indicador | La home es estática: la cifra se congela en el build y se refresca con cualquier revalidación desde el panel. Un día de desfase al año, a cambio de que nadie tenga que acordarse de actualizarla |
+
+## 2026-09-03 — Foto de la familia, portada del blog #4 y dos recomposiciones
+
+Tres entregas de la clienta en el mismo turno (foto de familia, foto de bodega de
+materias primas) más los ajustes visuales que pidió sobre «Para quién producimos» y
+sobre el blog.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint` / `npm run typecheck` | OK, limpios y en silencio |
+| Derivado `familia-compartiendo-pan-01.webp` | 1200×900, 110 582 bytes (receta del importador: máx. 1200 px, WebP q82, desde PNG de 1448×1086 / 2.2 MB) |
+| Derivado `almacen-materias-primas-01.webp` | 1200×675, 122 748 bytes (misma receta, desde PNG de 1672×941 / 2.3 MB) |
+| Portada del artículo 4 | **Todavía NO asignada.** Sin `SUPABASE_SERVICE_ROLE_KEY` en `.env.local`, el anon key no puede escribir (RLS): la asignación queda a la subida desde el panel o al script `2026-09-03-cover-blog-almacenamiento.sql`. Verificado de paso en la BD de desarrollo: **los otros 3 artículos ya tienen portada cargada**, así que el flujo del panel corregido el 2026-08-21 funciona |
+| Apertura de `/nosotros` | Grid `lg:grid-cols-[3fr_2fr]` a 1440 px: foto de 4:3 a ~438 px de ancho (≈330 px de alto) frente a los 864 px que habría medido a ancho completo. Los `BakerySideOrnament` siguen en los márgenes, fuera del contenedor `max-w-6xl`, sin invadir la columna |
+| Sale de publicación | `cargue-cajas-dap-01.webp`, la imagen con indicios de IA más visibles del sitio (pie «Compañía Mundial de **Cereales** S.A.S.»). El archivo queda versionado, sin uso |
+| `AudienceSectors` a 1440 px | Encabezado (2 col) + CTA (1 col) arriba; el CTA cae alineado con la columna «Distribución y punto de venta». Los 12 nombres siguen literales; solo se añadieron 3 rótulos de grupo |
+| `AudienceSectors` a 390 px | `order-last` verificado en pantalla: heading → 3 grupos → CTA. Antes de apilar, «¿Tu negocio está en esta lista?» habría quedado por encima de la lista |
+| `/blog` con 4 artículos | Con `ROTATING_POSTS = 4` desaparecen la tarjeta huérfana y los dos tercios de fila vacíos; el índice de la derecha pasa de 3 a 4 filas. `data-slides="4"` ya estaba cubierto por `blog-turn-4` en globals.css, no hizo falta CSS nuevo |
+| Extracción de `BlogCta` | Comparado en pantalla el cierre del artículo antes y después: idéntico (mismo petróleo, mismo eyebrow ámbar, mismo botón). `#cta-articulo` sigue existiendo y «Sigue leyendo» no se movió |
+| Consola del navegador | Sin errores en `/contacto`, `/nosotros`, `/blog` y dos artículos |

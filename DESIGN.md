@@ -246,6 +246,16 @@ clienta en reemplazo del recorte de buñuelos. Receta del marco: `figure` con
 (`w-full`), sin `object-cover` ni altura fija — la proporción nativa manda. El texto de la
 sección se centra verticalmente contra esa columna (`lg:items-center` en el grid).
 
+**Apertura de /nosotros a dos columnas (2026-09-03).** La zona alta era el texto a
+`max-w-3xl` y, debajo, una tira ancha a todo el contenedor; la mitad derecha quedaba
+vacía y la proporción de la foto la fijaba el recorte, no la foto. Ahora es un grid
+`lg:grid-cols-[3fr_2fr] lg:items-center`: h1 + bajada a la izquierda, escena real
+enmarcada a la derecha. La regla que deja el cambio: **una foto de proporción natural
+manda sobre el hueco que le tocaba**. La nueva imagen es 4:3 y a ancho completo habría
+medido 864 px de alto —se comía la apertura entera—; en la columna corta cae a ~330 px y
+queda a la altura del texto. Es la misma composición que usa «¿Quiénes somos?» en la home.
+Al quedar sobre el pliegue, esa figura lleva `priority` en vez de `loading="lazy"`.
+
 **Imagen dentro de un artículo (2026-08-21).** Las fotos que la clienta inserta en el cuerpo de
 un post desde el panel heredan ese mismo marco, pero desde CSS y no desde JSX: la regla
 `.prose-cmc img` en `globals.css` (bloque a ancho de columna, esquina lg, borde arena 1px, sin
@@ -430,15 +440,37 @@ El iframe mide 320px (380 desde `sm`) y va `loading="lazy"`. La consulta se deri
 dirección del CMS descartando el detalle interior del edificio (`Of.`, `Torre`, `Piso`…):
 Google no lo geocodifica y termina rotulando el pin con la ficha de una empresa vecina.
 
-**`AudienceSectors`** — banda de cierre `bg-cream` con los 12 sectores atendidos. Aplica la
-Eyebrow Rule («A quién servimos» → «Para quién producimos») y hereda la lista editorial de
-divisores de `HomePillars`, pero **sin numeración**: los `01…` de los pilares comunican
-orden, y aquí no hay jerarquía entre sectores. El marcador es un punto ámbar de 6px —
-forma decorativa, no texto, así que no viola la Amber Guardrail — alineado a la primera
-línea para que los ítems de dos líneas no descoloquen la columna. Tres columnas en `lg`,
-dos en `sm`, `reveal` por ítem. Vive fuera del wrapper de ornamentos, como sección
-hermana full-bleed, para no romper la alternancia de fondos ni dejar que el dibujo
-botánico invada la lista.
+**`AudienceSectors`** — banda de cierre `bg-surface-muted` (era `bg-cream` hasta el
+2026-08-28) con los 12 sectores atendidos. Aplica la Eyebrow Rule («A quién servimos» →
+«Para quién producimos») y hereda la lista editorial de divisores de `HomePillars`, pero
+**sin numeración**: los `01…` de los pilares comunican orden, y aquí no hay jerarquía
+entre sectores. El marcador es un punto ámbar de 6px — forma decorativa, no texto, así que
+no viola la Amber Guardrail — alineado a la primera línea para que los ítems de dos líneas
+no descoloquen la columna. Vive fuera del wrapper de ornamentos, como sección hermana
+full-bleed, para no romper la alternancia de fondos ni dejar que el dibujo botánico invada
+la lista.
+
+**Recomposición del 2026-09-03.** La banda era un encabezado a `max-w-2xl` sobre una
+rejilla de 4×3 ítems, y tenía dos problemas de composición: un vacío ancho arriba a la
+derecha, y tres columnas que no significaban nada — el corte caía donde lo dejaba el
+orden de entrega del copy. Ahora una **sola rejilla de tres columnas** gobierna la
+sección: encabezado (2 columnas) + acción (1 columna) arriba, y abajo **una columna por
+familia de cliente** — Industria (5), Panadería y pastelería (3), Distribución y punto de
+venta (4). Reglas que deja:
+
+- **Una columna solo se justifica si significa algo.** Doce ítems repartidos en tres
+  columnas por conteo son una tabla; repartidos por familia son un índice donde el
+  visitante encuentra su caso mirando un tercio de la lista. Los nombres siguen siendo
+  literales de la clienta: los rótulos de grupo son organizadores, no copy comercial.
+- **El filete grueso de petróleo** (2px sobre el rótulo) alinea los tres arranques en una
+  misma línea; las columnas terminan a distinta altura a propósito, que es lo que las hace
+  leerse como grupos y no como filas.
+- **El hueco de un encabezado corto se llena con la salida, no con decoración.** El CTA de
+  WhatsApp cae en la misma columna que el tercer grupo, así que queda alineado con él. La
+  página de contacto solo tenía botones en la cabecera: quien se reconoce en la lista ya no
+  vuelve a subir, y la sección deja de cerrar en una nota gris al pie.
+- **En móvil la acción va después de la lista** (`order-last`): «¿Tu negocio está en esta
+  lista?» leído antes de la lista señala a algo que todavía no apareció.
 
 ### Rotación editorial del blog (home, 2026-08-21)
 `HomePostsRotator` reemplaza al bloque estático de `HomePostsSection` como cabecera del
@@ -466,15 +498,41 @@ la tarjeta del artículo que ya está arriba se leía como duplicado, no como su
 barra ámbar es forma decorativa, no texto — no viola la Amber Guardrail — y es el único
 indicador: puntos aparte serían un segundo acento compitiendo (One Hero Rule).
 
-En `/blog` la rotación **no esconde ningún destino**: el índice lista siempre los tres
+En `/blog` la rotación **no esconde ningún destino**: el índice lista siempre los
 artículos en escena, así que cambia lo que se muestra en grande, no lo que se puede clicar
-— por eso el archivo puede rotar sin castigar a quien viene a escanearlo. Y en las dos
+— por eso el archivo puede rotar sin castigar a quien viene a escanearlo.
+
+**Cuatro turnos en `/blog`, tres en la home (2026-09-03).** El CSS cubre 2, 3 y 4 turnos,
+pero `/blog` cortaba en 3 por herencia de la home, y con los cuatro artículos publicados
+eso dejaba **uno solo abajo en una rejilla de tres columnas**: dos tercios de fila vacíos y
+una tarjeta huérfana bajo un divisor sin rótulo. Con los cuatro en escena el archivo no
+tiene sobrante y el índice de la derecha llena el alto del escenario. La home sigue en
+tres: allí el blog es un adelanto, no el archivo. La regla: **el corte de una lista se
+elige por lo que deja fuera, no por costumbre** — un sobrante de uno en una rejilla de
+tres es peor que no tener sobrante. Cuando sí lo hay (5 artículos o más) el bloque ya no
+es una rejilla anónima tras un divisor: lleva encabezado propio («Archivo» → «Más
+artículos»). Y en las dos
 páginas el orden lo fija `sortPostsByCoverFirst` (`src/lib/content.ts`): **primero los
 artículos con portada**. El escenario destacado es una superficie fotográfica; encabezarla
 con la portada tipográfica mientras hay artículos con foto esperando en las miniaturas
 malvende el contenido. Los que no tienen foto no desaparecen: caen a las tarjetas del
 final de `/blog`. Se corrige cargando la portada que falte desde el panel, no tocando ese
 orden.
+
+### Banda de cierre del blog (`BlogCta`, 2026-09-03)
+
+Petróleo profundo, eyebrow **ámbar** (adaptación documentada de la Eyebrow Rule sobre
+oscuro), titular blanco y el botón ámbar de WhatsApp a la derecha. Nació embebida en
+`PostArticle` (2026-08-21) y se extrajo al darle también el cierre al índice `/blog`, que
+terminaba en el pie sin una sola salida — el único rincón del sitio público sin el camino
+a WhatsApp a un paso.
+
+Es deliberadamente **más sobria que `HomeCta`**: sin círculo ámbar recortado ni GIF de
+mantequilla. La banda de la home cierra el recorrido comercial y puede permitirse
+decoración; esta cierra lectura y **aparece dos veces seguidas** para quien pasa del
+índice a un artículo, así que se comporta como pie de sección y no compite con el
+contenido (One Hero Rule). Regla que deja: **una banda que se repite en el recorrido se
+decora menos que una que se ve una sola vez.**
 
 ### Motion (vocabulario del sitio)
 CSS puro, sin JavaScript (restricción SSG). Tokens en `globals.css`: `--ease-out`

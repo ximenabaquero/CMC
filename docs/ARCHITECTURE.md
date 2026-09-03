@@ -142,13 +142,17 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   (`/admin/blog/<id>` → «Imagen de portada»), así que son medios `R2` como
   cualquier otra subida del CMS. `public/images/blog/` guarda solo los
   derivados optimizados que la usuaria elige al subirlos, y desaparecerá —
-  con el script de respaldo `supabase/scripts/2026-08-20-covers-blog.sql` —
-  en cuanto las tres estén cargadas. Sin portada, el artículo cae en la
-  portada tipográfica `EditorialCover`.
-  Bajo el h1 de /nosotros va una **ilustración dibujada a mano**
-  (`public/images/decorative/quienes-somos-panes.webp`, entregada por la
-  clienta el 2026-08-19 y optimizada a WebP con alfa; decorativa, `alt=""`),
-  que reemplazó a la escena `hero-mesa-panaderia-01`.
+  con los scripts de respaldo `supabase/scripts/2026-08-20-covers-blog.sql` y
+  `2026-09-03-cover-blog-almacenamiento.sql` — en cuanto las **cuatro** estén
+  cargadas. Sin portada, el artículo cae en la portada tipográfica
+  `EditorialCover`.
+  Junto al h1 de /nosotros va, desde el **2026-09-03**, la escena real
+  `public/images/photos/familia-compartiendo-pan-01.webp` (familia
+  compartiendo pan; enmarcada y con alt descriptivo), en una apertura a dos
+  columnas. Relevó a `photos/cargue-cajas-dap-01.webp` (2026-08-23), que a su
+  vez había relevado a la ilustración dibujada a mano
+  `public/images/decorative/quienes-somos-panes.webp` (2026-08-19) y esta a la
+  escena `hero-mesa-panaderia-01`; las tres quedan versionadas sin uso.
   Solo las fotos que entran a una galería de producto pasan por
   `media_assets`/`product_media` (vía script SQL manual, p. ej.
   `supabase/scripts/2026-08-19-galeria-dap-hojaldre.sql`, pendiente de
@@ -253,8 +257,13 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   variante `HomePostsRotator` (2026-08-21, cabecera del blog en la home
   **y** en `/blog`: los artículos se turnan en el escenario con fundido
   encadenado CSS y el índice lateral marca el que está en escena; el orden
-  lo fija `sortPostsByCoverFirst`, que pone delante los que tienen portada)
-  y `HomeCta` (canales
+  lo fija `sortPostsByCoverFirst`, que pone delante los que tienen portada.
+  Desde el **2026-09-03** `/blog` monta 4 turnos —constante `ROTATING_POSTS`,
+  el máximo que cubre el CSS— y la home sigue en 3; el sobrante, si lo hay,
+  va bajo el encabezado «Archivo → Más artículos»), `BlogCta`
+  (`src/components/public/BlogCta.tsx`, 2026-09-03: banda petróleo + WhatsApp
+  extraída de `PostArticle` para cerrar también el índice `/blog`, que
+  terminaba en el pie sin ninguna salida) y `HomeCta` (canales
   de `site_settings`; con WhatsApp configurado el botón principal abre el
   chat directo). Los compartidos de `shared.tsx` (`ProductCard`, `PostCard`,
   `SectionHeading` con `tone="warm"` por defecto, `EditorialCover` para
@@ -275,8 +284,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   derivados `-recorte.webp` en el manifest; los `.webp` de lienzo completo
   conviven en `public/` porque el importador los regeneraría). La única
   escena real (`hero-mesa-panaderia-01`) no se recorta; desde el 2026-08-19
-  quedó **sin uso**: su lugar como banner de /nosotros lo ocupa la
-  ilustración dibujada a mano `decorative/quienes-somos-panes.webp`.
+  quedó **sin uso**: su lugar en la apertura de /nosotros lo ocupa hoy
+  `photos/familia-compartiendo-pan-01.webp` (2026-09-03), tras pasar por la
+  ilustración `decorative/quienes-somos-panes.webp` y por
+  `photos/cargue-cajas-dap-01.webp`.
 - **Ornamentos laterales de obrador** (`BakerySideOrnament`, 2026-08-19;
   reubicados el 2026-08-20): dibujo botánico a mano en ambos márgenes
   (`public/images/decorative/borde-ornamental-cmc.png` y
@@ -296,8 +307,9 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   (globals.css): altura `min(86%, 900px)` relativa al host, `z-index: 1`,
   `left`/`right` con el clamp que desliza el dibujo fuera del lienzo en
   viewports angostos sin tocar el texto. La carpeta `decorative/` guarda
-  también la ilustración de panes del h1 de /nosotros
-  (`quienes-somos-panes.webp`), fuera del manifest como los ornamentos.
+  también la ilustración de panes que ocupó el h1 de /nosotros entre el
+  2026-08-19 y el 2026-08-23 (`quienes-somos-panes.webp`), hoy sin uso y
+  fuera del manifest como los ornamentos.
 - **Iconos** (`src/components/public/icons.tsx`, 2026-08-20): SVG inline con
   `currentColor` y `aria-hidden`; el proyecto **no usa librería de iconos**.
   `WhatsAppIcon` (glifo oficial de la marca) y `PhoneIcon` son los únicos
@@ -318,6 +330,11 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
   `next.config.ts` no define `headers()`). `AudienceSectors` cierra la página
   con los 12 sectores atendidos; su copy es **fijo en el componente**, sin
   sección de `company_content` todavía (ver `docs/CONTENT_PENDING.md`).
+  Desde el **2026-09-03** los doce van agrupados en tres familias de cliente
+  (Industria / Panadería y pastelería / Distribución y punto de venta), una
+  por columna, y la banda recibe `whatsappHref` desde la página para cerrar
+  con la misma acción con la que abre (los nombres de sector siguen siendo
+  literales de la clienta; los rótulos de grupo son el único texto añadido).
 - **Galería de la ficha de producto** (`ProductGallery`, 2026-08-19):
   client component (el segundo público junto a `MobileNav`) que recibe
   `gallery: MediaAsset[]` serializada desde `ProductDetail` (que sigue
