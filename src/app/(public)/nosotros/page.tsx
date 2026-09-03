@@ -44,8 +44,17 @@ export default async function AboutPage() {
       <div className="relative overflow-x-clip">
         <BakerySideOrnament />
         <BakerySideOrnament side="derecho" />
+        {/* Apertura a dos columnas (2026-09-03). Antes era el texto a
+            `max-w-3xl` y, debajo, una tira ancha de 1200×393 a todo el
+            contenedor: la mitad derecha de la zona alta quedaba vacía y la
+            proporción de la foto la fijaba el recorte, no la foto. La imagen
+            nueva es 4:3, así que a ancho completo mediría 864 px de alto y
+            se comería la apertura entera; en la columna corta cae a ~330 px y
+            queda a la altura del texto que acompaña. Es la misma composición
+            que usa «¿Quiénes somos?» en la home. */}
         <div className="mx-auto max-w-6xl px-4 pt-14">
-        <header className="max-w-3xl">
+        <div className="grid gap-10 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-14">
+        <header>
           <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-orange">Nosotros</p>
           <h1 className="text-3xl font-semibold text-petrol sm:text-4xl">
             {intro?.title ?? "¿Quiénes somos?"}
@@ -64,25 +73,32 @@ export default async function AboutPage() {
           ))}
         </header>
 
-        {/* Cargue de cajas DAP en el camión de despacho (foto entregada por la
-            clienta el 2026-08-23; reemplaza la ilustración de panes dibujada a
-            mano, que a su vez había reemplazado a hero-mesa-panaderia-01).
+        {/* Familia colombiana compartiendo pan en la mesa (foto entregada por
+            la clienta el 2026-09-03). Cierra el requerimiento 14 del
+            2026-08-28 —«fotografía de una familia colombiana compartiendo
+            pan», que había quedado sin implementar por no tener foto real— y
+            releva al cargue de cajas DAP en el camión
+            (`cargue-cajas-dap-01.webp`, 2026-08-23), la más marcada por los
+            indicios de IA que documenta docs/FOTOS_ADICIONALES.md: cajas
+            rotuladas «AP» y pie «Compañía Mundial de **Cereales** S.A.S.».
+            El cambio también cambia lo que dice la página: la empresa deja de
+            presentarse con su logística y pasa a presentarse con el destino
+            final de lo que produce.
             Al ser ESCENA REAL y no packshot ni recorte va enmarcada, con alt
-            descriptivo: aquí la foto es contenido, no decoración. El derivado
-            se recortó a las 3 filas superiores de cajas (pedido de la clienta,
-            mismo día): el corte cae en la junta de sombra entre la tercera y
-            la cuarta fila, así el borde inferior no rebana ninguna caja y la
-            foto queda como tira ancha. */}
-        <figure className="reveal mt-10 overflow-hidden rounded-lg border border-border">
+            descriptivo: aquí la foto es contenido, no decoración. `priority`
+            en vez de `loading="lazy"`: en el grid a dos columnas la foto queda
+            sobre el pliegue, junto al h1. */}
+        <figure className="reveal overflow-hidden rounded-lg border border-border">
           <Image
-            src="/images/photos/cargue-cajas-dap-01.webp"
-            alt="Cajas de margarina DAP Alta Repostería Ponqué de 15 kg estibadas en el camión de despacho"
+            src="/images/photos/familia-compartiendo-pan-01.webp"
+            alt="Familia colombiana de tres generaciones compartiendo pan y chocolate alrededor de la mesa"
             width={1200}
-            height={393}
-            loading="lazy"
+            height={900}
+            priority
             className="w-full"
           />
         </figure>
+        </div>
         </div>
       </div>
 

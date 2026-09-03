@@ -5,12 +5,18 @@ través de Ana y (b) las afirmaciones que quedaron **en revisión** y no se
 publican hasta ser verificadas.
 
 Responsable de recopilar y aprobar el contenido: **Ana** (según acuerdo de la
-reunión 1, punto 2). Última actualización: 2026-08-28.
+reunión 1, punto 2). Última actualización: 2026-09-03.
 
 ## 0. Insumos que bloquean los ajustes pedidos el 2026-08-28
 
 Del documento «Requerimientos de ajustes — Landing CMC v1.0» quedaron cinco puntos
 esperando material de la clienta. Todo lo demás de ese documento está implementado.
+
+> **2026-09-03 — el punto 14 se cerró.** La clienta entregó la fotografía de la familia
+> compartiendo pan y está publicada en `/nosotros` (ver más abajo). El punto 08 sigue
+> abierto pero **cambió de urgencia**: la foto de bodega ya no es la única imagen
+> cuestionada del sitio, porque el cargue de cajas —la peor de todas— salió de
+> `/nosotros` al entrar la familia.
 
 | N.º | Qué falta | Dónde entra cuando llegue |
 |---|---|---|
@@ -18,7 +24,7 @@ esperando material de la clienta. Todo lo demás de ese documento está implemen
 | 08 | **Foto/composición nueva para «¿Quiénes somos?»** de la home | Reemplaza `public/images/photos/bodega-dap-01.webp` en `src/app/(public)/page.tsx`. ⚠️ La imagen actual es una de las descartadas por indicios de IA y además muestra el empaque antiguo del Ponqué; sigue publicada por decisión explícita de la clienta. Su alternativa (usar otro producto destacado) también está abierta, pero implica repetir una foto ya usada o producir una composición nueva: decisión pendiente |
 | 10 | **Contenido de la FAQ de Alta Repostería** | No requiere código: se crea en `/admin/preguntas-frecuentes` y, marcada como destacada, aparece también en la home |
 | 13 | **Catálogo comercial en PDF** | Copiar el archivo a `public/catalogo/` y apuntar `CATALOG_PDF_HREF` en `src/lib/catalog.ts`. Mientras tanto, el menú «Productos» muestra la entrada «Descargar catálogo» inerte y rotulada «Próximamente» |
-| 14 | **Fotografía de una familia colombiana compartiendo pan** | No se implementó: no hay foto y la regla «cero fotografía de stock» de `PRODUCT.md` impide sustituirla por una de banco. La clienta pidió explícitamente que no se sienta de stock, así que necesita foto real |
+| ~~14~~ | ~~**Fotografía de una familia colombiana compartiendo pan**~~ | ✅ **Cerrado el 2026-09-03.** La clienta entregó la foto y se publicó como `public/images/photos/familia-compartiendo-pan-01.webp` (1200×900, 111 KB) junto al h1 de `/nosotros`, en una apertura recompuesta a dos columnas. Releva al cargue de cajas DAP. ⚠️ La foto **no viene de `content-source/`**: falta que Ana confirme origen y licencia, misma salvedad que las entregas del 2026-08-20 y del 2026-08-23 |
 | 15 | **Fotografía real del técnico panadero** | Reemplaza `public/images/photos/panadero-croissants-01.webp` en la sección «Propuesta de valor» (`src/app/(public)/page.tsx`). Verificar resolución, encuadre y comportamiento responsive antes de dejarla; si pierde calidad, se conserva la actual |
 
 ## 1. Afirmaciones en revisión (NO publicadas)
@@ -97,11 +103,22 @@ esperando material de la clienta. Todo lo demás de ese documento está implemen
   `supabase/scripts/2026-08-20-covers-blog.sql` queda como
   respaldo y **se borrará** cuando estén subidas (junto con la carpeta
   `public/images/blog/`, que solo sirve para elegir los archivos al subirlos).
-  Sigue **sin portada** el artículo de almacenamiento de materias primas: la
-  cuarta foto entregada (croissants, 325×245) es demasiado pequeña y no encaja
-  con el tema; se necesita una foto de almacenamiento real.
+  **Resuelto el 2026-09-03**: el artículo de almacenamiento de materias primas
+  ya tiene foto. La cuarta entrega del 2026-08-20 (croissants, 325×245) era
+  demasiado pequeña y ajena al tema; la clienta entregó ahora una escena de
+  bodega de materias primas (estantería metálica con sacos de harina, granos y
+  contenedores herméticos rotulados), derivada a
+  `public/images/blog/almacen-materias-primas-01.webp` (1200×675, 123 KB).
+  Falta **cargarla**: desde `/admin/blog/<artículo>` → «Imagen de portada»
+  sobre el sitio publicado, o ejecutando el respaldo
+  `supabase/scripts/2026-09-03-cover-blog-almacenamiento.sql`. Verificado el
+  mismo día en la BD de desarrollo: los otros 3 artículos **ya tienen portada
+  cargada** (se ven las fotos en `/blog`), así que el flujo del panel funciona
+  y este es el último que falta.
 - **Origen de las fotos entregadas el 2026-08-20** (bodega DAP de la home,
-  panadero de «Propuesta de valor» y las 4 del blog): **ninguna proviene del
+  panadero de «Propuesta de valor» y las 4 del blog), **el 2026-08-23** (cargue
+  de cajas) y **el 2026-09-03** (familia compartiendo pan y bodega de materias
+  primas del blog): **ninguna proviene del
   material de `content-source/`** y varias tienen aspecto de banco de
   imágenes — la de bodega es, byte a byte, una de las descartadas por
   indicios de IA. Publicadas/preparadas por decisión explícita de la clienta;

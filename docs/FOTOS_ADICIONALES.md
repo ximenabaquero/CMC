@@ -107,6 +107,36 @@ publica (montaje digital o indicios de IA).
 > foto real del despacho. La ilustración `decorative/quienes-somos-panes.webp`
 > queda disponible sin uso.
 
+> **Actualización 2026-09-03 — la familia releva al cargue de cajas en /nosotros.**
+> La clienta entregó `familiacomiendoquienessomos.png` (1448×1086, 2.2 MB) para la página
+> «¿Quiénes somos?» y pidió que reemplazara la foto de cajas. Publicada como
+> `familia-compartiendo-pan-01.webp` (1200×900, 111 KB, WebP q82) con marco de escena real,
+> en una apertura recompuesta a dos columnas. **Cierra el requerimiento 14 del 2026-08-28**
+> —«fotografía de una familia colombiana compartiendo pan»—, que llevaba abierto
+> justamente porque la regla «cero fotografía de stock» impedía sustituirlo con una foto de
+> banco. La imagen es coherente con lo que pidió: mesa de cocina real, tres generaciones,
+> pan de rollo y chocolate en pocillos, nada de encuadre de catálogo.
+>
+> **Efecto colateral que conviene registrar:** sale de publicación
+> `cargue-cajas-dap-01.webp`, la imagen **más marcada por los indicios de IA** de todo el
+> sitio (cajas «AP», pie «Compañía Mundial de **Cereales** S.A.S.», texto menor corrupto).
+> El riesgo comercial que señalaba la alerta del 2026-08-23 desaparece del sitio sin haber
+> tenido que discutirlo: la reemplazó una foto mejor. Queda el archivo disponible sin uso.
+>
+> ⚠️ Como las entregas anteriores, **no proviene de `content-source/`** (llegó desde otra
+> carpeta de la desarrolladora): **pendiente confirmar origen y licencia**.
+
+> **Actualización 2026-09-03 — portada del cuarto artículo del blog.** La clienta entregó
+> `imagen4blog.png` (1672×941) para «Consejos para almacenar adecuadamente las materias
+> primas en panadería», que era el único artículo sin portada fotográfica desde el
+> 2026-08-20 (la cuarta foto de aquella entrega, croissants de 325×245, era demasiado
+> pequeña y ajena al tema). Derivada a `public/images/blog/almacen-materias-primas-01.webp`
+> (1200×675, 123 KB, WebP q82). La escena —estantería metálica con sacos de harina sobre
+> estibas, granos y contenedores herméticos rotulados— es literalmente el tema del
+> artículo. Falta cargarla como portada desde el panel o con
+> `supabase/scripts/2026-09-03-cover-blog-almacenamiento.sql`. ⚠️ Mismo pendiente de
+> origen y licencia.
+
 ## Características generales
 
 - `2.png` … `27.png`, `panes 1.png`, `Panes 2.png`: PNG cuadrados

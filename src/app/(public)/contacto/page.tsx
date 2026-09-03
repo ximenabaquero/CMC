@@ -174,7 +174,10 @@ export default async function ContactPage() {
       )}
       </div>
     </div>
-    <AudienceSectors />
+    {/* La banda de sectores recibe el enlace de WhatsApp para cerrar la
+        página con la misma acción con la que abre: quien se reconoce en la
+        lista no tiene que volver a la cabecera. */}
+    <AudienceSectors whatsappHref={whatsappHref} />
     </>
   );
 }
