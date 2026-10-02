@@ -463,7 +463,8 @@ insert into public.product_media (product_id, media_asset_id, sort_order) values
 on conflict (product_id, media_asset_id) do nothing;
 
 -- ------------------------------------------------------------
--- Preguntas frecuentes (5, extraídas del PDF oficial).
+-- Preguntas frecuentes (5 del PDF oficial + la n.º 6 de Alta
+-- Repostería, entregada el 2026-10-02).
 -- La n.º 2 queda en DRAFT: clasifica margarina y mantequilla
 -- como "productos lácteos", afirmación en revisión.
 -- ------------------------------------------------------------
@@ -502,6 +503,11 @@ La mantequilla es una grasa sólida que se obtiene de la nata líquida que se se
   '¿Qué hace especial a nuestro hojaldre?',
   'Nuestro hojaldre se diferencia por su plasticidad y la facilidad que ofrece en el proceso de laminado. Además, ofrece un aroma y un sabor que lo hacen resaltar en las diferentes preparaciones de panadería.',
   5, 'PUBLISHED', false, null
+),
+(
+  '¿La margarina de alta repostería proporciona suavidad en el producto?',
+  'Sí. Nuestra margarina está fabricada para proporcionar una suavidad y una textura excepcionales, además de darle un toque de sabor delicioso a cada postre que se prepare con ella.',
+  6, 'PUBLISHED', false, null
 )
 on conflict do nothing;
 

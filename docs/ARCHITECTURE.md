@@ -86,7 +86,10 @@ Activos oficiales ──► public/brand y public/images/products (STATIC, versi
     animado en lugar del packshot) y el 2026-08-19 también el logo DAP junto
     al encabezado del catálogo. Desde el **2026-08-28** el header dejó de
     llevar GIF: monta el emblema vectorial, más grande y nítido, y el momento
-    animado del logo queda solo en el hero (sello pequeño).
+    animado del logo queda solo en el hero (sello pequeño). El **2026-10-02**
+    la clienta pidió más GIFs: `rodillo.gif` (decorativo, en bucle) acompaña
+    el encabezado de las FAQ de la home; el original de 2.5 MB se redujo con
+    ffmpeg a 288 px / 20 fps / 32 colores (~330 KB).
     `scripts/patch-gif-loop.mjs` genera la variante sin loop
     (`cmc-logo-entrada-una-vez.gif`) que reproduce la animación una sola vez.
   - **Relevo a vector en el hero (2026-08-23)**: el GIF del hero mide 512 px

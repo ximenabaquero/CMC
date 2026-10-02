@@ -309,12 +309,27 @@ export default async function HomePage() {
       {featuredFaqs.length > 0 ? (
         <section className="border-t border-border bg-surface-muted" aria-labelledby="faqs">
           <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
-            <SectionHeading
-              id="faqs"
-              tone="warm"
-              eyebrow="Preguntas frecuentes"
-              title="Resolvemos tus dudas"
-            />
+            <div className="flex items-center justify-between gap-8">
+              <SectionHeading
+                id="faqs"
+                tone="warm"
+                eyebrow="Preguntas frecuentes"
+                title="Resolvemos tus dudas"
+              />
+              {/* Rodillo animado (pedido de la clienta, 2026-10-02: «más GIFs»).
+                  Decorativo; oculto en móvil y con prefers-reduced-motion, mismo
+                  patrón que la mantequilla del CTA. `mix-blend-multiply` funde
+                  el fondo blanco del GIF con surface-muted. */}
+              <div aria-hidden="true" className="mb-8 hidden shrink-0 motion-safe:sm:block">
+                <Image
+                  src="/gifsanimados/rodillo.gif"
+                  alt=""
+                  width={288}
+                  height={288}
+                  className="w-24 mix-blend-multiply lg:w-28"
+                />
+              </div>
+            </div>
             {/* Mismo acordeón editorial que /preguntas-frecuentes (numeración,
                 chevron, encabezado petróleo al abrir) — un solo patrón de FAQ
                 en todo el sitio. */}
